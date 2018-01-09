@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
+import List from '../src/List.js';
 
 export default class App extends Component {
   render() {
     console.log('something');
 
     return (
-      <div>This is a react</div>
+      <div>
+        <List name='a' />
+      </div>
     );
   };
 }

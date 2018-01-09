@@ -3,7 +3,7 @@ var webpack = require('webpack');
 
 const ROOT_PATH = path.resolve(__dirname);
 const ENTRY_PATH = path.resolve(ROOT_PATH, 'app');
-const OUTPUT_PATH = path.resolve(ROOT_PATH, 'build');
+const OUTPUT_PATH = path.resolve(ENTRY_PATH, 'build');
 
 module.exports = {
   entry: {
@@ -22,7 +22,7 @@ module.exports = {
   },
   output: {
     path: OUTPUT_PATH,
-    filename: '[name]-[chunkhash].js',
+    filename: '[name].js',
     publicPath: '/'
   },
   devtool: "source-map",
