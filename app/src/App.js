@@ -7,7 +7,7 @@ export default class App extends Component {
 
     return (
       <div>
-        <List name='a' />
+        <List name='g' />
       </div>
     );
   };
