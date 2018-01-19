@@ -27,7 +27,8 @@ module.exports = {
     new HtmlWebpackPlugin({title: 'blog'})
   ],
   devServer: {
-    stats: 'errors-only'
+    stats: 'errors-only',
+    historyApiFallback: true,
   },
   output: {
     path: OUTPUT_PATH,

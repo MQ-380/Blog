@@ -4,12 +4,20 @@ const WebpackHotMiddleware = require('webpack-hot-middleware');
 const Mongoose = require('mongoose');
 const config  = require('../webpack.config');
 const Express = require('express');
-const http = require('http');
 const path = require('path');
+const Proxy = require('http-proxy');
 
 
 const app = new Express();
 
+const targetUrl =  'http://127.0.0.1:3030';
+const proxy = Proxy.createProxyServer({
+  target: targetUrl
+});
+
+app.use('/api', (req, res) => {
+  proxy.web(req,res,{target: targetUrl})
+});
 
 
 app.use(WebpackDevMiddleware(webpack(config),{
