@@ -1,12 +1,16 @@
 import Express from 'express'
 import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
 
 const port = 3030;
 
 const app = new Express();
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.use('/', require('./main'));
 app.use('/admin', require('./admin'));
+
+
 
 
 mongoose.Promise = require('bluebird');
@@ -16,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/blog',{useMongoClient:true}, functio
     return;
   }
   console.log('数据库连接成功');
+
 
   app.listen(port, function(err){
     if(err) {

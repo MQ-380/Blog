@@ -1,35 +1,49 @@
 import {combineReducers} from 'redux'
+import {reducer as UserReducer} from '../reducers/UserAction'
 
 const initialState = {
-  userList: [],
-}
+  isFetching: false,
+  msg: {
+    type: 1,//0失败 1成功
+    content: ''
+  }
+};
 
 export const actionTypes = {
-  GET_ALL_USERS: "GET_ALL_USER",
   SET_MESSAGE: "SET_MESSAGE",
-}
-
-export const action = {
-  get_all_users: (userList) => {
-    return{
-       type: actionTypes.GET_ALL_USERS,
-       list: userList
-    }
-  }
+  FETCH_START: "FETCH_START",
+  FETCH_END: "FETCH_END"
 }
 
 export function reducer(state=initialState, action){
   switch (action.type) {
-    case actionTypes.GET_ALL_USERS:
+    case actionTypes.FETCH_START:
       return {
         ...state,
-        userList: action.data
+        isFetching: true
+      };
+    case actionTypes.FETCH_END:
+      return {
+        ...state,
+        isFetching: false
       }
+    case actionTypes.SET_MESSAGE:
+      return {
+        ...state,
+        isFetching: false,
+        msg: {
+          type: action.msgType,
+          content: action.msgContent
+        }
+      };
     default:
       return state;
   }
 }
 
-export default combineReducers({
-  user: reducer,
+const root =  combineReducers({
+  user: UserReducer,
+  global:reducer
 })
+
+export default root;

@@ -1,24 +1,37 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux'
-import {action} from '../reducers/index'
+import {action} from '../reducers/UserAction'
+import Add from './Add'
 import Preview from './Preview'
 
 class List extends Component {
 
   render() {
-    this.props.action.get_all_users();
-    return this.props.user.map((item) => {
-      return(
-          <Preview name={item.userName}/>
+    let text = this.props.user.map((item) => {
+      return (
+        <Preview name={item.userName} id={item._id}/>
       )
     });
+    let add = true;
+    return (
+      <div>
+        <button onClick={this.props.get_all_users}>fresh</button>
+        {text}
+        <button onClick={()=>{add=true}}>add</button>
+        {add && <Add/>}
+
+      </div>
+    )
+  }
+
+  componentDidMount() {
+    this.props.get_all_users();
   }
 }
 
 List.defaultProps = {
-    user: [],
-    action
+    user: []
 }
 
 

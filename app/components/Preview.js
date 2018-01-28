@@ -8,7 +8,7 @@ export default class Preview extends Component {
         <li key={this.props.name}>
           <Link to={{
             pathname: '/detail',
-            name: this.props.name
+            _id: this.props.id
           }}>
             {this.props.name}
           </Link>

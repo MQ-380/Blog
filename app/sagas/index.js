@@ -1,6 +1,9 @@
 import {fork} from 'redux-saga/effects'
-import {getUsers} from './userSaga'
+import {getUserFlow, addUsersFlow, editUsersFlow, deleteUsersFlow} from './userSaga'
 
 export default function* rootSaga() {
-  yield fork(getUsers)
+  yield fork(getUserFlow);
+  yield fork(addUsersFlow);
+  yield fork(editUsersFlow);
+  yield fork(deleteUsersFlow);
 }
