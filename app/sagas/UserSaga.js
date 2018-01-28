@@ -6,7 +6,7 @@ import {actionTypes as actionTypes} from '../reducers/UserAction'
 export function* getUsers() {
   while(true) {
     try {
-      return yield call(get, '/user');
+      return yield call(get, '/admin/user');
     } catch (error) {
       console.log('aaaaa');
     }
@@ -26,7 +26,7 @@ export function* getUserFlow() {
 export function* addUser(data) {
   yield put({type: IndexTypes.FETCH_START});
   try {
-    return yield call(post, '/addUser', data);
+    return yield call(post, '/admin/addUser', data);
   } catch (err) {
     yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0'})
   } finally {
@@ -66,7 +66,7 @@ export function* addUsersFlow() {
 export function* editUser(data) {
   yield put({type: IndexTypes.FETCH_START})
   try {
-    return yield call(post, '/editUser',data);
+    return yield call(post, '/admin/editUser',data);
   } catch(err) {
     yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0'})
   } finally {
@@ -102,7 +102,7 @@ export function* editUsersFlow() {
 export function* deleteUsers(_id) {
   yield put({type: IndexTypes.FETCH_START});
   try {
-    return yield call(post, '/deleteUser', _id);
+    return yield call(post, '/admin/deleteUser', _id);
   } catch(err){
     yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0'})
   } finally {

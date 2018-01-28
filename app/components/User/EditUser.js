@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { action } from '../reducers/UserAction'
+import { action } from '../../reducers/UserAction'
 
 class Edit extends Component {
   constructor (props) {

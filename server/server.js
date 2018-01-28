@@ -6,6 +6,7 @@ const config  = require('../webpack.config');
 const Express = require('express');
 const path = require('path');
 const Proxy = require('http-proxy');
+const history = require('connect-history-api-fallback');
 
 
 const app = new Express();
@@ -15,9 +16,15 @@ const proxy = Proxy.createProxyServer({
   target: targetUrl
 });
 
+
+
 app.use('/api', (req, res) => {
   proxy.web(req,res,{target: targetUrl})
 });
+
+app.use('/',history());
+app.use('/',Express.static(path.join(__dirname,"..",'build')));
+app.use('/',Express.static(path.join(__dirname,"..",'static')));
 
 
 app.use(WebpackDevMiddleware(webpack(config),{
@@ -30,12 +37,12 @@ app.use(WebpackDevMiddleware(webpack(config),{
 
 app.use(WebpackHotMiddleware(webpack(config)));
 
-app.use('/build',Express.static(path.join(__dirname,"..",'app/build/')));
-
-
-app.get('/', (req,res)=>{
-  res.sendFile(path.join(__dirname,'..','app/build/index.html'));
-})
+// app.use('/build',Express.static(path.join(__dirname,"..",'app/build/')));
+//
+//
+// app.get('/admin', (req,res)=>{
+//   res.sendFile(path.join(__dirname,'..','app/build/index.html'));
+// })
 
 
 

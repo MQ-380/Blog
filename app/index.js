@@ -4,6 +4,7 @@ import {Provider} from 'react-redux'
 import App from './components/App.js'
 import {AppContainer} from 'react-hot-loader'
 import configureStore from './configureStore'
+import 'antd/dist/antd.css';
 
 let div = document.createElement('div');
 div.setAttribute('id', 'app');
@@ -12,6 +13,8 @@ document.body.appendChild(div);
 if(module.hot) {
   module.hot.accept();
 }
+
+
 
 const store = configureStore();
 

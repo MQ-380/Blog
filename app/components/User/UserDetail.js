@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { action } from '../reducers/UserAction'
+import { action } from '../../reducers/UserAction'
 import { bindActionCreators } from 'redux'
+import {Button} from 'antd'
 
 class Detail extends Component {
   constructor (props) {
@@ -19,9 +20,9 @@ class Detail extends Component {
         <h2>{this.props.names}</h2>
         <li>{this.props.times}</li>
         {this.props.hasEdit && <li>EditTime: {this.props.hasEdit}</li>}
-        <li><Link to={{pathname: '/edit',_id:this.props._id}}>Edit</Link></li>
+        <li><Link to={{pathname: '/admin/edit',_id:this.props._id}}>Edit</Link></li>
         <li><Link to={'/'}>Return</Link></li>
-        <button onClick={this.delete.bind(this)}>Delete</button>
+        <Button type="danger" onClick={this.delete.bind(this)}>Delete</Button>
       </div>
     )
   }

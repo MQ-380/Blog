@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux'
-import {action} from '../reducers/UserAction'
-import Add from './Add'
+import {action} from '../../reducers/UserAction'
+import Add from './AddUser'
 import Preview from './Preview'
 
 class List extends Component {

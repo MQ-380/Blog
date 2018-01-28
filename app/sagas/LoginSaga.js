@@ -1,0 +1,62 @@
+import {put, take, call} from 'redux-saga/effects'
+import {get, post} from './fetch'
+import {actionTypes as IndexTypes} from '../reducers/index'
+import {actionTypes as actionTypes} from '../reducers/UserAction'
+
+
+export function* adminLogin(data) {
+  yield put({type: IndexTypes.FETCH_START})
+  try {
+    return yield post('/login', data);
+  }catch(err) {
+    console.error(err);
+  }finally {
+    yield put({type: IndexTypes.FETCH_END})
+  }
+}
+
+export function* adminLoginFlow () {
+  while(true) {
+    let req = yield take(IndexTypes.LOGIN);
+    const data = {username: req.username, password: req.password}
+    let res = yield call(adminLogin, data);
+    if (res) {
+      res = JSON.parse(res)
+      if (res.status) {
+        let session = window.sessionStorage;
+        console.log(res.token);
+        session.token = res.token;
+        yield put({type: IndexTypes.LOGIN_SUCCESS, data, isAdmin: res.isAdmin});
+      } else {
+        yield put({type: IndexTypes.LOGIN_FAILED, data: res.message});
+      }
+    } else {
+      yield put({type: IndexTypes.LOGIN_FAILED, data: '请检查网络连接'});
+    }
+  }
+}
+
+export function* checkLogin(data) {
+  try {
+    return yield post('/loginCheck', data);
+  } catch(err) {
+    console.error(error);
+  }
+}
+
+export function* checkLoginFlow() {
+  while(true) {
+    let req = yield take(IndexTypes.CHECK_LOGIN);
+    const data  = {token: req.token};
+    let res = yield call(checkLogin, data);
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username});
+      } else {
+        window.sessionStorage.clear();
+        yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg});
+      }
+    }
+  }
+}

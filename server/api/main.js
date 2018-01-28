@@ -1,54 +1,46 @@
 import Express from 'express'
-import Users from '../../db/users'
+import Users from '../../db/Users'
+
+const uuidv4 = require('uuid/v4')
 
 const router = Express.Router();
 
-router.get('/user', function(req, res) {
-  Users.find({},(err, data)=> {
-    if(err) {
-      res.status(500);
-    }
-      console.log(data);
-      res.json(data);
-  });
-});
-
-
-router.post('/addUser', function(req, res) {
-  const {userName,time} = req.body;
-  let tmpUser = new Users({
-    userName,
-    time
-  })
-  tmpUser.save().then(() => {
-    res.json({code: 0})
-  }).cancel(err => {
-    console.log(err);
-    res.json({code: 1})
-  })
-})
-
-
-router.post('/editUser', function(req, res) {
-  const {_id, name, editTime} = req.body;
-  Users.update({_id: _id}, {userName: name,editTime: editTime},(err, data) => {
+router.post('/login',(req, res) => {
+  let {username, password} = req.body;
+  Users.find({username: username},(err, data) => {
     if(err){
-      console.error(err);
-      res.json({code: 1});
+      res.json({status: false, msg: '请检查数据库'})
     }
-    res.json({code: 0});
+    if(data[0].password === password) {
+      const loginToken = uuidv4()
+      Users.update({username: username}, {loginToken, loginTime: new Date()}, (err)=>{console.log(err)})
+      res.json({status: true, isAdmin: data[0].isAdmin, token: loginToken});
+    } else {
+      res.json({status: false, msg: '密码错误'})
+    }
   })
 })
 
-router.post('/deleteUser', (req,res) => {
-  const {_id} = req.body;
-  Users.remove({_id}, (err)=>{
+
+router.post('/loginCheck', (req, res) => {
+  let {token} = req.body;
+  Users.find({loginToken:token},(err,data)=>{
     if(err) {
-      console.log(err);
-      res.json({code: 1});
+      res.json({status: false, msg: '请检查网络'})
+    } else {
+      if(isExpired(data[0].loginTime)) {
+        Users.update({username: data[0].username}, {loginToken: '', loginTime: ''},(err)=>{console.log(err)});
+        res.json({status: false, msg: '当前登录已经过期，请重新登录'})
+      } else {
+        res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin})
+      }
     }
-    res.json({code: 0});
   })
 })
+
+const isExpired = (loginDate) => {
+  const now = new Date()
+  return Math.abs(now - loginDate) / 1000 / 60 / 60 > 2
+}
 
 module.exports = router

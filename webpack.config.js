@@ -18,7 +18,11 @@ module.exports = {
       test: /\.js$/,
       loaders: ['babel-loader'],
       exclude: /node_modules/,
-    }]
+    },
+      {
+        test: /\.css$/,
+        loader: ['style-loader', 'css-loader']
+      }]
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
