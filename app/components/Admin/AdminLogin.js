@@ -1,24 +1,22 @@
-import React, {Component} from 'react'
-import {bindActionCreators} from 'redux'
-import LoginForm from  './LoginForm'
-import {action} from '../../reducers/index'
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import LoginForm from './LoginForm'
+import { action } from '../../reducers/index'
 import { connect } from 'react-redux'
-import Admin from './AdminPanel'
-
 
 class AdminLogin extends Component {
   constructor () {
-    super();
+    super()
   }
 
-  login(username, password, remember) {
-    this.props.login(username, password);
+  login (username, password, remember) {
+    this.props.login(username, password)
   }
 
-  render() {
-    return(
+  render () {
+    return (
       <div>
-        <LoginForm LoginInfo={(username, password, remember)=> {
+        <LoginForm LoginInfo={(username, password, remember) => {
           this.login(username, password, remember)
         }}/>
         {this.props.isAdmin && location.replace('/adminPanel')}
@@ -33,7 +31,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
   return {
     login: bindActionCreators(action.login, dispatch)
   }

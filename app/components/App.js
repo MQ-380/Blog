@@ -7,12 +7,10 @@ export default class App extends Component {
   render () {
     return (
       <Router>
-        <div>
           <Switch>
             <Route path='/admin' component={Admin}/>
             <Route component={List}/>
           </Switch>
-        </div>
       </Router>
     )
   };

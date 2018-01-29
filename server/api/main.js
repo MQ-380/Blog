@@ -28,11 +28,15 @@ router.post('/loginCheck', (req, res) => {
     if(err) {
       res.json({status: false, msg: '请检查网络'})
     } else {
-      if(isExpired(data[0].loginTime)) {
-        Users.update({username: data[0].username}, {loginToken: '', loginTime: ''},(err)=>{console.log(err)});
-        res.json({status: false, msg: '当前登录已经过期，请重新登录'})
+      if (!data[0]) {
+        res.json({status: false, msg: '您的账号已经在别处登录，本地已下线'})
       } else {
-        res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin})
+        if (isExpired(data[0].loginTime)) {
+          Users.update({username: data[0].username}, {loginToken: '', loginTime: ''}, (err) => {console.log(err)});
+          res.json({status: false, msg: '当前登录已经过期，请重新登录'})
+        } else {
+          res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin})
+        }
       }
     }
   })

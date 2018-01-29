@@ -1,19 +1,33 @@
-import React, {Component} from 'react'
-import AdminPanel from  './AdminPanel'
+import React, { Component } from 'react'
+import AdminPanel from './AdminPanel'
 import AdminLogin from './AdminLogin'
 import { connect } from 'react-redux'
 import { action } from '../../reducers/index'
 import { bindActionCreators } from 'redux'
+import { Row, Col } from 'antd'
+import '../Style/Form.css'
 
 class Admin extends Component {
-  render() {
+  render () {
     return (
-      <div>
-        {window.sessionStorage.token ? this.props.check_login(window.sessionStorage.token) && <div/> : <div/>}
+      <div className='full'>
         {this.props.isAdminLogin && <AdminPanel/>}
-        {!this.props.isAdminLogin && <AdminLogin/>}
+        {!this.props.isAdminLogin && (
+          <div className='container'>
+            <div className="form">
+              <AdminLogin/>
+            </div>
+          </div>
+        )
+        }
       </div>
     )
+  }
+
+  componentWillMount () {
+    if (window.sessionStorage.token) {
+      this.props.check_login(window.sessionStorage.token)
+    }
   }
 }
 
@@ -23,10 +37,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) =>{
+const mapDispatchToProps = (dispatch) => {
   return {
-    check_login: bindActionCreators(action.check_login,dispatch)
+    check_login: bindActionCreators(action.check_login, dispatch)
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Admin);
+export default connect(mapStateToProps, mapDispatchToProps)(Admin)
