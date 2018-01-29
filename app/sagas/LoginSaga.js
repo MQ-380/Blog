@@ -60,3 +60,30 @@ export function* checkLoginFlow() {
     }
   }
 }
+
+export function* logout(data) {
+  try {
+    return yield post('/logout', data);
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export function* LogoutFlow() {
+  while(true) {
+    let req = yield take(IndexTypes.LOGOUT);
+    const data = {username: req.username};
+    let res = yield call(logout, data);
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        window.sessionStorage.clear();
+        yield put({type: IndexTypes.LOGOUT_SUCCESS})
+      } else {
+        yield put({type: IndexTypes.LOGIN_FAILED, msg: '退出登录失败，请检查网络'})
+      }
+    } else {
+      yield put({type: IndexTypes.LOGIN_FAILED, msg: '退出登录失败，请检查网络'})
+    }
+  }
+}

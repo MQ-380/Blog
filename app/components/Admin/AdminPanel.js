@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Icon, Popover, Avatar, Badge } from 'antd'
+import { Layout, Menu, Icon, Popover, Avatar, Badge, MenuItemGroup} from 'antd'
 import Add from '../User/AddUser'
 import List from '../User/UserList'
 import Detail from '../User/UserDetail'
 import Edit from '../User/EditUser'
+import Avator from '../Normal/Avatar'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const {SubMenu} = Menu
 const {Header, Content, Sider} = Layout
-const content = (
-<div>
-  aaaaa
-</div>
-)
+
 
 class AdminPanel extends Component {
   render () {
@@ -23,13 +20,7 @@ class AdminPanel extends Component {
         <Layout>
           <Header className='header' style={{position: 'relative'}}>
             <div className='AdminLogo' style={{position:'absolute', right:'5%'}}>
-              <Popover content={content} title={`欢迎,${this.props.username}`} placement="bottom" trigger='click'>
-                <Badge count={99}>
-                  <Avatar style={{ backgroundColor: '#7265e6', verticalAlign: 'middle',cursor:'pointer' }} shape="square" size="large">
-                    {this.props.username}
-                  </Avatar>
-                </Badge>
-              </Popover>
+              <Avator/>
             </div>
           </Header>
           <Layout>

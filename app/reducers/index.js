@@ -16,6 +16,9 @@ export const actionTypes = {
   LOGIN: "LOGIN",
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILED: 'LOGIN_FAILED',
+  LOGOUT: 'LOGOUT',
+  LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
+  LOGOUT_FAIL: 'LOGOUT_FAIL',
   CHECK_LOGIN: 'CHECK_LOGIN',
   CHECK_TRUE: 'CHECK_TRUE',
   CHECK_FALSE: 'CHECK_FALSE',
@@ -30,6 +33,12 @@ export const action = {
       type: actionTypes.LOGIN,
       username,
       password
+    }
+  },
+  logout: (username) => {
+    return {
+      type: actionTypes.LOGOUT,
+      username
     }
   },
   check_login: (token) => {
@@ -79,6 +88,18 @@ export function reducer(state=initialState, action){
       return {
         ...state,
         isLogin: false,
+        msg: {type: 1, content:action.msg}
+      }
+    case actionTypes.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        isLogin: false,
+        username: '',
+        isAdminLogin: false
+      }
+    case actionTypes.LOGIN_FAILED:
+      return {
+        ...state,
         msg: {type: 1, content:action.msg}
       }
     default:
