@@ -7,8 +7,9 @@ const initialState = {
   isFetching: false,
   username: '',
   msg: {
-    type: 1,//0失败 1成功
-    content: ''
+    title: '',
+    content: '',
+    type: ''
   }
 };
 
@@ -24,7 +25,8 @@ export const actionTypes = {
   CHECK_FALSE: 'CHECK_FALSE',
   SET_MESSAGE: "SET_MESSAGE",
   FETCH_START: "FETCH_START",
-  FETCH_END: "FETCH_END"
+  FETCH_END: "FETCH_END",
+  CLEAR_MSG: 'CLEAR_MSG',
 }
 
 export const action = {
@@ -46,6 +48,11 @@ export const action = {
       type: actionTypes.CHECK_LOGIN,
       token
     }
+  },
+  clear_msg: () => {
+    return {
+      type: actionTypes.CLEAR_MSG
+    }
   }
 }
 
@@ -66,8 +73,18 @@ export function reducer(state=initialState, action){
         ...state,
         isFetching: false,
         msg: {
-          type: action.msgType,
-          content: action.msgContent
+          title: action.msgType,
+          content: action.msgContent,
+          type: action.alertType
+        }
+      }
+    case actionTypes.CLEAR_MSG:
+      return {
+        ...state,
+        msg: {
+          type: '',
+          content: '',
+          title: ''
         }
       }
     case actionTypes.LOGIN_SUCCESS:
@@ -88,7 +105,11 @@ export function reducer(state=initialState, action){
       return {
         ...state,
         isLogin: false,
-        msg: {type: 1, content:action.msg}
+        msg: {
+          title: '登录状态错误',
+          content:action.msg,
+          type: action.alertType,
+        }
       }
     case actionTypes.LOGOUT_SUCCESS:
       return {
@@ -100,7 +121,11 @@ export function reducer(state=initialState, action){
     case actionTypes.LOGIN_FAILED:
       return {
         ...state,
-        msg: {type: 1, content:action.msg}
+        msg: {
+          title: '登录错误',
+          content:action.msg,
+          type: action.alertType
+        }
       }
     default:
       return state;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {Popover, Avatar, Badge} from 'antd'
+import {Popover, Avatar, Badge,Popconfirm} from 'antd'
 import {action} from '../../reducers/index'
 
 
@@ -14,7 +14,9 @@ class Avatars extends Component {
     return (
         <Popover content={
           <div>
-            <a onClick={this.logout.bind(this)}>退出登录</a>
+            <Popconfirm placement="bottom" title={'确定退出登录?'} onConfirm={this.logout.bind(this)} okText="确定" cancelText="取消">
+              <a>退出登录</a>
+            </Popconfirm>
           </div>
         } title={`欢迎,${this.props.username}`} placement="bottom" trigger='click'>
           <Badge count={99}>

@@ -18,6 +18,7 @@ export function* adminLogin(data) {
 export function* adminLoginFlow () {
   while(true) {
     let req = yield take(IndexTypes.LOGIN);
+    yield put({type: IndexTypes.CLEAR_MSG});
     const data = {username: req.username, password: req.password}
     let res = yield call(adminLogin, data);
     if (res) {
@@ -28,10 +29,10 @@ export function* adminLoginFlow () {
         session.token = res.token;
         yield put({type: IndexTypes.LOGIN_SUCCESS, data, isAdmin: res.isAdmin});
       } else {
-        yield put({type: IndexTypes.LOGIN_FAILED, data: res.message});
+        yield put({type: IndexTypes.LOGIN_FAILED, msg: res.msg, alertType: 'error'});
       }
     } else {
-      yield put({type: IndexTypes.LOGIN_FAILED, data: '请检查网络连接'});
+      yield put({type: IndexTypes.LOGIN_FAILED, msg: '请检查网络连接', alertType: 'error'});
     }
   }
 }
@@ -47,6 +48,7 @@ export function* checkLogin(data) {
 export function* checkLoginFlow() {
   while(true) {
     let req = yield take(IndexTypes.CHECK_LOGIN);
+    yield put({type: IndexTypes.CLEAR_MSG});
     const data  = {token: req.token};
     let res = yield call(checkLogin, data);
     if(res) {
@@ -55,7 +57,7 @@ export function* checkLoginFlow() {
         yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username});
       } else {
         window.sessionStorage.clear();
-        yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg});
+        yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg, alertType: 'error'});
       }
     }
   }
@@ -80,10 +82,10 @@ export function* LogoutFlow() {
         window.sessionStorage.clear();
         yield put({type: IndexTypes.LOGOUT_SUCCESS})
       } else {
-        yield put({type: IndexTypes.LOGIN_FAILED, msg: '退出登录失败，请检查网络'})
+        yield put({type: IndexTypes.LOGIN_FAILED, msg: res.message, alertType: 'error'})
       }
     } else {
-      yield put({type: IndexTypes.LOGIN_FAILED, msg: '退出登录失败，请检查网络'})
+      yield put({type: IndexTypes.LOGIN_FAILED, msg: res.message, alertType: 'error'})
     }
   }
 }

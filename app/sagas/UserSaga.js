@@ -79,7 +79,7 @@ export function* editUsersFlow() {
     let req = yield take(actionTypes.EDIT_NAME);
 
     if(req.name === '' || req.name === undefined) {
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'empty name', msgType: '0'});
+      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'empty name', msgType: '0', alertType: 'error'});
     }
     if(req.name) {
       let data = {_id: req._id,name: req.name, editTime: req.editTime}
@@ -87,12 +87,12 @@ export function* editUsersFlow() {
       if(res) {
         res = JSON.parse(res);
         if(res.code === 0) {
-          yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1'});
+          yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1', alertType: 'success'});
           setTimeout(function () {
             location.replace('/')
           }, 500);
         } else {
-          yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0'})
+          yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0',alertType: 'error'})
         }
       }
     }
@@ -104,7 +104,7 @@ export function* deleteUsers(_id) {
   try {
     return yield call(post, '/admin/deleteUser', _id);
   } catch(err){
-    yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0'})
+    yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0',alertType: 'error'})
   } finally {
 
     yield put({type: IndexTypes.FETCH_END});
@@ -117,12 +117,12 @@ export function* deleteUsersFlow() {
     let res = yield call(deleteUsers, {_id:req._id});
     res = JSON.parse(res);
     if(res.code === 0) {
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1'});
+      yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1',alertType: 'success'});
       setTimeout(function () {
         location.replace('/')
       }, 500);
     } else {
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0'})
+      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0',alertType: 'error'})
     }
   }
 }

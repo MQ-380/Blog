@@ -36,7 +36,7 @@ router.post('/loginCheck', (req, res) => {
       if (!data[0]) {
         res.json({status: false, msg: '您的账号已经在别处登录，本地已下线'})
       } else {
-        if (isExpired(data[0].loginTime)) {
+        if (isExpired(data[0].loginTime) || true) {
           Users.update({username: data[0].username}, {loginToken: '', loginTime: null}, (err) => {
             if(err) {
               console.log(err);
@@ -57,15 +57,15 @@ router.post('/logout', (req, res) => {
   let {username} = req.body;
   Users.find({username}, (err, data) => {
     if(err) {
-      res.json({status: false});
+      res.json({status: false,  message: '退出登录失败，请检查网络'});
     } else {
       if(!data[0]) {
-        res.json({status: false});
+        res.json({status: false, message: '退出登录失败，请检查网络'});
       } else {
         Users.update({username}, {loginToken:'', loginTime: null}, (err)=>{
           if(err) {
             console.log(err);
-            res.json({status: false});
+            res.json({status: false, message: '退出登录失败，请检查网络'});
           }
           res.json({status: true});
           });
