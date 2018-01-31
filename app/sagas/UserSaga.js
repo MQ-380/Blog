@@ -4,13 +4,15 @@ import {actionTypes as IndexTypes} from '../reducers/index'
 import {actionTypes as actionTypes} from '../reducers/UserAction'
 
 export function* getUsers() {
-  while(true) {
+
+  yield put({type: IndexTypes.FETCH_START});
     try {
       return yield call(get, '/admin/user');
     } catch (error) {
       console.log('aaaaa');
+    } finally {
+      yield put({type: IndexTypes.FETCH_END});
     }
-  }
 }
 
 export function* getUserFlow() {

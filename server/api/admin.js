@@ -8,7 +8,6 @@ router.get('/user', function(req, res) {
     if(err) {
       res.status(500);
     }
-    console.log(data);
     res.json(data);
   });
 });

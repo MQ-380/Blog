@@ -31,10 +31,7 @@ class AdminPanel extends Component {
                 defaultOpenKeys={['Users']}
                 style={{height: '100%', borderRight: 0}}
               >
-                <SubMenu key={'Users'} title={<span><Icon type='user'/>用户管理</span>}>
-                  <Menu.Item key='userList'>用户列表</Menu.Item>
-                  <Menu.Item key='addUser'>增加用户</Menu.Item>
-                </SubMenu>
+                  <Menu.Item key='userList'><span><Icon type='user'/>用户管理</span></Menu.Item>
                 <SubMenu key={'Article'} title={<span><Icon type='book'/>文章管理</span>}>
                   <Menu.Item key='articleList'>文章列表</Menu.Item>
                 </SubMenu>
@@ -44,10 +41,10 @@ class AdminPanel extends Component {
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
                 <Router>
                   <Switch>
-                    <Route path='/detail' component={Detail}/>
-                    <Route path='/edit' component={Edit}/>
-                    <Route path='/add' component={Add}/>
-                    <Route path='/' component={List}/>
+                    <Route path='/admin/detail' component={Detail}/>
+                    <Route path='/admin/edit' component={Edit}/>
+                    <Route path='/admin/add' component={Add}/>
+                    <Route path='/admin' component={List}/>
                   </Switch>
                 </Router>
               </Content>
