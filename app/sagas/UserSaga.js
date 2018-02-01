@@ -30,38 +30,30 @@ export function* addUser(data) {
   try {
     return yield call(post, '/admin/addUser', data);
   } catch (err) {
-    yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0'})
+    yield put({type: IndexTypes.SET_MESSAGE, msgType:'失败', msgContent: '添加用户失败', alertType: 'error'})
   } finally {
     yield put({type: IndexTypes.FETCH_END});
   }
-
 }
+
 
 export function* addUsersFlow() {
   while(true) {
     let req = yield take(actionTypes.ADD_NEW_USERS);
-
-    if (req.userName === '' || req.userName === undefined) {
-      console.log(req);
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'empty name', msgType: '0'});
-    }
-    if(req.userName) {
-      let data = {userName: req.userName, time: req.time}
-      let res = yield call(addUser, data);
+    if(req) {
+      let res = yield call(addUser, req);
       if(res) {
         res = JSON.parse(res);
         if(res.code === 0) {
-          yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1'});
-          setTimeout(function () {
-          location.replace('/')
-        }, 500);
+          yield put({type: actionTypes.REGISTER_SUCCESS});
         } else {
-         yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0'})
+         yield put({type: IndexTypes.SET_MESSAGE, msgType:'失败', msgContent: '添加用户失败', alertType: 'error'});
         }
       }
     }
   }
 }
+
 
 
 

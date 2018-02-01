@@ -14,10 +14,13 @@ router.get('/user', function(req, res) {
 
 
 router.post('/addUser', function(req, res) {
-  const {userName,time} = req.body;
+  const {username,email,password,auth,isAdmin} = req.body;
   let tmpUser = new Users({
-    userName,
-    time
+    username,
+    email,
+    password,
+    isAdmin,
+    auth,
   })
   tmpUser.save().then(() => {
     res.json({code: 0})

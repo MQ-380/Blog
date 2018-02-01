@@ -3,9 +3,10 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {action} from '../../reducers/UserAction'
-import {Button, Table, Divider, Tooltip, Menu, Icon, Dropdown} from 'antd'
+import {Button, Table, Divider, Tooltip, Menu, Icon, Dropdown,Form, Modal} from 'antd'
 import Add from './AddUser'
 import Preview from './Preview'
+import Register from './RegisterForm'
 
 
 const columns = [
@@ -35,23 +36,36 @@ const columns = [
   }
 ]
 
-const actions = (
-  <Menu>
-    <Menu.Item key={'fresh'}><span><Icon type={'reload'}/>刷新</span></Menu.Item>
-    <Menu.Item key={'add'}><span><Icon type={'plus'}/>新增用户</span></Menu.Item>
-    <Menu.Item key={'delete'}><span><Icon type={'minus'}/>删除所选用户</span></Menu.Item>
-  </Menu>
-)
+
 
 class List extends Component {
-  state = {selectedRowKeys: []}
+  state = {selectedRowKeys: [], visible: false}
 
   onSelectedChange = (selectedRowKeys) => {
     this.setState({selectedRowKeys});
   }
 
+  handleAction = (e) => {
+    switch (e.key) {
+      case 'fresh':
+        this.props.get_all_users();
+        return;
+      case 'add':
+        this.props.show_register(true);
+    }
+  }
+
+  actions = (
+    <Menu onClick={this.handleAction}>
+      <Menu.Item key={'fresh'}><span><Icon type={'reload'}/>刷新</span></Menu.Item>
+      <Menu.Item key={'add'}><span><Icon type={'plus'}/>增加管理员</span></Menu.Item>
+      <Menu.Item key={'delete'}><span><Icon type={'minus'}/>删除所选用户</span></Menu.Item>
+    </Menu>
+  )
+
+
   render() {
-    const {selectedRowKeys} = this.state;
+    const {selectedRowKeys, visible} = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectedChange,
@@ -61,8 +75,8 @@ class List extends Component {
         <h1>用户管理</h1>
         <div style={{position: 'relative'}}>
           <div style={{position: 'absolute', right: '5%'}}>
-            <Dropdown overlay={actions}>
-              <Button>
+            <Dropdown overlay={this.actions}>
+              <Button >
                 用户操作<Icon type={'down'}/>
               </Button>
             </Dropdown>
@@ -70,13 +84,19 @@ class List extends Component {
         </div>
           <br/><br/>
           <Table rowSelection={rowSelection} bordered={true} columns={columns} dataSource={this.props.user} rowKey="_id" />
-
+        <Add/>
       </div>
     )
   }
 
   componentDidMount() {
     this.props.get_all_users();
+  }
+
+  componentDidUpdate() {
+    if(this.props.after_register){
+      this.props.get_all_users();
+    }
   }
 }
 
@@ -85,12 +105,14 @@ function mapStateToProps(state) {
   return {
     user: state.user.userList,
     isLoading: state.global.isFetching,
+    after_register: state.user.after_register
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    get_all_users: bindActionCreators(action.get_all_users,dispatch)
+    get_all_users: bindActionCreators(action.get_all_users,dispatch),
+    show_register: bindActionCreators(action.register_control,dispatch)
   }
 }
 
@@ -98,3 +120,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(List)
+
+

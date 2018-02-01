@@ -2,34 +2,55 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action } from '../../reducers/UserAction'
+import {action as indexAction} from '../../reducers/index'
+import RegisterForm from './RegisterForm'
+import { Form, Modal } from 'antd'
+
+const bcrypt = require('bcryptjs')
 
 class AddUser extends Component {
   constructor (props) {
     super(props)
   }
 
-  onChanges(e) {
-    this.props.update_name(e.target.value);
+  showMessage = () => {
+      let msg = {
+        title: this.props.msg.title,
+        content: this.props.msg.content
+      }
+      if(this.props.msg.type === 'error'){
+        Modal.error(msg);
+      }
   }
 
-  add(){
-    this.props.add_new_users(this.props.name)
+  submit = () => {
+    this.props.clearMsg();
+    this.refs.form.validateFields((err, values) => {
+      if (!err) {
+        values.password = bcrypt.hashSync(values.password, bcrypt.genSaltSync(10))
+        this.props.add_new_admin(values.username, values.password, values.email)
+
+      }
+    })
   }
 
   render () {
-    let {isFetching} = this.props;
-
     return (
       <div>
-        <form>
-          <label>name</label>
-          <input value={this.props.name} onChange={this.onChanges.bind(this)}/>
-        </form>
-        <button onClick={this.add.bind(this)}>Add</button>
-        {isFetching &&  <h1>LOADING</h1>}
-        {this.props.msg && <div>{this.props.msg.content}</div>}
+        <Modal title={'增加管理员'}
+               visible={this.props.show_register}
+               destroyOnClose={true}
+               onOk={this.submit}
+               confirmLoading={this.props.isFetching}
+        >
+          <RegisterForm ref={'form'} user={this.props.userList}/>
+        </Modal>
       </div>
     )
+  }
+
+  componentDidUpdate () {
+    this.showMessage();
   }
 }
 
@@ -37,14 +58,15 @@ function mapStateToProps (state) {
   return {
     isFetching: state.global.isFetching,
     msg: state.global.msg,
-    name: state.user.userName
+    userList: state.user.userList,
+    show_register: state.user.show_register,
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    add_new_users: bindActionCreators(action.add_new_users, dispatch),
-    update_name: bindActionCreators(action.update_name, dispatch)
+    add_new_admin: bindActionCreators(action.add_new_admin, dispatch),
+    clearMsg: bindActionCreators(indexAction.clear_msg, dispatch)
   }
 }
 
@@ -52,3 +74,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(AddUser)
+
+
