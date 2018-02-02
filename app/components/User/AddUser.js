@@ -13,10 +13,13 @@ class AddUser extends Component {
     super(props)
   }
 
-  showMessage = () => {
+  showMessage = (self) => {
       let msg = {
         title: this.props.msg.title,
-        content: this.props.msg.content
+        content: this.props.msg.content,
+        onOk: () => {
+          self.props.to_show_register(false);
+        }
       }
       if(this.props.msg.type === 'error'){
         Modal.error(msg);
@@ -29,7 +32,6 @@ class AddUser extends Component {
       if (!err) {
         values.password = bcrypt.hashSync(values.password, bcrypt.genSaltSync(10))
         this.props.add_new_admin(values.username, values.password, values.email)
-
       }
     })
   }
@@ -41,6 +43,7 @@ class AddUser extends Component {
                visible={this.props.show_register}
                destroyOnClose={true}
                onOk={this.submit}
+               onCancel={()=>this.props.to_show_register(false)}
                confirmLoading={this.props.isFetching}
         >
           <RegisterForm ref={'form'} user={this.props.userList}/>
@@ -50,7 +53,7 @@ class AddUser extends Component {
   }
 
   componentDidUpdate () {
-    this.showMessage();
+    this.showMessage(this);
   }
 }
 
@@ -66,7 +69,8 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     add_new_admin: bindActionCreators(action.add_new_admin, dispatch),
-    clearMsg: bindActionCreators(indexAction.clear_msg, dispatch)
+    clearMsg: bindActionCreators(indexAction.clear_msg, dispatch),
+    to_show_register: bindActionCreators(action.register_control, dispatch)
   }
 }
 

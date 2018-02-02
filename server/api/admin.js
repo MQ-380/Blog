@@ -44,13 +44,20 @@ router.post('/editUser', function(req, res) {
 
 router.post('/deleteUser', (req,res) => {
   const {_id} = req.body;
-  Users.remove({_id}, (err)=>{
-    if(err) {
-      console.log(err);
-      res.json({code: 1});
-    }
-    res.json({code: 0});
+  let failedItem = [];
+  _id.split(',').forEach((item) => {
+    Users.remove({_id: item}, (err) => {
+      if(err) {
+        console.log(err);
+        failedItem.push(item);
+      }
+    })
   })
+  if(failedItem.length !== 0) {
+    res.json({code: 0});
+  } else {
+    res.json({code: 1});
+  }
 })
 
 module.exports = router

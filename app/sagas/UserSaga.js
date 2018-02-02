@@ -98,7 +98,7 @@ export function* deleteUsers(_id) {
   try {
     return yield call(post, '/admin/deleteUser', _id);
   } catch(err){
-    yield put({type: IndexTypes.SET_MESSAGE, msgContent:'error', msgType: '0',alertType: 'error'})
+    yield put({type: actionTypes.DELETE_FAILED, content:`删除错误，部分或全部用户未被删除`, title: '删除失败',alertType: 'error'});
   } finally {
 
     yield put({type: IndexTypes.FETCH_END});
@@ -108,15 +108,12 @@ export function* deleteUsers(_id) {
 export function* deleteUsersFlow() {
   while(true) {
     let req = yield take(actionTypes.DELETE_ITEM);
-    let res = yield call(deleteUsers, {_id:req._id});
+    let res = yield call(deleteUsers, {_id:req._ids});
     res = JSON.parse(res);
     if(res.code === 0) {
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent: 'success!', msgType: '1',alertType: 'success'});
-      setTimeout(function () {
-        location.replace('/')
-      }, 500);
+      yield put({type: actionTypes.TO_SHOW_DELETE, toShow: false});
     } else {
-      yield put({type: IndexTypes.SET_MESSAGE, msgContent:'net error', msgType: '0',alertType: 'error'})
+      yield put({type: actionTypes.DELETE_FAILED, content:`删除错误，部分或全部用户未被删除`, title: '删除失败',alertType: 'error'});
     }
   }
 }

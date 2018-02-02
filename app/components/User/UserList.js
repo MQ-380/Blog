@@ -39,19 +39,48 @@ const columns = [
 
 
 class List extends Component {
-  state = {selectedRowKeys: [], visible: false}
+  state = {selectedRowKeys: [], visible: false, selectedRowNames: []}
 
   onSelectedChange = (selectedRowKeys) => {
     this.setState({selectedRowKeys});
+    console.log(selectedRowKeys);
   }
+
 
   handleAction = (e) => {
     switch (e.key) {
       case 'fresh':
-        this.props.get_all_users();
-        return;
+        return this.props.get_all_users();
       case 'add':
-        this.props.show_register(true);
+        return this.props.show_register(true);
+      case 'delete':
+        if(this.state.selectedRowKeys.length === 0) {
+          Modal.error({title: '错误', content:'未选择要删除的账号!'})
+        } else {
+          let selectedRowNames = this.state.selectedRowKeys.map((id) => {
+            return this.props.user.filter((item) => item._id === id)[0].username;
+          })
+          this.setState({selectedRowNames})
+          if (selectedRowNames.includes(this.props.username)) {
+            Modal.error({title: '错误', content: '不得删除当前登录的账号!'})
+          } else {
+            return this.props.to_show_delete(true);
+          }
+        }
+    }
+  }
+
+  showMessage = (self) => {
+    let msg = {
+      title: this.props.delete_msg.title,
+      content: this.props.delete_msg.content,
+      onOk: () => {
+        self.props.to_show_delete(false);
+        self.props.close_msg();
+      }
+    }
+    if(this.props.delete_msg.type === 'error'){
+      Modal.error(msg);
     }
   }
 
@@ -63,9 +92,8 @@ class List extends Component {
     </Menu>
   )
 
-
   render() {
-    const {selectedRowKeys, visible} = this.state;
+    const {selectedRowKeys} = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectedChange,
@@ -85,6 +113,14 @@ class List extends Component {
           <br/><br/>
           <Table rowSelection={rowSelection} bordered={true} columns={columns} dataSource={this.props.user} rowKey="_id" />
         <Add/>
+        <Modal title={`确定删除如下${this.state.selectedRowNames.length}个用户?`}
+               visible={this.props.show_delete}
+               onOk = {()=>this.props.delete_item(this.state.selectedRowKeys)}
+               onCancel={()=>this.props.to_show_delete(false)}
+               confirmLoading={!this.props.show_delete}
+        >
+          <p>{this.state.selectedRowNames.join(',')}</p>
+        </Modal>
       </div>
     )
   }
@@ -97,6 +133,9 @@ class List extends Component {
     if(this.props.after_register){
       this.props.get_all_users();
     }
+    if(this.props.delete_msg.show) {
+      this.showMessage(this);
+    }
   }
 }
 
@@ -104,15 +143,21 @@ class List extends Component {
 function mapStateToProps(state) {
   return {
     user: state.user.userList,
+    username: state.global.username,
     isLoading: state.global.isFetching,
-    after_register: state.user.after_register
+    after_register: state.user.after_register,
+    show_delete: state.user.show_delete,
+    delete_msg: state.user.delete_msg,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     get_all_users: bindActionCreators(action.get_all_users,dispatch),
-    show_register: bindActionCreators(action.register_control,dispatch)
+    delete_item: bindActionCreators(action.delete_item, dispatch),
+    show_register: bindActionCreators(action.register_control,dispatch),
+    to_show_delete: bindActionCreators(action.to_show_delete, dispatch),
+    close_msg: bindActionCreators(action.clear_msg, dispatch)
   }
 }
 

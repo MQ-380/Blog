@@ -1,7 +1,14 @@
 const initialState = {
   userList: [],
   show_register: false,
-  after_register: false
+  after_register: false,
+  show_delete: false,
+  delete_msg: {
+    show: false,
+    type: '',
+    content:'',
+    title: ''
+  }
 }
 
 export const actionTypes = {
@@ -14,7 +21,10 @@ export const actionTypes = {
   DELETE_ITEM: 'DELETE_ITEM',
   REGISTER_CONTROL: 'REGISTER_CONTROL',
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
-  REGISTER_FAILED: 'REGISTER_FAILED'
+  REGISTER_FAILED: 'REGISTER_FAILED',
+  TO_SHOW_DELETE: 'TO_SHOW_DELETE',
+  DELETE_FAILED: 'DELETE_FAILED',
+  CLEAR_MSG: 'CLEAR_MSG',
 }
 
 export const action = {
@@ -54,16 +64,27 @@ export const action = {
       editTime: new Date()
     }
   },
-  delete_item: (_id) => {
+  delete_item: (_ids) => {
     return {
       type: actionTypes.DELETE_ITEM,
-      _id
+      _ids
     }
   },
   register_control: (show) => {
     return {
       type: actionTypes.REGISTER_CONTROL,
       show
+    }
+  },
+  to_show_delete: (toShow) => {
+    return {
+      type: actionTypes.TO_SHOW_DELETE,
+      toShow
+    }
+  },
+  clear_msg: () => {
+    return {
+      type: actionTypes.CLEAR_MSG
     }
   }
 }
@@ -91,6 +112,32 @@ export function reducer(state=initialState, action){
         ...state,
         show_register: false,
         after_register: true
+      }
+    case actionTypes.TO_SHOW_DELETE:
+      return {
+        ...state,
+        show_delete: action.toShow,
+        after_register: !action.toShow,
+      }
+    case actionTypes.DELETE_FAILED:
+      return {
+        ...state,
+        delete_msg: {
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        }
+      }
+    case actionTypes.CLEAR_MSG:
+      return {
+        ...state,
+        delete_msg: {
+          show: false,
+          type: '',
+          content:'',
+          title: ''
+        }
       }
     default:
       return state;
