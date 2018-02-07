@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon, Popover, Avatar, Badge, MenuItemGroup} from 'antd'
-import Add from '../User/AddUser'
-import List from '../User/UserList'
-import Detail from '../User/UserDetail'
 import Edit from '../User/EditUser'
 import Avator from '../Normal/Avatar'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
+import UserManager from '../Admin/UserManager'
+import ArticleManager from '../Admin/ArticleManager'
+import {action} from '../../reducers/index'
+import { bindActionCreators } from 'redux'
 
 const {SubMenu} = Menu
 const {Header, Content, Sider} = Layout
 
 
 class AdminPanel extends Component {
+
   render () {
     return (
       <div>
@@ -30,23 +32,18 @@ class AdminPanel extends Component {
                 defaultSelectedKeys={['userList']}
                 defaultOpenKeys={['Users']}
                 style={{height: '100%', borderRight: 0}}
+                onSelect={(e) => this.props.change_page(e.key)}
               >
-                  <Menu.Item key='userList'><span><Icon type='user'/>用户管理</span></Menu.Item>
+                  <Menu.Item key='user'><span><Icon type='user'/>用户管理</span></Menu.Item>
                 <SubMenu key={'Article'} title={<span><Icon type='book'/>文章管理</span>}>
-                  <Menu.Item key='articleList'>文章列表</Menu.Item>
+                  <Menu.Item key='article'>文章列表</Menu.Item>
                 </SubMenu>
               </Menu>
             </Sider>
             <Layout style={{padding: '9 24px 24px'}}>
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
-                <Router>
-                  <Switch>
-                    <Route path='/admin/detail' component={Detail}/>
-                    <Route path='/admin/edit' component={Edit}/>
-                    <Route path='/admin/add' component={Add}/>
-                    <Route path='/admin' component={List}/>
-                  </Switch>
-                </Router>
+                {this.props.page === 'user' && <UserManager />}
+                {this.props.page === 'article' && <ArticleManager/> }
               </Content>
             </Layout>
           </Layout>
@@ -59,8 +56,15 @@ class AdminPanel extends Component {
 const mapStateToProps = (state) => {
   return {
     notAdmin: !state.global.isAdmin,
-    username: state.global.username
+    username: state.global.username,
+    page: state.global.page
   }
 }
 
-export default connect(mapStateToProps)(AdminPanel)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    change_page: bindActionCreators(action.change_page, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPanel)

@@ -10,7 +10,8 @@ const initialState = {
     title: '',
     content: '',
     type: ''
-  }
+  },
+  page: 'user'
 };
 
 export const actionTypes = {
@@ -27,6 +28,7 @@ export const actionTypes = {
   FETCH_START: "FETCH_START",
   FETCH_END: "FETCH_END",
   CLEAR_MSG: 'CLEAR_MSG',
+  CHANGE_PAGE: 'CHANGE_PAGE',
 }
 
 export const action = {
@@ -53,6 +55,13 @@ export const action = {
     return {
       type: actionTypes.CLEAR_MSG
     }
+  },
+  change_page: (page) => {
+    return {
+      type: actionTypes.CHANGE_PAGE,
+      page
+    }
+
   }
 }
 
@@ -126,6 +135,11 @@ export function reducer(state=initialState, action){
           content:action.msg,
           type: action.alertType
         }
+      }
+    case actionTypes.CHANGE_PAGE:
+      return {
+        ...state,
+        page: action.page,
       }
     default:
       return state;

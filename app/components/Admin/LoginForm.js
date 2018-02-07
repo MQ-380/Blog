@@ -11,7 +11,7 @@ class LoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const {username, password, remember} = values
-        this.props.LoginInfo(username, password, remember)
+        this.props.LoginInfo(username, md5(password), remember)
       }
     })
   }

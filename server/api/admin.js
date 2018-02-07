@@ -3,6 +3,8 @@ import Users from '../../db/Users'
 
 const router = Express.Router();
 
+const bcrypt = require('bcryptjs');
+
 router.get('/user', function(req, res) {
   Users.find({},(err, data)=> {
     if(err) {
@@ -18,7 +20,7 @@ router.post('/addUser', function(req, res) {
   let tmpUser = new Users({
     username,
     email,
-    password,
+    password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
     isAdmin,
     auth,
   })

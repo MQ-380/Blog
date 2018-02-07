@@ -1,7 +1,7 @@
 import Express from 'express'
 import Users from '../../db/Users'
 
-const uuidv4 = require('uuid/v4')
+const bcrypt = require('bcryptjs');
 
 const router = Express.Router();
 
@@ -11,7 +11,7 @@ router.post('/login',(req, res) => {
     if(err){
       res.json({status: false, msg: '请检查数据库'})
     }
-    if(data[0].password === password) {
+    if(bcrypt.compareSync(password, data[0].password)) {
       const loginToken = uuidv4()
       Users.update({username: username}, {loginToken, loginTime: new Date()}, (err)=>{
         if(err){

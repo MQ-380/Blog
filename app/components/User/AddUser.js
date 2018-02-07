@@ -6,7 +6,7 @@ import {action as indexAction} from '../../reducers/index'
 import RegisterForm from './RegisterForm'
 import { Form, Modal } from 'antd'
 
-const bcrypt = require('bcryptjs')
+const md5 = require('md5')
 
 class AddUser extends Component {
   constructor (props) {
@@ -30,7 +30,7 @@ class AddUser extends Component {
     this.props.clearMsg();
     this.refs.form.validateFields((err, values) => {
       if (!err) {
-        values.password = bcrypt.hashSync(values.password, bcrypt.genSaltSync(10))
+        values.password = md5(values.password)
         this.props.add_new_admin(values.username, values.password, values.email)
       }
     })
