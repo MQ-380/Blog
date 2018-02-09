@@ -85,6 +85,7 @@ class List extends Component {
     }
   }
 
+
   actions = (
     <Menu onClick={this.handleAction}>
       <Menu.Item key={'fresh'}><span><Icon type={'reload'}/>刷新</span></Menu.Item>
@@ -99,6 +100,7 @@ class List extends Component {
       selectedRowKeys,
       onChange: this.onSelectedChange,
     }
+
     return (
       <div>
         <h1>用户管理</h1>
@@ -116,7 +118,10 @@ class List extends Component {
                  pagination={{
                    defaultCurrent: 1,
                    total: this.props.user.length,
-                   pageSize: 3
+                   pageSize: 10,
+                   pageSizeOptions: ['10','20','30'],
+                   showSizeChanger: true,
+                   showQuickJumper: true
                  }}/>
         <Add/>
         <Modal title={`确定删除如下${this.state.selectedRowNames.length}个用户?`}
