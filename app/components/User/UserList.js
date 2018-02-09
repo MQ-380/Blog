@@ -42,6 +42,7 @@ class List extends Component {
   state = {selectedRowKeys: [], visible: false, selectedRowNames: []}
 
   onSelectedChange = (selectedRowKeys) => {
+    selectedRowKeys = selectedRowKeys.filter((item) => this.props.user.filter((e) => e._id === item).length !== 0);
     this.setState({selectedRowKeys});
     console.log(selectedRowKeys);
   }
@@ -111,11 +112,16 @@ class List extends Component {
           </div>
         </div>
           <br/><br/>
-          <Table rowSelection={rowSelection} bordered={true} columns={columns} dataSource={this.props.user} rowKey="_id" />
+          <Table rowSelection={rowSelection} bordered={true} columns={columns} dataSource={this.props.user} rowKey="_id"
+                 pagination={{
+                   defaultCurrent: 1,
+                   total: this.props.user.length,
+                   pageSize: 3
+                 }}/>
         <Add/>
         <Modal title={`确定删除如下${this.state.selectedRowNames.length}个用户?`}
                visible={this.props.show_delete}
-               onOk = {()=>this.props.delete_item(this.state.selectedRowKeys)}
+               onOk = {()=>{this.props.delete_item(this.state.selectedRowKeys);}}
                onCancel={()=>this.props.to_show_delete(false)}
                confirmLoading={!this.props.show_delete}
         >

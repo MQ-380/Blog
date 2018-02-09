@@ -56,9 +56,9 @@ router.post('/deleteUser', (req,res) => {
     })
   })
   if(failedItem.length !== 0) {
-    res.json({code: 0});
-  } else {
     res.json({code: 1});
+  } else {
+    res.json({code: 0});
   }
 })
 
