@@ -12,14 +12,14 @@ router.post('/login',(req, res) => {
     if(err){
       res.json({status: false, msg: '请检查数据库'})
     }
-    if(bcrypt.compareSync(password, data[0])) {
+    if(bcrypt.compareSync(password, data[0].password)) {
       const loginToken = uuidv4();
       Users.update({username: username}, {loginToken, loginTime: new Date()}, (err)=>{
         if(err){
           console.log(err);
           res.json({status: false, msg: '请检查数据库'})
         }
-        res.json({status: true, isAdmin: data[0].isAdmin, token: loginToken});
+        res.json({status: true, isAdmin: data[0].isAdmin, token: loginToken, _id:data[0]._id});
       })
     } else {
       res.json({status: false, msg: '密码错误'})
@@ -46,7 +46,7 @@ router.post('/loginCheck', (req, res) => {
             res.json({status: false, msg: '当前登录已经过期，请重新登录'})
           });
         } else {
-          res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin})
+          res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin, id:data[0]._id})
         }
       }
     }

@@ -10,7 +10,10 @@ router.get('/user', function(req, res) {
     if(err) {
       res.status(500);
     }
-    res.json({username: data.username, _id: data._id});
+    data = data.map((item) => (
+      {username: item.username, _id: item._id, email: item.email, isAdmin: item.isAdmin, auth: item.auth}
+    ))
+    res.json(data);
   });
 });
 

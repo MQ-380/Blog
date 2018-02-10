@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Form } from 'antd/lib/index'
+import { Form , Input} from 'antd/lib/index'
 
 class EditPasswordForm extends Component {
   state = {
@@ -54,7 +54,7 @@ class EditPasswordForm extends Component {
                 required: true, message: '请输入旧密码'
               }]
             })(
-              <Input/>
+              <Input type={'password'}/>
             )}
           </Form.Item>)
         }

@@ -122,7 +122,7 @@ export function* editPassword(userId, oldPass, newPass) {
   try {
     return yield call(post, '/admin/editPassword',userId, oldPass, newPass);
   } catch (err) {
-    yield put({type: actionTypes.DELETE_FAILED, content:`修改失败`, title: '修改失败',alertType: 'error'});
+    yield put({type: actionTypes.PASSWORD_EDIT_RESULT, content:`修改失败`, title: '修改失败',alertType: 'error'});
   } finally {
     yield put({type: IndexTypes.FETCH_END});
   }
@@ -131,12 +131,13 @@ export function* editPassword(userId, oldPass, newPass) {
 export function* editPasswordFlow() {
   while(true) {
     let req = yield take(actionTypes.EDIT_PASSWORD);
-    let res = yield call(editPassword, {userId: req._id,oldPass: req.oldPass, newPass: req.newPass});
+    let res = yield call(editPassword, {userId: req.userId,oldPass: req.oldPass, newPass: req.newPass});
     if (res) {
+      res = JSON.parse(res);
       if(!res.status) {
-        yield put({type: IndexTypes.SET_MESSAGE, msgType:'失败', msgContent: res.msg, alertType: 'error'})
+        yield put({type: actionTypes.PASSWORD_EDIT_RESULT, content: res.msg, title: '失败',alertType: 'error'})
       } else {
-        yield put({type: IndexTypes.SET_MESSAGE, msgType:'成功', msgContent: res.msg, alertType: 'error'})
+        yield put({type: actionTypes.PASSWORD_EDIT_RESULT, content: res.msg, title: '成功',alertType: 'success'})
       }
     }
   }

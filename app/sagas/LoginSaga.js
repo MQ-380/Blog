@@ -25,9 +25,8 @@ export function* adminLoginFlow () {
       res = JSON.parse(res)
       if (res.status) {
         let session = window.sessionStorage;
-        console.log(res.token);
         session.token = res.token;
-        yield put({type: IndexTypes.LOGIN_SUCCESS, data, isAdmin: res.isAdmin});
+        yield put({type: IndexTypes.LOGIN_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id});
       } else {
         yield put({type: IndexTypes.LOGIN_FAILED, msg: res.msg, alertType: 'error'});
       }
@@ -54,7 +53,7 @@ export function* checkLoginFlow() {
     if(res) {
       res = JSON.parse(res);
       if(res.status) {
-        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username});
+        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username, id: res.id});
       } else {
         window.sessionStorage.clear();
         yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg, alertType: 'error'});

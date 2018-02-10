@@ -4,6 +4,12 @@ const initialState = {
   after_register: false,
   show_delete: false,
   show_edit_password: false,
+  edit_message: {
+    show: false,
+    type: '',
+    content: '',
+    title: ''
+  },
   delete_msg: {
     show: false,
     type: '',
@@ -28,6 +34,7 @@ export const actionTypes = {
   DELETE_FAILED: 'DELETE_FAILED',
   EDIT_PASSWORD: 'EDIT_PASSWORD',
   CLEAR_MSG: 'CLEAR_MSG',
+  PASSWORD_EDIT_RESULT: 'PASSWORD_EDIT_RESULT'
 }
 
 export const action = {
@@ -154,12 +161,29 @@ export function reducer(state=initialState, action){
           type: '',
           content:'',
           title: ''
+        },
+        edit_message: {
+          show: false,
+          type: '',
+          content:'',
+          title: ''
         }
       }
     case actionTypes.TO_EDIT_PASSWORD:
       return {
         ...state,
-        show_edit_password: action.toEdit
+        show_edit_password: action.toEdit,
+        after_register: !action.toEdit
+      }
+    case actionTypes.PASSWORD_EDIT_RESULT:
+      return {
+        ...state,
+        edit_message:{
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        }
       }
     default:
       return state;

@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Popover, Avatar, Badge, Popconfirm } from 'antd'
 import { action } from '../../reducers/index'
-import {userAction} from '../../reducers/UserAction'
+import {action as userAction} from '../../reducers/UserAction'
 import EditPasswordForm from '../User/EditPasswordForm'
+import { Modal } from 'antd'
+
+const md5 = require('md5')
 
 class Avatars extends Component {
   logout () {
@@ -12,30 +15,46 @@ class Avatars extends Component {
   }
 
   submit = () => {
-    this.props.clearMsg();
+    this.props.clear_msg();
     this.refs.form.validateFields((err, values) => {
       if (!err) {
-        values.password = md5(values.password)
-        this.props.add_new_admin(values.username, values.password, values.email)
+        this.props.to_edit_password(this.props.user_id, md5(values.oldPassword),md5(values.password))
       }
     })
   }
 
+  showResult = (self) => {
+    let msg = {
+      title: self.props.msg.title,
+      content: self.props.msg.content,
+      onOk: () => {
+        self.props.to_show_edit(false);
+        self.props.clear_msg();
+      }
+    }
+    if(this.props.msg.type === 'error'){
+      Modal.error(msg);
+    } else {
+      Modal.info(msg);
+    }
+  }
+
   render () {
     return (
+      <div>
+      <Modal title={'修改密码'}
+             visible={this.props.show_edit_password && true}
+             destroyOnClose={true}
+             onOk={this.submit}
+             onCancel={()=>this.props.to_show_edit(false)}
+             confirmLoading={this.props.isFetching}
+      >
+        <EditPasswordForm needOld={true} ref={'form'}/>
+      </Modal>
       <Popover content={
         <div>
           <div>
-            <a>修改密码</a>
-            <Modal title={'修改密码'}
-                   visible={this.props.to_show_delete(true)}
-                   destroyOnClose={true}
-                   onOk={this.submit}
-                   onCancel={()=>this.props.to_show_delete(false)}
-                   confirmLoading={this.props.isFetching}
-            >
-              <EditPasswordForm needOld={true}/>
-            </Modal>
+            <a onClick={()=>{this.props.to_show_edit(true)}}>修改密码</a>
           </div>
           <Popconfirm placement="bottom" title={'确定退出登录?'} onConfirm={this.logout.bind(this)} okText="确定"
                       cancelText="取消">
@@ -50,7 +69,14 @@ class Avatars extends Component {
           </Avatar>
         </Badge>
       </Popover>
+      </div>
     )
+  }
+
+  componentDidUpdate() {
+    if(this.props.msg.show) {
+      this.showResult(this)
+    }
   }
 }
 
@@ -59,14 +85,17 @@ const mapStateToProps = (state) => {
     isAdmin: state.global.isAdminLogin,
     username: state.global.username,
     show_edit_password: state.user.show_edit_password,
-    user_id: state.global.userId
+    user_id: state.global.user_Id,
+    msg: state.user.edit_message
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     log_out: bindActionCreators(action.logout, dispatch),
-    to_show_delete: bindActionCreators(userAction.edit_password, dispatch)
+    to_show_edit: bindActionCreators(userAction.edit_password, dispatch),
+    clear_msg: bindActionCreators(userAction.clear_msg, dispatch),
+    to_edit_password: bindActionCreators(userAction.edit_user_password, dispatch)
   }
 }
 
