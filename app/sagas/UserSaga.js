@@ -100,7 +100,6 @@ export function* deleteUsers(_id) {
   } catch(err){
     yield put({type: actionTypes.DELETE_FAILED, content:`删除错误，部分或全部用户未被删除`, title: '删除失败',alertType: 'error'});
   } finally {
-
     yield put({type: IndexTypes.FETCH_END});
   }
 }
@@ -114,6 +113,31 @@ export function* deleteUsersFlow() {
       yield put({type: actionTypes.TO_SHOW_DELETE, toShow: false});
     } else {
       yield put({type: actionTypes.DELETE_FAILED, content:`删除错误，部分或全部用户未被删除`, title: '删除失败',alertType: 'error'});
+    }
+  }
+}
+
+export function* editPassword(userId, oldPass, newPass) {
+  yield put({type: IndexTypes.FETCH_START});
+  try {
+    return yield call(post, '/admin/editPassword',userId, oldPass, newPass);
+  } catch (err) {
+    yield put({type: actionTypes.DELETE_FAILED, content:`修改失败`, title: '修改失败',alertType: 'error'});
+  } finally {
+    yield put({type: IndexTypes.FETCH_END});
+  }
+}
+
+export function* editPasswordFlow() {
+  while(true) {
+    let req = yield take(actionTypes.EDIT_PASSWORD);
+    let res = yield call(editPassword, {userId: req._id,oldPass: req.oldPass, newPass: req.newPass});
+    if (res) {
+      if(!res.status) {
+        yield put({type: IndexTypes.SET_MESSAGE, msgType:'失败', msgContent: res.msg, alertType: 'error'})
+      } else {
+        yield put({type: IndexTypes.SET_MESSAGE, msgType:'成功', msgContent: res.msg, alertType: 'error'})
+      }
     }
   }
 }

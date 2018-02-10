@@ -36,6 +36,7 @@ class AdminPanel extends Component {
               >
                   <Menu.Item key='user'><span><Icon type='user'/>用户管理</span></Menu.Item>
                 <SubMenu key={'Article'} title={<span><Icon type='book'/>文章管理</span>}>
+                  <Menu.Item key='createArticle'>发表文章</Menu.Item>
                   <Menu.Item key='article'>文章列表</Menu.Item>
                 </SubMenu>
               </Menu>

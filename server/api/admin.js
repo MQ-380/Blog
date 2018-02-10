@@ -10,7 +10,7 @@ router.get('/user', function(req, res) {
     if(err) {
       res.status(500);
     }
-    res.json(data);
+    res.json({username: data.username, _id: data._id});
   });
 });
 
@@ -60,6 +60,28 @@ router.post('/deleteUser', (req,res) => {
   } else {
     res.json({code: 0});
   }
+})
+
+router.post('/editPassword', (req, res) => {
+  const {oldPass, newPass, userId} = req.body;
+  Users.find({_id:userId}, (err, data)=> {
+    if(bcrypt.compareSync(oldPass, data[0].password)) {
+      if (err) {
+        res.json({status: false, msg: '请检查连接'})
+      } else {
+        Users.update({_id: userId}, {password: bcrypt.hashSync(newPass, bcrypt.genSaltSync(10))},
+          (err) => {
+            if (err) {
+              res.json({status: false, msg: '请检查数据库连接'})
+            } else {
+              res.json({status: true, msg: '修改密码成功'})
+            }
+          })
+      }
+    } else {
+      res.json({status: false, msg: '旧密码错误，请检查旧密码。'})
+    }
+  })
 })
 
 module.exports = router

@@ -6,6 +6,7 @@ const initialState = {
   isLogin: false,
   isFetching: false,
   username: '',
+  userId: '',
   msg: {
     title: '',
     content: '',
@@ -101,6 +102,7 @@ export function reducer(state=initialState, action){
         ...state,
         isLogin: true,
         username: action.data.username,
+        userId: action.data._id,
         isAdminLogin: action.isAdmin
       }
     case actionTypes.CHECK_TRUE:
