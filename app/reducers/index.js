@@ -7,6 +7,7 @@ const initialState = {
   isFetching: false,
   username: '',
   user_Id: '',
+  email: '',
   msg: {
     title: '',
     content: '',
@@ -30,6 +31,7 @@ export const actionTypes = {
   FETCH_END: "FETCH_END",
   CLEAR_MSG: 'CLEAR_MSG',
   CHANGE_PAGE: 'CHANGE_PAGE',
+  CHANGE_EMAIL: 'CHANGE_EMAIL',
 }
 
 export const action = {
@@ -62,7 +64,6 @@ export const action = {
       type: actionTypes.CHANGE_PAGE,
       page
     }
-
   }
 }
 
@@ -103,6 +104,7 @@ export function reducer(state=initialState, action){
         isLogin: true,
         username: action.username,
         user_Id: action.id,
+        email: action.email,
         isAdminLogin: action.isAdmin
       }
     case actionTypes.CHECK_TRUE:
@@ -111,6 +113,7 @@ export function reducer(state=initialState, action){
         isLogin: true,
         username: action.username,
         user_Id: action.id,
+        email: action.email,
         isAdminLogin: action.isAdmin
       }
     case actionTypes.CHECK_FALSE:
@@ -143,6 +146,11 @@ export function reducer(state=initialState, action){
       return {
         ...state,
         page: action.page,
+      }
+    case actionTypes.CHANGE_EMAIL:
+      return {
+        ...state,
+        email: action.email
       }
     default:
       return state;

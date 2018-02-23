@@ -3,6 +3,7 @@ const initialState = {
   show_register: false,
   after_register: false,
   show_delete: false,
+  show_edit: false,
   show_edit_password: false,
   edit_message: {
     show: false,
@@ -30,11 +31,13 @@ export const actionTypes = {
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
   REGISTER_FAILED: 'REGISTER_FAILED',
   TO_SHOW_DELETE: 'TO_SHOW_DELETE',
+  TO_EDIT_INFO: 'TO_EDIT_INFO',
   TO_EDIT_PASSWORD: 'TO_EDIT_PASSWORD',
   DELETE_FAILED: 'DELETE_FAILED',
   EDIT_PASSWORD: 'EDIT_PASSWORD',
+  EDIT_USER_INFO: 'EDIT_USER_INFO',
   CLEAR_MSG: 'CLEAR_MSG',
-  PASSWORD_EDIT_RESULT: 'PASSWORD_EDIT_RESULT'
+  EDIT_RESULT: 'EDIT_RESULT'
 }
 
 export const action = {
@@ -110,6 +113,19 @@ export const action = {
       oldPass,
       newPass
     }
+  },
+  show_edit_user_info: (toEdit) => {
+    return {
+      type: actionTypes.TO_EDIT_INFO,
+      toEdit
+    }
+  },
+  edit_user_info: (userId,newEmail) => {
+    return {
+      type: actionTypes.EDIT_USER_INFO,
+      userId,
+      newEmail
+    }
   }
 }
 
@@ -175,10 +191,16 @@ export function reducer(state=initialState, action){
         show_edit_password: action.toEdit,
         after_register: !action.toEdit
       }
-    case actionTypes.PASSWORD_EDIT_RESULT:
+    case actionTypes.TO_EDIT_INFO:
       return {
         ...state,
-        edit_message:{
+        show_edit: action.toEdit,
+        after_register: !action.toEdit
+      }
+    case actionTypes.EDIT_RESULT:
+      return {
+        ...state,
+        edit_message: {
           show: true,
           type: action.alertType,
           content: action.content,

@@ -37,7 +37,8 @@ const mapStateToProps = (state,p)=>{
     name: state.user.userList.filter((item)=>{
       return item._id === p.location._id
     })[0].userName,
-    editName: state.user.editingName
+    editName: state.user.editingName,
+    showEdit: state.user.showEdit
   }
 }
 

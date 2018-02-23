@@ -37,13 +37,13 @@ router.post('/addUser', function(req, res) {
 
 
 router.post('/editUser', function(req, res) {
-  const {_id, name, editTime} = req.body;
-  Users.update({_id: _id}, {userName: name,editTime: editTime},(err, data) => {
+  const {_id, newEmail} = req.body;
+  Users.update({_id: _id}, {email: newEmail},(err) => {
     if(err){
       console.error(err);
-      res.json({code: 1});
+      res.json({status: false});
     }
-    res.json({code: 0});
+    res.json({status: true, email: newEmail});
   })
 })
 
