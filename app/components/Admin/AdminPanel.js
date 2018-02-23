@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon, Popover, Avatar, Badge, MenuItemGroup} from 'antd'
-import Edit from '../User/EditUser'
 import Avator from '../Normal/Avatar'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import UserManager from '../Admin/UserManager'
 import ArticleManager from '../Admin/ArticleManager'
 import {action} from '../../reducers/index'
+import AddArticle from '../Article/AddArticle'
 import { bindActionCreators } from 'redux'
 
 const {SubMenu} = Menu
@@ -43,8 +43,8 @@ class AdminPanel extends Component {
             </Sider>
             <Layout style={{padding: '9 24px 24px'}}>
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
-                {this.props.page === 'user' && <UserManager />}
-                {this.props.page === 'article' && <ArticleManager/> }
+                {this.props.page.includes('user') && <UserManager />}
+                {this.props.page.includes('createArticle') && <AddArticle/> }
               </Content>
             </Layout>
           </Layout>

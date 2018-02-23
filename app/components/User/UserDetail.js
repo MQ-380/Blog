@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { action } from '../../reducers/UserAction'
+import { action } from '../../reducers/index'
 import { bindActionCreators } from 'redux'
 import {Button} from 'antd'
 
@@ -10,55 +10,32 @@ class Detail extends Component {
     super(props)
   }
 
-  delete() {
-    this.props.delete_item(this.props._id);
-  }
-
   render () {
     return (
       <div>
-        <h2>{this.props.names}</h2>
-        <li>{this.props.times}</li>
-        {this.props.hasEdit && <li>EditTime: {this.props.hasEdit}</li>}
-        <li><Link to={{pathname: '/admin/edit',_id:this.props._id}}>Edit</Link></li>
-        <li><Link to={'/'}>Return</Link></li>
-        <Button type="danger" onClick={this.delete.bind(this)}>Delete</Button>
+        <h2>1234</h2>
+        <button onClick={(e)=>{
+          this.props.change_page('user')
+        }}>
+          返回
+        </button>
       </div>
     )
   }
 }
 
-const mapStateToProps = function (state, p) {
-  let s = state.user.userList.filter((item) => {
-    return item._id === p.location._id
-  })[0];
-  let t;
-  if(s) {
-    t = {
-      names: s.userName,
-      times: s.time,
-      _id: p.location._id,
-      hasEdit: s.editTime
-    }
-  } else {
-    t = {
-      names: '',
-      times: '',
-      _id: '',
-      hasEdit:''
-    }
-  }
-  return t
-}
 
+
+const mapStateToProps = (state) => {
+  return {
+    page: state.global.page
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    delete_item: bindActionCreators(action.delete_item, dispatch)
+    change_page: bindActionCreators(action.change_page, dispatch)
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Detail)
+export default connect(mapStateToProps, mapDispatchToProps)(Detail)

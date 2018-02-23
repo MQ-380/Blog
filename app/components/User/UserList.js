@@ -3,38 +3,9 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {action} from '../../reducers/UserAction'
+import {action as indexAction} from '../../reducers/index'
 import {Button, Table, Divider, Tooltip, Menu, Icon, Dropdown,Form, Modal} from 'antd'
 import Add from './AddUser'
-import Preview from './Preview'
-import Register from './RegisterForm'
-
-
-const columns = [
-  {
-    title: '用户名',
-    dataIndex: 'username',
-    key: '_id',
-    render: (text,record) => (
-        <Tooltip placement='bottom' title='点击进入编辑界面' mouseEnterDelay={2}>
-          <Link to={{pathname: '/admin/detail', _id: record._id}}>{text}</Link>
-        </Tooltip>
-      )
-  },
-  {
-    title: '用户权限',
-    dataIndex: 'auth',
-    render: (text) => {
-      text = text === 'admin' ? '管理员' : '一般用户';
-      return(
-      <span>{text}</span>
-      )
-    }
-  },
-  {
-    title: '用户邮箱',
-    dataIndex: 'email'
-  }
-]
 
 
 
@@ -47,6 +18,37 @@ class List extends Component {
     console.log(selectedRowKeys);
   }
 
+  columns = [
+    {
+      title: '用户名',
+      dataIndex: 'username',
+      key: '_id',
+      render: (text,record) => (
+        <Tooltip placement='bottom' title='点击查看详情' mouseEnterDelay={2}>
+          <a onClick={(e)=>{
+            e.preventDefault();
+            this.props.change_page('userDetail')
+          }}>
+            {text}
+          </a>
+        </Tooltip>
+      )
+    },
+    {
+      title: '用户权限',
+      dataIndex: 'auth',
+      render: (text) => {
+        text = text === 'admin' ? '管理员' : '一般用户';
+        return(
+          <span>{text}</span>
+        )
+      }
+    },
+    {
+      title: '用户邮箱',
+      dataIndex: 'email'
+    }
+  ]
 
   handleAction = (e) => {
     switch (e.key) {
@@ -114,7 +116,7 @@ class List extends Component {
           </div>
         </div>
           <br/><br/>
-          <Table rowSelection={rowSelection} bordered={true} columns={columns} dataSource={this.props.user} rowKey="_id"
+          <Table rowSelection={rowSelection} bordered={true} columns={this.columns} dataSource={this.props.user} rowKey="_id"
                  pagination={{
                    defaultCurrent: 1,
                    total: this.props.user.length,
@@ -168,7 +170,8 @@ function mapDispatchToProps(dispatch) {
     delete_item: bindActionCreators(action.delete_item, dispatch),
     show_register: bindActionCreators(action.register_control,dispatch),
     to_show_delete: bindActionCreators(action.to_show_delete, dispatch),
-    close_msg: bindActionCreators(action.clear_msg, dispatch)
+    close_msg: bindActionCreators(action.clear_msg, dispatch),
+    change_page: bindActionCreators(indexAction.change_page, dispatch)
   }
 }
 

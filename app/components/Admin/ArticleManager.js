@@ -1,24 +1,33 @@
 import React, { Component } from 'react'
-import Add from '../User/AddUser'
-import List from '../User/UserList'
-import Detail from '../User/UserDetail'
-import Edit from '../User/EditUser'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import AddArticle from '../Article/AddArticle'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { action } from '../../reducers'
 
-export default  class UserManager  extends Component {
+
+class UserManager  extends Component {
   render () {
     return (
       <div>
-        <h2>shanghao</h2>
-        <Router>
-          <Switch>
-            <Route path='/admin/detail' component={Detail}/>
-            <Route path='/admin/edit' component={Edit}/>
-            <Route path='/admin/add' component={Add}/>
-            <Route path='/admin' component={List}/>
-          </Switch>
-        </Router>
       </div>
     )
   }
 }
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    page: state.global.page
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    change_page: bindActionCreators(action.change_page, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserManager)
+
+
