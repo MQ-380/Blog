@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {action} from '../../reducers/UserAction'
-import {action as indexAction} from '../../reducers/index'
+import {action as pageAction} from '../../reducers/PageAction'
 import {Button, Table, Divider, Tooltip, Menu, Icon, Dropdown,Form, Modal} from 'antd'
 import Add from './AddUser'
 
@@ -171,7 +171,7 @@ function mapDispatchToProps(dispatch) {
     show_register: bindActionCreators(action.register_control,dispatch),
     to_show_delete: bindActionCreators(action.to_show_delete, dispatch),
     close_msg: bindActionCreators(action.clear_msg, dispatch),
-    change_page: bindActionCreators(indexAction.change_page, dispatch)
+    change_page: bindActionCreators(pageAction.change_page, dispatch)
   }
 }
 

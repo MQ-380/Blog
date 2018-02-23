@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon, Popover, Avatar, Badge, MenuItemGroup} from 'antd'
 import Avator from '../Normal/Avatar'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import UserManager from '../Admin/UserManager'
 import ArticleManager from '../Admin/ArticleManager'
 import {action} from '../../reducers/index'
+import {action as pageAction} from '../../reducers/PageAction'
 import AddArticle from '../Article/AddArticle'
 import { bindActionCreators } from 'redux'
 
@@ -45,6 +45,7 @@ class AdminPanel extends Component {
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
                 {this.props.page.includes('user') && <UserManager />}
                 {this.props.page.includes('createArticle') && <AddArticle/> }
+                {this.props.page.includes('ArticleList') && <ArticleManager/>}
               </Content>
             </Layout>
           </Layout>
@@ -58,13 +59,13 @@ const mapStateToProps = (state) => {
   return {
     notAdmin: !state.global.isAdmin,
     username: state.global.username,
-    page: state.global.page
+    page: state.page.now_page
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    change_page: bindActionCreators(action.change_page, dispatch)
+    change_page: bindActionCreators(pageAction.change_page, dispatch)
   }
 }
 

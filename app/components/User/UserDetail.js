@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { action } from '../../reducers/index'
+import { action } from '../../reducers/PageAction'
 import { bindActionCreators } from 'redux'
 import {Button} from 'antd'
 
@@ -28,7 +28,7 @@ class Detail extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    page: state.global.page
+    page: state.page.now_page
   }
 }
 

@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux'
 import {reducer as UserReducer} from '../reducers/UserAction'
+import {reducer as PageReducer} from '../reducers/PageAction'
 
 const initialState = {
   isAdminLogin: false,
@@ -12,8 +13,7 @@ const initialState = {
     title: '',
     content: '',
     type: ''
-  },
-  page: 'user'
+  }
 };
 
 export const actionTypes = {
@@ -57,12 +57,6 @@ export const action = {
   clear_msg: () => {
     return {
       type: actionTypes.CLEAR_MSG
-    }
-  },
-  change_page: (page) => {
-    return {
-      type: actionTypes.CHANGE_PAGE,
-      page
     }
   }
 }
@@ -142,11 +136,6 @@ export function reducer(state=initialState, action){
           type: action.alertType
         }
       }
-    case actionTypes.CHANGE_PAGE:
-      return {
-        ...state,
-        page: action.page,
-      }
     case actionTypes.CHANGE_EMAIL:
       return {
         ...state,
@@ -159,7 +148,8 @@ export function reducer(state=initialState, action){
 
 const root =  combineReducers({
   user: UserReducer,
-  global:reducer
+  page: PageReducer,
+  global: reducer,
 })
 
 export default root;

@@ -5,7 +5,7 @@ import Detail from '../User/UserDetail'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { action } from '../../reducers'
+import { action } from '../../reducers/PageAction'
 
 
 class UserManager  extends Component {
@@ -23,7 +23,7 @@ class UserManager  extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    page: state.global.page
+    page: state.page.now_page
   }
 }
 

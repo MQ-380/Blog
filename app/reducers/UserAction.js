@@ -24,8 +24,6 @@ export const actionTypes = {
   ADD_NEW_USERS: "ADD_NEW_USERS",
   ADD_NEW_ADMIN: "ADD_NEW_ADMIN",
   GET_ALL_USERS_RES: "GET_ALL_USERS_RES",
-  EDIT_NAME: "EDIT_NAME",
-  UPDATING_NAME: 'UPDATING_NAME',
   DELETE_ITEM: 'DELETE_ITEM',
   REGISTER_CONTROL: 'REGISTER_CONTROL',
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
@@ -61,20 +59,6 @@ export const action = {
       email,
       isAdmin: true,
       auth: 'admin'
-    }
-  },
-  updating_name: (name) => {
-    return {
-      type: actionTypes.UPDATING_NAME,
-      name
-    }
-  },
-  edit_name: (_id, name) => {
-    return {
-      type: actionTypes.EDIT_NAME,
-      _id,
-      name,
-      editTime: new Date()
     }
   },
   delete_item: (_ids) => {
@@ -141,11 +125,6 @@ export function reducer(state=initialState, action){
       return {
         ...state,
         show_register: action.show
-      }
-    case actionTypes.UPDATING_NAME:
-      return {
-        ...state,
-        editingName: action.name
       }
     case actionTypes.REGISTER_SUCCESS:
       return {

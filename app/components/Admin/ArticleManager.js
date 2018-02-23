@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import AddArticle from '../Article/AddArticle'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { action } from '../../reducers'
+import { action } from '../../reducers/PageAction'
 
 
 class UserManager  extends Component {
@@ -18,7 +17,7 @@ class UserManager  extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    page: state.global.page
+    page: state.page.now_page
   }
 }
 
