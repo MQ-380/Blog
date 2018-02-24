@@ -6,7 +6,7 @@ import UserManager from '../Admin/UserManager'
 import ArticleManager from '../Admin/ArticleManager'
 import {action} from '../../reducers/index'
 import {action as pageAction} from '../../reducers/PageAction'
-import AddArticle from '../Article/AddArticle'
+import AddArticle from '../Article/Publish'
 import { bindActionCreators } from 'redux'
 
 const {SubMenu} = Menu

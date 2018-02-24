@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import { Form , Input} from 'antd/lib/index'
 
 class EditUserInfoForm extends Component {
-  state = {
-    confirmDirty: false
-  }
-
   render () {
     const {getFieldDecorator} = this.props.form
 

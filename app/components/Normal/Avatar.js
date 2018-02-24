@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux'
 import { Popover, Avatar, Badge, Popconfirm } from 'antd'
 import { action } from '../../reducers/index'
 import {action as userAction} from '../../reducers/UserAction'
-import EditPasswordForm from '../User/EditPasswordForm'
-import EditUserInfoForm from '../User/EditUserInfoForm'
+import EditPasswordForm from '../Forms/EditPasswordForm'
+import EditUserInfoForm from '../Forms/EditUserInfoForm'
 import { Modal } from 'antd'
 
 const md5 = require('md5')

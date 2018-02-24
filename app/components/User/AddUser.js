@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action } from '../../reducers/UserAction'
 import {action as indexAction} from '../../reducers/index'
-import RegisterForm from './RegisterForm'
+import RegisterForm from '../Forms/RegisterForm'
 import { Form, Modal } from 'antd'
 
 const md5 = require('md5')

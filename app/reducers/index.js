@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 import {reducer as UserReducer} from '../reducers/UserAction'
 import {reducer as PageReducer} from '../reducers/PageAction'
+import {reducer as PublishReducer} from '../reducers/PublishAction'
 
 const initialState = {
   isAdminLogin: false,
@@ -149,6 +150,7 @@ export function reducer(state=initialState, action){
 const root =  combineReducers({
   user: UserReducer,
   page: PageReducer,
+  publish: PublishReducer,
   global: reducer,
 })
 
