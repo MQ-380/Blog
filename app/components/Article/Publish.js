@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action as publishAction } from '../../reducers/PublishAction'
 import { action as indexAction } from '../../reducers/index'
-import MarkdownUploadForm from '../Forms/MarkdownUploadForm'
+import MarkdownUpload from '../../components/Article/MarkdownUpload'
 import { Radio, Form } from 'antd'
 
 class Publish extends Component {
@@ -24,7 +24,7 @@ class Publish extends Component {
           </Radio.Group>
           </span>
         </label>
-        {this.props.publish_type === 'md' && <MarkdownUploadForm/>}
+        {this.props.publish_type === 'md' && <MarkdownUpload/>}
         {this.props.publish_type === 'richText' && <span>richText</span>}
 
       </div>

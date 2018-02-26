@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 let articleSchema = new mongoose.Schema({
-  catalogName : String,
-  catalogChildren: [],
-  articles : []
+  name: 'String',
+  tags: [],
+  fileName: ''
 })
 
 module.exports = mongoose.model('Article',articleSchema,'Article');

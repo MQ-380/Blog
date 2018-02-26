@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Form , Input} from 'antd/lib/index'
+import { Form, Input, Upload, Button, Icon, message } from 'antd/lib/index'
 
-class MarkdownUploadForm extends Component {
+export default  class MarkdownUploadForm extends Component {
   render () {
-    const {getFieldDecorator} = this.props.form
+   // const {getFieldDecorator} = this.props.form
+
+    let showTags = false
 
     const formItemLayout = {
       labelCol: {
@@ -17,25 +19,13 @@ class MarkdownUploadForm extends Component {
     }
 
     return (
-      <Form>
-        <Form.Item {...formItemLayout} label={'电子邮件'}>
-          {getFieldDecorator('newEmail', {
-            rules: [{
-              required: true, message: '电子邮件不得为空'
-            },{
-              type: 'email', message: '请输入合法的邮箱地址'
-            }],
-            initialValue: this.props.nowEmail
-          })(
-            <Input type={'text'}/>
-          )}
-        </Form.Item>
-      </Form>
+      <div>
+        <span>sdhuhdue</span>
+      </div>
     )
   }
 }
-
-
-const MarkdownUpload = Form.create({})(MarkdownUploadForm)
-
-export default MarkdownUpload
+//
+// const MarkdownUpload = Form.create({})(MarkdownUploadForm)
+//
+// export default MarkdownUpload

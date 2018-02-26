@@ -9,8 +9,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 app.use('/', require('./main'));
 app.use('/admin', require('./admin'));
-
-
+app.use('/article', require('./article'));
 
 
 mongoose.Promise = require('bluebird');
