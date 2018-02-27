@@ -12,10 +12,10 @@ class MarkdownUpload extends Component {
       accept: '.md',
       name: 'md',
       action: '/api/article/markdownUpload',
-      onChange (info, self=this) {
+      onChange: (info) => {
         if (info.file.status === 'done') {
           message.success('上传成功！请选择标签')
-          self.props.show_tags(true)
+          this.props.show_tags(true)
         } else if (info.file.status === 'error') {
           message.error('上传失败！请重新上传')
         }
@@ -29,7 +29,7 @@ class MarkdownUpload extends Component {
             <Icon type={'upload'}/>点击选择上传markdown文件.
           </Button>
         </Upload>
-        {this.props.showTags && <Markd˚ownUploadForm/>}
+        {this.props.showTags && <MarkdownUploadForm/>}
       </div>
     )
   }
