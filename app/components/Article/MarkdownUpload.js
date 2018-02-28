@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {action} from '../../reducers/PublishAction'
 import { Form, Input, Upload, Button, Icon, message } from 'antd/lib/index'
-import MarkdownUploadForm from '../../components/Forms/MarkdownUploadForm'
+import MarkdownUploadForm from './TagSelect'
 
 class MarkdownUpload extends Component {
   render () {
