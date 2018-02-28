@@ -1,4 +1,5 @@
 import Express from 'express'
+import fs from 'fs'
 
 let multer = require('multer')
 
@@ -25,5 +26,15 @@ router.post('/markdownUpload', function(req, res) {
   })
 })
 
+router.post('/deleteFile', (req, res) => {
+  const {fileName} = req.body;
+  fs.unlink(`articles/${fileName}`, (err) => {
+    if(err) {
+      console.log(err);
+      res.json({status: false})
+    }
+    res.json({status: true})
+  })
+})
 
 module.exports = router

@@ -67,14 +67,11 @@ export default  class TagSelect extends Component {
             onClick={this.showInput}
             style={{background: '#fff', borderStyle: 'dashed'}}
           >
-            <Icon type="plus"/> New Tag
+            <Icon type="plus"/> 增加标签
           </Tag>
         )}
       </div>
     )
   }
 }
-//
-// const MarkdownUpload = Form.create({})(MarkdownUploadForm)
-//
-// export default MarkdownUpload
+

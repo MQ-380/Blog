@@ -4,11 +4,25 @@ import { connect } from 'react-redux'
 import { action as publishAction } from '../../reducers/PublishAction'
 import { action as indexAction } from '../../reducers/index'
 import MarkdownUpload from '../../components/Article/MarkdownUpload'
-import { Radio, Form } from 'antd'
+import { Radio, Modal } from 'antd'
+
 
 class Publish extends Component {
   changeType = (e) => {
-    this.props.change_type(e.target.value)
+    if(this.props.showTags){
+      Modal.confirm({
+        title: '是否要转换编辑方式？',
+        content: '是否要转换编辑方式？未提交内容将会丢失！',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk: ()=>{
+          this.props.change_type(e.target.value)
+        }
+      });
+    } else {
+      this.props.change_type(e.target.value)
+    }
   }
 
   render () {
@@ -26,7 +40,6 @@ class Publish extends Component {
         </label>
         {this.props.publish_type === 'md' && <MarkdownUpload/>}
         {this.props.publish_type === 'richText' && <span>richText</span>}
-
       </div>
     )
   }
@@ -34,7 +47,9 @@ class Publish extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    publish_type: state.publish.publish_type
+    publish_type: state.publish.publish_type,
+    showTags: state.publish.show_tags,
+    name: state.publish.file_name,
   }
 }
 
