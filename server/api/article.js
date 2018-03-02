@@ -1,5 +1,6 @@
 import Express from 'express'
 import fs from 'fs'
+import Article from '../../db/Article'
 
 let multer = require('multer')
 
@@ -34,6 +35,25 @@ router.post('/deleteFile', (req, res) => {
       res.json({status: false})
     }
     res.json({status: true})
+  })
+})
+
+router.post('/uploadInfo', (req, res) => {
+  const {fileName, linkName, tags} = req.body;
+  let newArticle = new Article({
+    fileName, linkName, tags
+  })
+
+  newArticle.save().then((err) => {
+    if(err) {
+      res.json({status: false})
+    } else{
+      res.json({status: true})
+    }
+    }
+  ).cancel( err => {
+    console.log(err);
+    res.json({status: false})
   })
 })
 

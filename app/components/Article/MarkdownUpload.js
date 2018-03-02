@@ -73,7 +73,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     show_tags: bindActionCreators(action.show_tags, dispatch),
     set_file_name: bindActionCreators(action.set_file_name, dispatch),
-    set_link_name: bindActionCreators(action.set_link_name, dispatch)
+    set_link_name: bindActionCreators(action.set_link_name, dispatch),
+    upload: bindActionCreators(action.upload_info, dispatch)
   }
 }
 
@@ -84,9 +85,12 @@ class AfterUploads extends Component {
   render() {
     return (
       <div>
-        <Tags/>
+        <Tags ref={tags}/>
         <UploadForm {...this.props} onChange={(changedFields)=> {this.props.set_link_name(changedFields.linkNameEdit)}}/>
         <span>{this.props.linkNameEdit.value}</span>
+        <Button onClick={()=>{this.props.upload(this.props.name,this.props.linkNameEdit.value,this.refs.tags.state.tags)}}>
+          确认发表
+        </Button>
       </div>
     )
   }

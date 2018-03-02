@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { action as publishAction } from '../../reducers/PublishAction'
 import { action as indexAction } from '../../reducers/index'
 import MarkdownUpload from '../../components/Article/MarkdownUpload'
-import { Radio, Modal } from 'antd'
+import { Radio, Modal, Button } from 'antd'
 
 
 class Publish extends Component {
