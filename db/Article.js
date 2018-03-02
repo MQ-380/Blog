@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 
 let articleSchema = new mongoose.Schema({
-  linkName: String,
+  linkName:  { type:String, unique: true },
   tags: [],
-  fileName: String
+  fileName: String,
+  articleName: String,
+  writer: String
 })
 
 module.exports = mongoose.model('Article',articleSchema,'Article');

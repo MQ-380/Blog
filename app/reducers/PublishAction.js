@@ -1,7 +1,8 @@
 const initialState = {
   publish_type: 'md',
-  show_tags: false,
+  show_tags: true,
   file_name: '',
+  article_name: {value: ''},
   link_name: {value: ''},
   upload_message: {
     show: false,
@@ -16,8 +17,12 @@ export const actionTypes = {
   SHOW_TAGS: 'SHOW_TAGS',
   SET_FILE_NAME: 'SET_NAME_NAME',
   SET_LINK_NAME: 'SET_LINK_NAME',
+  SET_ARTICLE_NAME: 'SET_ARTICLE_NAME',
   UPLOAD_INFO: 'UPLOAD_INFO',
-  PUBLISH_SUCCESS: 'PUBLISH_SUCCESS'
+  CANCEL_UPLOAD: 'CANCEL_UPLOAD',
+  PUBLISH_RESULT: 'PUBLISH_RESULT',
+  CLEAR_PUBLISH_SUCCESS_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT',
+  CLEAR_PUBLISH_FAIL_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT'
 }
 
 export const action = {
@@ -33,6 +38,13 @@ export const action = {
       show
     }
   },
+  set_article_name: (name) => {
+    return {
+      type: actionTypes.SET_ARTICLE_NAME,
+      name
+    }
+
+  },
   set_file_name: (name) => {
     return {
       type: actionTypes.SET_FILE_NAME,
@@ -45,12 +57,26 @@ export const action = {
       name
     }
   },
-  upload_info: (fileName, linkName, tags) => {
+  upload_info: (fileName, linkName, articleName, tags, writer) => {
     return {
       type: actionTypes.UPLOAD_INFO,
       fileName,
       linkName,
-      tags
+      articleName,
+      tags,
+      writer
+    }
+  },
+  clear_msg: (success) => {
+    return {
+      type: success? actionTypes.CLEAR_PUBLISH_SUCCESS_RESULT : actionTypes.CLEAR_PUBLISH_FAIL_RESULT,
+      success
+    }
+  },
+  cancel_upload: (fileName) => {
+    return {
+      type: actionTypes.CANCEL_UPLOAD,
+      fileName,
     }
   }
 }
@@ -82,11 +108,47 @@ export function reducer(state=initialState, action) {
         ...state,
         link_name: action.name
       }
-    case actionTypes.PUBLISH_SUCCESS:
+    case actionTypes.SET_ARTICLE_NAME:
       return {
         ...state,
-
+        article_name: action.name
       }
+    case actionTypes.PUBLISH_RESULT:
+      return {
+        ...state,
+        upload_message: {
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        },
+      }
+    case actionTypes.CLEAR_PUBLISH_SUCCESS_RESULT: {
+      return {
+        ...state,
+        show_tags: !action.success,
+        file_name: '',
+        article_name: {value: ''},
+        link_name: {value: ''},
+        upload_message: {
+          show: false,
+          type: '',
+          content: '',
+          title: ''
+        },
+      }
+    }
+    case actionTypes.CLEAR_PUBLISH_FAIL_RESULT: {
+      return {
+        ...state,
+        upload_message: {
+          show: false,
+          type: '',
+          content: '',
+          title: ''
+        },
+      }
+    }
     default:
       return {
           ...state

@@ -18,14 +18,32 @@ export function* uploadArticle (data) {
 
 export function* uploadArticleInfoFlow() {
   while(true) {
-    let req = take(actionTypes.UPLOAD_INFO);
-    const data = {fileName: req.fileName, linkName: req.linkName, tags: req.tags};
-    let res = call(uploadArticle, data);
+    let req = yield take(actionTypes.UPLOAD_INFO);
+    const data = {fileName: req.fileName, linkName: req.linkName, tags: req.tags, articleName: req.articleName, writer: req.writer};
+    let res = yield call(uploadArticle, data);
     if(res) {
       res = JSON.parse(res);
       if(res.status) {
-        yield put({type: actionTypes.PUBLISH_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id, email: res.email});
+        yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传成功！', title: '上传文章成功' ,alertType:'success'});
+      } else {
+        yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
       }
     }
+  }
+}
+
+export function* cancelUpload(data) {
+  try {
+    return yield post('/article/deleteFile', data);
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export function* cancelUploadFlow() {
+  while(true) {
+    let req = yield take(actionTypes.CANCEL_UPLOAD);
+    const data = {fileName: req.fileName};
+    yield call(cancelUpload, data);
   }
 }

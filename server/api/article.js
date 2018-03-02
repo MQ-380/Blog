@@ -39,22 +39,19 @@ router.post('/deleteFile', (req, res) => {
 })
 
 router.post('/uploadInfo', (req, res) => {
-  const {fileName, linkName, tags} = req.body;
+  const {fileName, linkName, articleName, tags, writer} = req.body;
   let newArticle = new Article({
-    fileName, linkName, tags
+    fileName, linkName, articleName, tags: tags !== '' ? tags.split(',') : [], writer
   })
 
-  newArticle.save().then((err) => {
-    if(err) {
-      res.json({status: false})
-    } else{
-      res.json({status: true})
-    }
-    }
-  ).cancel( err => {
-    console.log(err);
-    res.json({status: false})
-  })
+    newArticle.save((err) => {
+      if(err) {
+        console.log(err);
+        res.json({status: false})
+      } else {
+        res.json({status: true})
+      }
+    })
 })
 
 module.exports = router
