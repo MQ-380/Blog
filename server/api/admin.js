@@ -9,11 +9,12 @@ router.get('/user', function(req, res) {
   Users.find({},(err, data)=> {
     if(err) {
       res.status(500);
+    } else {
+      data = data.map((item) => (
+        {username: item.username, _id: item._id, email: item.email, isAdmin: item.isAdmin, auth: item.auth}
+      ))
+      res.json(data);
     }
-    data = data.map((item) => (
-      {username: item.username, _id: item._id, email: item.email, isAdmin: item.isAdmin, auth: item.auth}
-    ))
-    res.json(data);
   });
 });
 

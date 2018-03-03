@@ -1,7 +1,7 @@
 import {fork} from 'redux-saga/effects'
 import {getUserFlow, addUsersFlow, editUsersFlow, deleteUsersFlow, editPasswordFlow} from './UserSaga'
 import {adminLoginFlow, checkLoginFlow, LogoutFlow } from './LoginSaga'
-import {uploadArticleInfoFlow, cancelUploadFlow} from './PublishSaga'
+import {uploadArticleInfoFlow, cancelUploadFlow, getArticleListFlow} from './PublishSaga'
 
 export default function* rootSaga() {
   yield fork(getUserFlow);
@@ -14,4 +14,5 @@ export default function* rootSaga() {
   yield fork(editPasswordFlow);
   yield fork(uploadArticleInfoFlow);
   yield fork(cancelUploadFlow);
+  yield fork(getArticleListFlow);
 }

@@ -47,3 +47,22 @@ export function* cancelUploadFlow() {
     yield call(cancelUpload, data);
   }
 }
+
+export function* getArticleList() {
+  try {
+    return yield get('/article/getArticleList');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export function* getArticleListFlow() {
+  while(true) {
+    let req = yield take(actionTypes.GET_ARTICLE_LIST);
+    let res = yield call(getArticleList);
+    if(res) {
+      res = JSON.parse(res);
+      yield put({type: actionTypes.ARTICLE_LIST_RESULT, list: res})
+    }
+  }
+}

@@ -1,8 +1,9 @@
 const initialState = {
   publish_type: 'md',
-  show_tags: true,
+  show_tags: false,
   file_name: '',
   article_name: {value: ''},
+  article_list: [],
   link_name: {value: ''},
   upload_message: {
     show: false,
@@ -10,6 +11,7 @@ const initialState = {
     content: '',
     title: ''
   },
+  show_delete: false,
 };
 
 export const actionTypes = {
@@ -22,7 +24,10 @@ export const actionTypes = {
   CANCEL_UPLOAD: 'CANCEL_UPLOAD',
   PUBLISH_RESULT: 'PUBLISH_RESULT',
   CLEAR_PUBLISH_SUCCESS_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT',
-  CLEAR_PUBLISH_FAIL_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT'
+  CLEAR_PUBLISH_FAIL_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT',
+  GET_ARTICLE_LIST: 'GET_ARTICLE_LIST',
+  ARTICLE_LIST_RESULT: 'ARTICLE_LIST_RESULT',
+  SHOW_DELETE_ARTICLE_CONFIRM:'SHOW_DELETE_ARTICLE_CONFIRM'
 }
 
 export const action = {
@@ -77,6 +82,17 @@ export const action = {
     return {
       type: actionTypes.CANCEL_UPLOAD,
       fileName,
+    }
+  },
+  get_article_list: () => {
+    return {
+      type: actionTypes.GET_ARTICLE_LIST
+    }
+  },
+  show_article_delete_confirm: (show) => {
+    return {
+      type: actionTypes.SHOW_DELETE_ARTICLE_CONFIRM,
+      show
     }
   }
 }
@@ -147,6 +163,18 @@ export function reducer(state=initialState, action) {
           content: '',
           title: ''
         },
+      }
+    }
+    case actionTypes.ARTICLE_LIST_RESULT: {
+      return {
+        ...state,
+        article_list: action.list
+      }
+    }
+    case actionTypes.SHOW_DELETE_ARTICLE_CONFIRM: {
+      return {
+        ...state,
+        show_delete: action.show
       }
     }
     default:

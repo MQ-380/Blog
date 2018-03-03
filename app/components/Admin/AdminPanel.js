@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Layout, Menu, Icon, Popover, Avatar, Badge, MenuItemGroup} from 'antd'
 import Avator from '../Normal/Avatar'
 import { connect } from 'react-redux'
-import UserManager from '../Admin/UserManager'
-import ArticleManager from '../Admin/ArticleManager'
+import UserManager from '../User/UserManager'
+import ArticleList from '../Article/ArticleList'
 import {action} from '../../reducers/index'
 import {action as pageAction} from '../../reducers/PageAction'
 import AddArticle from '../Article/Publish'
@@ -37,7 +37,7 @@ class AdminPanel extends Component {
                   <Menu.Item key='user'><span><Icon type='user'/>用户管理</span></Menu.Item>
                 <SubMenu key={'Article'} title={<span><Icon type='book'/>文章管理</span>}>
                   <Menu.Item key='createArticle'>发表文章</Menu.Item>
-                  <Menu.Item key='article'>文章列表</Menu.Item>
+                  <Menu.Item key='ArticleList'>文章列表</Menu.Item>
                 </SubMenu>
               </Menu>
             </Sider>
@@ -45,7 +45,7 @@ class AdminPanel extends Component {
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
                 {this.props.page.includes('user') && <UserManager />}
                 {this.props.page.includes('createArticle') && <AddArticle/> }
-                {this.props.page.includes('ArticleList') && <ArticleManager/>}
+                {this.props.page.includes('ArticleList') && <ArticleList/>}
               </Content>
             </Layout>
           </Layout>

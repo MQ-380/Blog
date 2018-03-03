@@ -5,7 +5,12 @@ let articleSchema = new mongoose.Schema({
   tags: [],
   fileName: String,
   articleName: String,
-  writer: String
+  writer: String,
+  createTime: Date,
+  editTime: Date,
+  comment: [],
+  likeNumber: Number,
+  readNumber: Number
 })
 
 module.exports = mongoose.model('Article',articleSchema,'Article');
