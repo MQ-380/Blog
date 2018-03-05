@@ -66,3 +66,29 @@ export function* getArticleListFlow() {
     }
   }
 }
+
+export function* deleteArticle(_ids) {
+  try {
+    return yield post('/article/deleteArticle', _ids)
+  } catch (err){
+    console.error(err);
+  }
+}
+
+export function* deleteArticleFlow() {
+  while(true) {
+    let req = yield take(actionTypes.DELETE_ARTICLE);
+    let res = yield call(deleteArticle, {_ids: req.articleId});
+    if(res) {
+      console.log(res);
+      res = JSON.parse(res);
+      if(res.status){
+        yield put({type: actionTypes.DELETE_ARTICLE_RESULT, content: '文章已被删除！', title: '文章已被删除' ,alertType:'success'});
+      } else {
+        yield put({type: actionTypes.DELETE_ARTICLE_RESULT, content: '文章删除失败！', title: '文章删除失败', alertType: 'error'});
+      }
+    } else {
+      yield put({type: actionTypes.DELETE_ARTICLE_RESULT, content: '文章删除失败！', title: '文章删除失败', alertType: 'error'});
+    }
+  }
+}

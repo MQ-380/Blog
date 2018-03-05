@@ -1,6 +1,7 @@
 import Express from 'express'
 import fs from 'fs'
 import Article from '../../db/Article'
+import Users from '../../db/Users'
 
 let multer = require('multer')
 
@@ -63,6 +64,24 @@ router.get('/getArticleList', (req, res) => {
       res.json(data);
     }
   })
+})
+
+router.post('/deleteArticle', (req, res) => {
+  const {_ids} = req.body;
+  let failedItem = [];
+  _ids.split(',').forEach((item) => {
+    Article.remove({_id: item}, (err) => {
+      if(err) {
+        console.log(err);
+        failedItem.push(item);
+      }
+    })
+  })
+  if(failedItem.length !== 0) {
+    res.json({status: false});
+  } else {
+    res.json({status: true});
+  }
 })
 
 module.exports = router

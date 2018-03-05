@@ -11,7 +11,14 @@ const initialState = {
     content: '',
     title: ''
   },
+  delete_message: {
+    show: false,
+    type: '',
+    content: '',
+    title: ''
+  },
   show_delete: false,
+  after_delete: false
 };
 
 export const actionTypes = {
@@ -27,7 +34,10 @@ export const actionTypes = {
   CLEAR_PUBLISH_FAIL_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT',
   GET_ARTICLE_LIST: 'GET_ARTICLE_LIST',
   ARTICLE_LIST_RESULT: 'ARTICLE_LIST_RESULT',
-  SHOW_DELETE_ARTICLE_CONFIRM:'SHOW_DELETE_ARTICLE_CONFIRM'
+  SHOW_DELETE_ARTICLE_CONFIRM:'SHOW_DELETE_ARTICLE_CONFIRM',
+  DELETE_ARTICLE: 'DELETE_ARTICLE',
+  DELETE_ARTICLE_RESULT: 'DELETE_ARTICLE_RESULT',
+  CLEAR_DELETE_RESULT: 'CLEAR_DELETE_RESULT'
 }
 
 export const action = {
@@ -86,7 +96,7 @@ export const action = {
   },
   get_article_list: () => {
     return {
-      type: actionTypes.GET_ARTICLE_LIST
+      type: actionTypes.GET_ARTICLE_LIST,
     }
   },
   show_article_delete_confirm: (show) => {
@@ -94,9 +104,19 @@ export const action = {
       type: actionTypes.SHOW_DELETE_ARTICLE_CONFIRM,
       show
     }
+  },
+  delete_article: (articleId) => {
+    return {
+      type: actionTypes.DELETE_ARTICLE,
+      articleId
+    }
+  },
+  clear_delete_message: () => {
+    return {
+      type: actionTypes.CLEAR_DELETE_RESULT,
+    }
   }
 }
-
 
 
 export function reducer(state=initialState, action) {
@@ -168,13 +188,37 @@ export function reducer(state=initialState, action) {
     case actionTypes.ARTICLE_LIST_RESULT: {
       return {
         ...state,
-        article_list: action.list
+        article_list: action.list,
+        after_delete: false
       }
     }
     case actionTypes.SHOW_DELETE_ARTICLE_CONFIRM: {
       return {
         ...state,
-        show_delete: action.show
+        show_delete: action.show,
+        after_delete: !action.show,
+      }
+    }
+    case actionTypes.DELETE_ARTICLE_RESULT: {
+      return {
+        ...state,
+        delete_message: {
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        },
+      }
+    }
+    case actionTypes.CLEAR_DELETE_RESULT: {
+      return {
+        ...state,
+        delete_message: {
+          show: false,
+          type: '',
+          content: '',
+          title: ''
+        }
       }
     }
     default:

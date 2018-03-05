@@ -17,6 +17,22 @@ class ArticleList extends Component {
     console.log(selectedRowKeys);
   }
 
+  showMessage = (self) => {
+    let msg = {
+      title: this.props.delete_message.title,
+      content: this.props.delete_message.content,
+      onOk: () => {
+        self.props.show_delete_confirm(false);
+        self.props.clear_delete_message();
+      }
+    }
+    if(this.props.delete_message.type === 'error'){
+      Modal.error(msg);
+    } else {
+      Modal.success(msg);
+    }
+  }
+
   columns = [
     {
       title: '文章标题',
@@ -109,13 +125,15 @@ class ArticleList extends Component {
                  showSizeChanger: true,
                  showQuickJumper: true
                }}/>
-        <Modal title={`确定删除如下${this.state.selectedRowNames.length}篇文章?删除后，将无法恢复！`}
+        <Modal title={`确定删除如下${this.state.selectedRowNames.length}篇文章?`}
                visible={this.props.show_delete}
-               onOk = {()=>{console.log(this.state.selectedRowKeys);}}
+               onOk = {()=>{this.props.delete_article(this.state.selectedRowKeys);}}
+               okType ={'danger'}
                onCancel={()=>this.props.show_delete_confirm(false)}
                confirmLoading={!this.props.show_delete}
         >
           <p>{this.state.selectedRowNames.join(',')}</p>
+          <p>删除后，将无法恢复！</p>
         </Modal>
       </div>
     )
@@ -125,19 +143,32 @@ class ArticleList extends Component {
   componentDidMount() {
     this.props.get_article_list();
   }
+
+  componentDidUpdate() {
+    if(this.props.after_delete) {
+      this.props.get_article_list();
+    }
+    if(this.props.delete_message.show) {
+      this.showMessage(this)
+    }
+  }
 }
 
 const mapStateToProps = (state) => {
   return {
     article_list: state.publish.article_list,
-    show_delete: state.publish.show_delete
+    show_delete: state.publish.show_delete,
+    after_delete: state.publish.after_delete,
+    delete_message: state.publish.delete_message,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     get_article_list: bindActionCreators(publishAction.get_article_list, dispatch),
-    show_delete_confirm: bindActionCreators(publishAction.show_article_delete_confirm, dispatch)
+    show_delete_confirm: bindActionCreators(publishAction.show_article_delete_confirm, dispatch),
+    delete_article: bindActionCreators(publishAction.delete_article, dispatch),
+    clear_delete_message: bindActionCreators(publishAction.clear_delete_message, dispatch)
   }
 }
 
