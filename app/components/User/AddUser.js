@@ -79,6 +79,3 @@ export default connect(
   mapDispatchToProps,
 )(AddUser)
 
-;
-
-
