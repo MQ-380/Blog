@@ -80,7 +80,6 @@ export function* deleteArticleFlow() {
     let req = yield take(actionTypes.DELETE_ARTICLE);
     let res = yield call(deleteArticle, {_ids: req.articleId});
     if(res) {
-      console.log(res);
       res = JSON.parse(res);
       if(res.status){
         yield put({type: actionTypes.DELETE_ARTICLE_RESULT, content: '文章已被删除！', title: '文章已被删除' ,alertType:'success'});
@@ -89,6 +88,32 @@ export function* deleteArticleFlow() {
       }
     } else {
       yield put({type: actionTypes.DELETE_ARTICLE_RESULT, content: '文章删除失败！', title: '文章删除失败', alertType: 'error'});
+    }
+  }
+}
+
+export function* getArticleContent(_id) {
+  yield put({type: IndexTypes.FETCH_START})
+  try {
+    return yield post('/article/getArticleContent', _id);
+  }catch(err) {
+    console.error(err);
+  }finally {
+    yield put({type: IndexTypes.FETCH_END})
+  }
+}
+
+export function* getArticleContentFlow() {
+  while(true) {
+    let req = yield take(actionTypes.GET_ARTICLE_CONTENT);
+    let res = yield call(getArticleContent, {_id: req._id});
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: actionTypes.SET_ARTICLE_CONTENT, content: res.content})
+      } else {
+        yield put({type: actionTypes.SET_ARTICLE_CONTENT, content: '请检查网络'})
+      }
     }
   }
 }

@@ -18,7 +18,9 @@ const initialState = {
     title: ''
   },
   show_delete: false,
-  after_delete: false
+  after_delete: false,
+  article_show_style: 'plain',
+  article_content: ''
 };
 
 export const actionTypes = {
@@ -37,7 +39,10 @@ export const actionTypes = {
   SHOW_DELETE_ARTICLE_CONFIRM:'SHOW_DELETE_ARTICLE_CONFIRM',
   DELETE_ARTICLE: 'DELETE_ARTICLE',
   DELETE_ARTICLE_RESULT: 'DELETE_ARTICLE_RESULT',
-  CLEAR_DELETE_RESULT: 'CLEAR_DELETE_RESULT'
+  CLEAR_DELETE_RESULT: 'CLEAR_DELETE_RESULT',
+  CHANGE_ARTICLE_SHOW_STYLE: 'CHANGE_ARTICLE_SHOW_STYLE',
+  GET_ARTICLE_CONTENT: 'GET_ARTICLE_CONTENT',
+  SET_ARTICLE_CONTENT: 'SET_ARTICLE_CONTENT'
 }
 
 export const action = {
@@ -114,6 +119,18 @@ export const action = {
   clear_delete_message: () => {
     return {
       type: actionTypes.CLEAR_DELETE_RESULT,
+    }
+  },
+  change_article_show_style: (style) => {
+    return {
+      type: actionTypes.CHANGE_ARTICLE_SHOW_STYLE,
+      style,
+    }
+  },
+  get_article_content: (_id) => {
+    return {
+      type: actionTypes.GET_ARTICLE_CONTENT,
+      _id
     }
   }
 }
@@ -219,6 +236,18 @@ export function reducer(state=initialState, action) {
           content: '',
           title: ''
         }
+      }
+    }
+    case actionTypes.CHANGE_ARTICLE_SHOW_STYLE: {
+      return {
+        ...state,
+        article_show_style: action.style
+      }
+    }
+    case actionTypes.SET_ARTICLE_CONTENT: {
+      return {
+        ...state,
+        article_content: action.content
       }
     }
     default:

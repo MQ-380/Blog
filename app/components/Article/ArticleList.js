@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action as publishAction } from '../../reducers/PublishAction'
-import { action as indexAction } from '../../reducers/index'
+import { action as pageAction } from '../../reducers/PageAction'
 import MarkdownUpload from '../../components/Article/MarkdownUpload'
 import { Radio, Modal, Button, Table, Icon, Tooltip } from 'antd'
 
@@ -38,11 +38,11 @@ class ArticleList extends Component {
       title: '文章标题',
       key: '_id',
       dataIndex: 'articleName',
-      render: (text) => (
+      render: (text, record) => (
         <Tooltip placement='bottom' title='点击查看详情' mouseEnterDelay={2}>
           <a onClick={(e)=>{
             e.preventDefault();
-            /*完成跳转*/
+            this.props.change_page('articleDetail', record._id);
           }}>
             {text}
           </a>
@@ -168,7 +168,8 @@ const mapDispatchToProps = (dispatch) => {
     get_article_list: bindActionCreators(publishAction.get_article_list, dispatch),
     show_delete_confirm: bindActionCreators(publishAction.show_article_delete_confirm, dispatch),
     delete_article: bindActionCreators(publishAction.delete_article, dispatch),
-    clear_delete_message: bindActionCreators(publishAction.clear_delete_message, dispatch)
+    clear_delete_message: bindActionCreators(publishAction.clear_delete_message, dispatch),
+    change_page: bindActionCreators(pageAction.change_page, dispatch)
   }
 }
 

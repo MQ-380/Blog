@@ -4,6 +4,7 @@ import Article from '../../db/Article'
 import Users from '../../db/Users'
 
 let multer = require('multer')
+let marked = require('marked')
 
 let storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -82,6 +83,24 @@ router.post('/deleteArticle', (req, res) => {
   } else {
     res.json({status: true});
   }
+})
+
+router.post('/getArticleContent', (req, res) => {
+  let {_id} = req.body;
+  Article.find({_id}, (err, data) => {
+    if(err) {
+      console.error(err);
+      res.json({status: false});
+    } else {
+      const fileLink = data[0].fileName;
+      fs.readFile(`articles/${fileLink}`,'utf8', (err, data) => {
+        if(err) {console.error('err'); res.json({status: false})}
+        else {
+          res.json({status: true, content: data})
+        }
+      });
+    }
+  })
 })
 
 module.exports = router
