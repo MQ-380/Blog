@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {action as publishAction} from '../../reducers/PublishAction'
 import {Button} from 'antd'
+import Prism from 'prismjs';
 
 const ReactMarkdown = require('react-markdown')
 
@@ -42,7 +43,6 @@ class ArticleDetail extends Component {
     let nowArticle = this.props.article_list.filter((item)=>item._id === this.props.article_id)[0]
     this.setState({nowArticle})
     this.props.get_article_content(nowArticle._id)
-
   }
 }
 
@@ -68,9 +68,17 @@ class ArticleContentPrototype extends Component {
   render() {
     return (
       <div>
-    <ReactMarkdown source={this.props.article_content}/>
+         <ReactMarkdown source={this.props.article_content}/>
       </div>
     )
+  }
+
+  componentDidUpdate() {
+    Prism.highlightAll();
+  }
+
+  componentDidMount() {
+    Prism.highlightAll();
   }
 }
 
