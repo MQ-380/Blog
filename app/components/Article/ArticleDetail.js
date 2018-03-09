@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux'
 import {action as publishAction} from '../../reducers/PublishAction'
 import {Button} from 'antd'
 
+const ReactMarkdown = require('react-markdown')
+
 class ArticleDetail extends Component {
   state = {nowArticle: {}}
 
@@ -30,9 +32,8 @@ class ArticleDetail extends Component {
             </Button>
           </div>
         </div>
-        <div>
-          {this.props.article_content}
-        </div>
+        <br/><br/>
+        {this.props.now_style === 'plain' && <ArticleContent style={{overflow: 'scroll', }}/>}
       </div>
     )
   }
@@ -62,3 +63,17 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetail)
+
+class ArticleContentPrototype extends Component {
+  render() {
+    return (
+      <div>
+    <ReactMarkdown source={this.props.article_content}/>
+      </div>
+    )
+  }
+}
+
+let ArticleContent = connect(mapStateToProps, mapDispatchToProps)(ArticleContentPrototype);
+
+
