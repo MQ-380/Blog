@@ -57,7 +57,11 @@ class ArticleList extends Component {
     {
       title: '修改时间',
       dataIndex: 'editTime',
-      sorter: (a,b) => a.editTime > b.editTime,
+      render: (text) => {
+        let date = text.split('T');
+        return `${date[0]} ${date[1].split('.')[0]}`;
+      },
+      sorter: (a,b) => {return new Date(a.editTime) - new Date(b.editTime)},
     },
     {
       title: '评论数',

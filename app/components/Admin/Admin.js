@@ -4,8 +4,7 @@ import AdminLogin from './AdminLogin'
 import { connect } from 'react-redux'
 import { action } from '../../reducers/index'
 import { bindActionCreators } from 'redux'
-import { Row, Col } from 'antd'
-import '../Style/Form.css'
+import '../Style/Main.css'
 
 class Admin extends Component {
   render () {

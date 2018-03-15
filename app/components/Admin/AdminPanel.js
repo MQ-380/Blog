@@ -21,13 +21,15 @@ class AdminPanel extends Component {
       <div>
         {this.props.notAdmin}
         <Layout>
+          <div style={{position: 'fixed', top: '0', left: '0', zIndex: '9999', width: '100%'}}>
           <Header className='header' style={{position: 'relative'}}>
             <div className='AdminLogo' style={{position:'absolute', right:'5%'}}>
               <Avator/>
             </div>
           </Header>
+          </div>
           <Layout>
-            <Sider width={200} style={{background: '#fff'}}>
+            <Sider width={200} style={{position: 'fixed', top: 64, height: '100%'}}>
               <Menu
                 mode='inline'
                 defaultSelectedKeys={['userList']}
@@ -42,8 +44,9 @@ class AdminPanel extends Component {
                 </SubMenu>
               </Menu>
             </Sider>
-            <Layout style={{padding: '9 24px 24px'}}>
-              <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 200}}>
+            <Layout>
+              <Content style={{background: '#fff', padding: 24,margin: 0, minHeight: 200, position:'absolute',
+                top: 80, left: 220, width: 'calc(100% - 220px)'}}>
                 {this.props.page.includes('user') && <UserManager />}
                 {this.props.page.includes('createArticle') && <AddArticle/> }
                 {this.props.page.includes('ArticleList') && <ArticleList/>}

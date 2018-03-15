@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {action as publishAction} from '../../reducers/PublishAction'
-import {Button} from 'antd'
+import {action as pageAction} from '../../reducers/PageAction'
+import {Button, Icon, Modal} from 'antd'
 import Prism from 'prismjs';
 
 const ReactMarkdown = require('react-markdown')
@@ -13,8 +14,28 @@ class ArticleDetail extends Component {
   render () {
     return (
       <div>
+        <Button onClick={()=> {
+          if (this.props.now_style === 'edit') {
+            Modal.confirm({
+              title: '返回列表将会丢失编辑的数据，请确定已经保存。',
+              content: '请确定是否要返回列表。返回后将丢失未保存的修改数据',
+              onOk: () => {
+                this.props.change_article_show_style('plain');
+                this.props.change_page('ArticleList');
+              },
+              okText: '确定',
+              cancelText: '取消'
+            })
+          } else {
+            this.props.change_article_show_style('plain');
+            this.props.change_page('ArticleList')
+          }
+        }
+        }>
+          <Icon type="rollback" />返回列表
+        </Button>
         <h1>
-        {this.state.nowArticle.articleName}
+        {`标题：${this.state.nowArticle.articleName}`}
         </h1>
         <div style={{position: 'relative'}}>
           <div style={{position: 'absolute'}}>
@@ -28,13 +49,33 @@ class ArticleDetail extends Component {
             <Button onClick={()=>this.props.change_article_show_style('edit')}>
               编辑文章
             </Button>
-            <Button type={'danger'}>
+            <Button type={'danger'} onClick={
+              () => {
+                console.log('dede')
+                Modal.confirm({
+                  title: '确认删除',
+                  content: '是否要删除本文？',
+                  onOk: () => {
+                    this.props.delete_article(this.props.article_id);
+                    this.props.change_page('ArticleList');
+                  },
+                  okText: '确定',
+                  okType: 'danger',
+                  cancelText: '取消'
+                })
+              }
+            }>
               删除
             </Button>
           </div>
         </div>
         <br/><br/>
-        {this.props.now_style === 'plain' && <ArticleContent style={{overflow: 'scroll', }}/>}
+        {this.props.now_style === 'plain' &&
+          <div>
+            <h1>文章原文：</h1>
+        <ArticleContent/>
+          </div>
+        }
       </div>
     )
   }
@@ -58,7 +99,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     change_article_show_style: bindActionCreators(publishAction.change_article_show_style, dispatch),
-    get_article_content: bindActionCreators(publishAction.get_article_content, dispatch)
+    get_article_content: bindActionCreators(publishAction.get_article_content, dispatch),
+    change_page: bindActionCreators(pageAction.change_page, dispatch),
+    delete_article: bindActionCreators(publishAction.delete_article, dispatch)
   }
 }
 
