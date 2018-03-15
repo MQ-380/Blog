@@ -8,6 +8,7 @@ import {action} from '../../reducers/index'
 import {action as pageAction} from '../../reducers/PageAction'
 import AddArticle from '../Article/Publish'
 import ArticleDetail from '../Article/ArticleDetail'
+import CommentDetail from '../Article/CommentDetail'
 import { bindActionCreators } from 'redux'
 
 const {SubMenu} = Menu
@@ -51,6 +52,7 @@ class AdminPanel extends Component {
                 {this.props.page.includes('createArticle') && <AddArticle/> }
                 {this.props.page.includes('ArticleList') && <ArticleList/>}
                 {this.props.page.includes('articleDetail') && <ArticleDetail/>}
+                {this.props.page.includes('commentDetail') && <CommentDetail/>}
               </Content>
             </Layout>
           </Layout>

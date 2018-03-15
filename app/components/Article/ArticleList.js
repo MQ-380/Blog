@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action as publishAction } from '../../reducers/PublishAction'
 import { action as pageAction } from '../../reducers/PageAction'
-import MarkdownUpload from '../../components/Article/MarkdownUpload'
 import { Radio, Modal, Button, Table, Icon, Tooltip } from 'antd'
 
 
@@ -14,7 +13,6 @@ class ArticleList extends Component {
   onSelectedChange = (selectedRowKeys) => {
     selectedRowKeys = selectedRowKeys.filter((item) => this.props.article_list.filter((e) => e._id === item).length !== 0);
     this.setState({selectedRowKeys});
-    console.log(selectedRowKeys);
   }
 
   showMessage = (self) => {
@@ -70,7 +68,7 @@ class ArticleList extends Component {
         <Tooltip placement='bottom' title='点击查看详情' mouseEnterDelay={2}>
           <a onClick={(e)=>{
             e.preventDefault();
-            /*完成跳转*/
+            this.props.change_page('commentDetail', record._id);
           }}>
             {record.comment.length}
           </a>
