@@ -40,9 +40,11 @@ class AdminPanel extends Component {
               >
                   <Menu.Item key='user'><span><Icon type='user'/>用户管理</span></Menu.Item>
                 <SubMenu key={'Article'} title={<span><Icon type='book'/>文章管理</span>}>
-                  <Menu.Item key='createArticle'>发表文章</Menu.Item>
-                  <Menu.Item key='ArticleList'>文章列表</Menu.Item>
+                  <Menu.Item key='createArticle'><Icon type="cloud-upload-o" />发表文章</Menu.Item>
+                  <Menu.Item key='ArticleList'><Icon type="table" />文章列表</Menu.Item>
                 </SubMenu>
+                <Menu.Item key='data'><span><Icon type="dashboard" />浏览数据</span></Menu.Item>
+                <Menu.Item key='message'><span><Icon type="inbox" />消息列表</span></Menu.Item>
               </Menu>
             </Sider>
             <Layout>

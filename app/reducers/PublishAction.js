@@ -17,6 +17,12 @@ const initialState = {
     content: '',
     title: ''
   },
+  review_message: {
+    show: false,
+    type: '',
+    content: '',
+    title: ''
+  },
   show_delete: false,
   after_delete: false,
   article_show_style: 'plain',
@@ -42,7 +48,11 @@ export const actionTypes = {
   CLEAR_DELETE_RESULT: 'CLEAR_DELETE_RESULT',
   CHANGE_ARTICLE_SHOW_STYLE: 'CHANGE_ARTICLE_SHOW_STYLE',
   GET_ARTICLE_CONTENT: 'GET_ARTICLE_CONTENT',
-  SET_ARTICLE_CONTENT: 'SET_ARTICLE_CONTENT'
+  SET_ARTICLE_CONTENT: 'SET_ARTICLE_CONTENT',
+  COMMENT_REVIEW: 'COMMENT_REVIEW',
+  COMMENT_REVIEW_FAILED: 'COMMENT_REVIEW_FAILED',
+  COMMENT_REVIEW_SUCCESS: 'COMMENT_REVIEW_SUCCESS',
+  CLEAR_REVIEW_FAILED_MESSAGE: 'CLEAR_REVIEW_FAILED_MESSAGE'
 }
 
 export const action = {
@@ -131,6 +141,19 @@ export const action = {
     return {
       type: actionTypes.GET_ARTICLE_CONTENT,
       _id
+    }
+  },
+  comment_review: (commentId, articleId, passed) => {
+    return {
+      type: actionTypes.COMMENT_REVIEW,
+      commentId,
+      articleId,
+      passed
+    }
+  },
+  clear_review_failed: () => {
+    return {
+      type: actionTypes.CLEAR_REVIEW_FAILED_MESSAGE
     }
   }
 }
@@ -248,6 +271,39 @@ export function reducer(state=initialState, action) {
       return {
         ...state,
         article_content: action.content
+      }
+    }
+    case actionTypes.COMMENT_REVIEW_FAILED: {
+      return {
+        ...state,
+        review_message:{
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        }
+      }
+    }
+    case actionTypes.CLEAR_REVIEW_FAILED_MESSAGE: {
+      return {
+        ...state,
+        review_message:{
+          show: false,
+          type: '',
+          content: '',
+          title: ''
+        }
+      }
+    }
+    case actionTypes.COMMENT_REVIEW_SUCCESS: {
+      return {
+        ...state,
+        article_list: state.article_list.map((item) => {
+          if(item._id === action.articleId) {
+            item.comment = action.comment
+          }
+          return item;
+        })
       }
     }
     default:

@@ -117,3 +117,29 @@ export function* getArticleContentFlow() {
     }
   }
 }
+
+export function* reviewComment(data) {
+  try {
+    return yield post('/article/reviewComment', data);
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+
+export function* reviewCommentFlow() {
+  while(true) {
+    let req = yield take(actionTypes.COMMENT_REVIEW);
+    let res = yield call(reviewComment, {commentId: req.commentId, articleId: req.articleId, passed: req.passed})
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: actionTypes.COMMENT_REVIEW_SUCCESS, comment: res.comment, articleId: res.articleId})
+      } else {
+        yield put({type: actionTypes.COMMENT_REVIEW_FAILED, content: '评论操作失败，请检查网络！', title: '', alertType: 'error'});
+      }
+    } else {
+      yield put({type: actionTypes.COMMENT_REVIEW_FAILED, content: '评论操作失败，请检查网络！', title: '', alertType: 'error'});
+    }
+  }
+}

@@ -103,4 +103,36 @@ router.post('/getArticleContent', (req, res) => {
   })
 })
 
+router.post('/reviewComment', (req, res) => {
+  let {commentId, articleId, passed} = req.body;
+  Article.findOne({_id: articleId}, (err, data) => {
+    if(err) {
+      console.error(err);
+      res.json({status: false})
+    } else {
+      let comment = data.comment.map((item) => {
+        if(item.id === commentId) {
+          passed = passed === 'true';
+          if(passed) {
+            item.reviewed = true;
+          } else if(!passed && item.reviewed) {
+            item.reviewed = false;
+          } else {
+            return undefined;
+          }
+        }
+        return item;
+      }).filter((item) => !!item);
+      Article.update({_id: articleId}, {comment}, (err) => {
+        if(err) {
+          console.error(err);
+          res.json({status: false});
+        } else {
+          res.json({status: true, comment: comment, articleId: articleId});
+        }
+      })
+    }
+  })
+})
+
 module.exports = router
