@@ -102,7 +102,7 @@ class Avatars extends Component {
   }
 
   componentDidUpdate() {
-    if(this.props.msg.show ) {
+    if(this.props.msg.show) {
       this.showResult(this)
     }
   }
@@ -117,7 +117,8 @@ const mapStateToProps = (state) => {
     user_id: state.global.user_Id,
     msg: state.user.edit_message,
     email: state.global.email,
-    show_edit_info: state.user.show_edit
+    show_edit_info: state.user.show_edit,
+
   }
 }
 
