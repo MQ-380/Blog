@@ -118,7 +118,6 @@ const mapStateToProps = (state) => {
     msg: state.user.edit_message,
     email: state.global.email,
     show_edit_info: state.user.show_edit,
-
   }
 }
 
