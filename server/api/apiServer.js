@@ -31,3 +31,10 @@ export const io = require('socket.io').listen(app.listen(port, function(err){
   }
 }))
 
+export const socket = io.on('connection', (socket) => {
+  socket.on('register_user', (name, fn) => {
+    fn(name.userId)
+  })
+  return socket;
+});
+

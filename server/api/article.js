@@ -2,7 +2,7 @@ import Express from 'express'
 import fs from 'fs'
 import Article from '../../db/Article'
 import Users from '../../db/Users'
-import { io } from './apiServer'
+import {socket} from '../../server/api/apiServer'
 
 let multer = require('multer')
 let marked = require('marked')
@@ -63,6 +63,7 @@ router.get('/getArticleList', (req, res) => {
       console.error(err);
       res.status(500);
     } else {
+      socket.emit('new_comment', 'new at data');
       res.json(data);
     }
   })

@@ -60,8 +60,11 @@ export const action = {
       type: actionTypes.CLEAR_MSG
     }
   },
-  achieve_new_comment: () => {
-
+  achieve_new_comment: (data) => {
+    console.log(data);
+    return {
+      type: actionTypes.CLEAR_MSG
+    }
   }
 }
 

@@ -1,27 +1,25 @@
-import {action} from '../app/reducers/index'
-
-
-window.socket = socket;
-
-export function socketEmit(userId) {
-  socket.emit('register_user', {
-    userId
-  }, (data) => {
-    console.log(data);
-  })
-}
-
-export function get_new_comment() {
-  socket.on('new_comment', msg => {
-
-  })
-}
+import {action as IndexAction} from '../app/reducers/index'
 
 function createSocketMiddleware(socket) {
   let eventFlag = false;
-  if(!eventFlag) {
-    eventFlag = true;
+  return store => next => action => {
+    if(!eventFlag) {
+      eventFlag = true;
+      //此处注册需要从服务器返回的推送数据
+      socket.on('new_comment', (data) => {
+        console.log(data)
+        next(IndexAction.achieve_new_comment(data));
+      })
+    }
 
+    if(action.type === 'REGISTER_USER') {
+      socket.emit('register_user', {
+        userId: action.userId
+      }, (data) => {
+        console.log(data);
+      })
+    }
+    return next(action);
   }
 }
 

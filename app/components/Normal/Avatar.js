@@ -7,7 +7,6 @@ import {action as userAction} from '../../reducers/UserAction'
 import EditPasswordForm from '../Forms/EditPasswordForm'
 import EditUserInfoForm from '../Forms/EditUserInfoForm'
 import { Modal } from 'antd'
-import { io } from '../../../server/api/apiServer'
 
 const md5 = require('md5')
 
@@ -106,10 +105,6 @@ class Avatars extends Component {
     if(this.props.msg.show) {
       this.showResult(this)
     }
-  }
-
-  componentWillMount() {
-
   }
 
   /*
