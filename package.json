@@ -59,6 +59,8 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "slick-carousel": "^1.8.1",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
     "style-loader": "^0.20.1",
     "uuid": "^3.2.1",
     "webpack": "^3.10.0",

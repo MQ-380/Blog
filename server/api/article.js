@@ -2,6 +2,7 @@ import Express from 'express'
 import fs from 'fs'
 import Article from '../../db/Article'
 import Users from '../../db/Users'
+import { io } from './apiServer'
 
 let multer = require('multer')
 let marked = require('marked')

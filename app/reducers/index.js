@@ -59,6 +59,9 @@ export const action = {
     return {
       type: actionTypes.CLEAR_MSG
     }
+  },
+  achieve_new_comment: () => {
+
   }
 }
 

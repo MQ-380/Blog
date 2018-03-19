@@ -2,7 +2,7 @@ import {put, take, call} from 'redux-saga/effects'
 import {get, post} from './fetch'
 import {actionTypes as IndexTypes} from '../reducers/index'
 import {actionTypes as actionTypes} from '../reducers/UserAction'
-
+import {socketEmit} from '../socketMiddleware'
 
 export function* adminLogin(data) {
   yield put({type: IndexTypes.FETCH_START})
@@ -26,6 +26,7 @@ export function* adminLoginFlow () {
       if (res.status) {
         let session = window.sessionStorage;
         session.token = res.token;
+        socketEmit(res.id);
         yield put({type: IndexTypes.LOGIN_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id, email: res.email});
       } else {
         yield put({type: IndexTypes.LOGIN_FAILED, msg: res.msg, alertType: 'error'});
@@ -53,6 +54,7 @@ export function* checkLoginFlow() {
     if(res) {
       res = JSON.parse(res);
       if(res.status) {
+        socketEmit(res.id);
         yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username, id: res.id, email: res.email});
       } else {
         window.sessionStorage.clear();

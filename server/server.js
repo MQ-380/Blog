@@ -17,7 +17,6 @@ const proxy = Proxy.createProxyServer({
 });
 
 
-
 app.use('/api', (req, res) => {
   proxy.web(req,res,{target: targetUrl})
 });
@@ -44,14 +43,10 @@ app.use(WebpackHotMiddleware(webpack(config)));
 //   res.sendFile(path.join(__dirname,'..','app/build/index.html'));
 // })
 
-
-
 app.listen(3000, (err)=>{
   if(err) {
     return console.error(err);
   }
   return console.log('opening the localhost:3000');
-})
-
-
+});
 

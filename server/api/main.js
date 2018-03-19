@@ -1,5 +1,6 @@
 import Express from 'express'
 import Users from '../../db/Users'
+import {io} from '../../server/api/apiServer'
 
 const bcrypt = require('bcryptjs');
 const uuidv4 = require('uuid')
@@ -74,6 +75,8 @@ router.post('/logout', (req, res) => {
     }
   })
 })
+
+
 
 const isExpired = (loginDate) => {
   const now = new Date()

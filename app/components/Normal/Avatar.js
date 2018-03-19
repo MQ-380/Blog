@@ -7,6 +7,7 @@ import {action as userAction} from '../../reducers/UserAction'
 import EditPasswordForm from '../Forms/EditPasswordForm'
 import EditUserInfoForm from '../Forms/EditUserInfoForm'
 import { Modal } from 'antd'
+import { io } from '../../../server/api/apiServer'
 
 const md5 = require('md5')
 
@@ -106,6 +107,19 @@ class Avatars extends Component {
       this.showResult(this)
     }
   }
+
+  componentWillMount() {
+
+  }
+
+  /*
+  发表评论后的Server端代码：
+      io.on('connection', (socket) => {
+        socket.on('new_comment', (name, fn) => {
+          fn('woot');
+        });
+      });
+   */
 }
 
 const mapStateToProps = (state) => {

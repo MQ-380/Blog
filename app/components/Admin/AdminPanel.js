@@ -16,7 +16,6 @@ const {Header, Content, Sider} = Layout
 
 
 class AdminPanel extends Component {
-
   render () {
     return (
       <div>
