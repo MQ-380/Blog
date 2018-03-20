@@ -10,7 +10,7 @@ import Editor from '../../components/Article/EditorUpload'
 
 class Publish extends Component {
   changeType = (e) => {
-    if(this.props.showTags){
+    if(this.props.showTags || this.props.publish_type === 'richText'){
       Modal.confirm({
         title: '是否要转换编辑方式？',
         content: '是否要转换编辑方式？未提交内容将会丢失！',

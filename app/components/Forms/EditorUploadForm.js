@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Form , Input} from 'antd/lib/index'
-import EditorConvertToMarkdown from '../../../app/components/Normal/Editor'
 
 
 class EditorUploadForm extends Component {
@@ -47,11 +46,6 @@ class EditorUploadForm extends Component {
             }]
           })(
             <Input />
-          )}
-        </Form.Item>
-        <Form.Item {...formItemLayout} label={'编辑文章内容'}>
-          {getFieldDecorator('article')(
-            <EditorConvertToMarkdown/>
           )}
         </Form.Item>
       </Form>

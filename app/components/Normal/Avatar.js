@@ -106,15 +106,6 @@ class Avatars extends Component {
       this.showResult(this)
     }
   }
-
-  /*
-  发表评论后的Server端代码：
-      io.on('connection', (socket) => {
-        socket.on('new_comment', (name, fn) => {
-          fn('woot');
-        });
-      });
-   */
 }
 
 const mapStateToProps = (state) => {
