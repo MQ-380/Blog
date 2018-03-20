@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { Form , Input} from 'antd/lib/index'
 
 class EditPasswordForm extends Component {

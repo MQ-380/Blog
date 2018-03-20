@@ -5,6 +5,7 @@ import { action as publishAction } from '../../reducers/PublishAction'
 import { action as indexAction } from '../../reducers/index'
 import MarkdownUpload from '../../components/Article/MarkdownUpload'
 import { Radio, Modal, Button } from 'antd'
+import Editor from '../../components/Article/EditorUpload'
 
 
 class Publish extends Component {
@@ -39,7 +40,7 @@ class Publish extends Component {
           </span>
         </label>
         {this.props.publish_type === 'md' && <MarkdownUpload/>}
-        {this.props.publish_type === 'richText' && <span>richText</span>}
+        {this.props.publish_type === 'richText' && <Editor/>}
       </div>
     )
   }
