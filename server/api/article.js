@@ -44,17 +44,53 @@ router.post('/deleteFile', (req, res) => {
 router.post('/uploadInfo', (req, res) => {
   const {fileName, linkName, articleName, tags, writer} = req.body;
   let newArticle = new Article({
-    fileName, linkName, articleName, tags: tags !== '' ? tags.split(',') : [], writer, createTime: new Date(), editTime: new Date(), comment: []
+    fileName, linkName, articleName, writer,
+    tags: tags !== '' ? tags.split(',') : [],
+    createTime: new Date(),
+    editTime: new Date(), comment: [], fileType: 'md'
   })
 
-    newArticle.save((err) => {
-      if(err) {
-        console.log(err);
-        res.json({status: false})
-      } else {
-        res.json({status: true})
-      }
-    })
+  newArticle.save((err) => {
+    if(err) {
+      console.log(err);
+      res.json({status: false})
+    } else {
+      res.json({status: true})
+    }
+  })
+})
+
+router.post('/publishArticle', (req, res) => {
+  const {title,content,contentType,tags,writer,linkName} = req.body;
+  let contentBuffer = new Buffer(content);
+  let fileName = `articles/${title}.${contentType}`
+  for(let i =0;fs.existsSync(fileName);i++){
+    fileName = `articles/${title+i}.${contentType}`;
+  }
+  let newArticle = new Article({
+    linkName,writer,
+    fileName: `${title}.${contentType}`,
+    articleName: title,
+    tags: tags !== ''? tags.split(',') : [],
+    createTime: new Date(), editTime: new Date(), comment: [],
+    fileType: contentType
+  });
+
+  newArticle.save((err) => {
+    if(err) {
+      console.log(err);
+      res.json({status: false});
+    } else {
+      fs.writeFile(fileName, contentBuffer,(err)=>{
+        if(err) {
+          console.error(err);
+          res.json({status: false});
+        } else {
+          res.json({status: true});
+        }
+      });
+    }
+  })
 })
 
 router.get('/getArticleList', (req, res) => {
@@ -94,11 +130,11 @@ router.post('/getArticleContent', (req, res) => {
       console.error(err);
       res.json({status: false});
     } else {
-      const fileLink = data[0].fileName;
-      fs.readFile(`articles/${fileLink}`,'utf8', (err, data) => {
+      const {fileName, fileType} = data[0];
+      fs.readFile(`articles/${fileName}`,'utf8', (err, data) => {
         if(err) {console.error('err'); res.json({status: false})}
         else {
-          res.json({status: true, content: data})
+          res.json({status: true, content: data, fileType})
         }
       });
     }

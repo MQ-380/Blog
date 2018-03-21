@@ -9,6 +9,23 @@ import Editor from '../../components/Article/EditorUpload'
 
 
 class Publish extends Component {
+  showResult = (self) => {
+    let msg = {
+      title: self.props.msg.title,
+      content: self.props.msg.content,
+      onOk: () => {
+        self.props.clear_msg(this.props.msg.type !== 'error');
+      }
+    }
+    if(this.props.msg.type === 'error'){
+      Modal.error(msg);
+    } else {
+      Modal.info(msg);
+    }
+  }
+
+
+
   changeType = (e) => {
     if(this.props.showTags || this.props.publish_type === 'richText'){
       Modal.confirm({
@@ -44,6 +61,10 @@ class Publish extends Component {
       </div>
     )
   }
+
+  componentDidUpdate() {
+    if(this.props.msg.show) this.showResult(this)
+  }
 }
 
 const mapStateToProps = (state) => {
@@ -51,12 +72,14 @@ const mapStateToProps = (state) => {
     publish_type: state.publish.publish_type,
     showTags: state.publish.show_tags,
     name: state.publish.file_name,
+    msg: state.publish.upload_message,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    change_type: bindActionCreators(publishAction.change_type, dispatch)
+    change_type: bindActionCreators(publishAction.change_type, dispatch),
+    clear_msg: bindActionCreators(publishAction.clear_msg, dispatch)
   }
 }
 

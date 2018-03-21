@@ -37,7 +37,7 @@ class ArticleList extends Component {
       key: '_id',
       dataIndex: 'articleName',
       render: (text, record) => (
-        <Tooltip placement='bottom' title='点击查看详情' mouseEnterDelay={2}>
+        <Tooltip placement='bottom' title='点击编辑文章' mouseEnterDelay={2}>
           <a onClick={(e)=>{
             e.preventDefault();
             this.props.change_page('articleDetail', record._id);

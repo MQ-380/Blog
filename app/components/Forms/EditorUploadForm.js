@@ -48,6 +48,13 @@ class EditorUploadForm extends Component {
             <Input />
           )}
         </Form.Item>
+        <Form.Item {...formItemLayout} label={'文章访问链接'}>
+          {getFieldDecorator('linkName',{
+            rules: [{required: true, message: '请输入文章的访问链接'},{max: 50, message: '最多输入50个字符'}],
+          })(
+            <Input addonBefore={`${window.location.origin}/articles/`} type={'text'}/>
+          )}
+        </Form.Item>
       </Form>
     )
   }

@@ -25,8 +25,8 @@ const initialState = {
   },
   show_delete: false,
   after_delete: false,
-  article_show_style: 'plain',
-  article_content: ''
+  article_content: '',
+  content_type: ''
 };
 
 export const actionTypes = {
@@ -36,6 +36,7 @@ export const actionTypes = {
   SET_LINK_NAME: 'SET_LINK_NAME',
   SET_ARTICLE_NAME: 'SET_ARTICLE_NAME',
   UPLOAD_INFO: 'UPLOAD_INFO',
+  PUBLISH_ARTICLE: 'PUBLISH_ARTICLE',
   CANCEL_UPLOAD: 'CANCEL_UPLOAD',
   PUBLISH_RESULT: 'PUBLISH_RESULT',
   CLEAR_PUBLISH_SUCCESS_RESULT: 'CLEAR_PUBLISH_SUCCESS_RESULT',
@@ -46,13 +47,13 @@ export const actionTypes = {
   DELETE_ARTICLE: 'DELETE_ARTICLE',
   DELETE_ARTICLE_RESULT: 'DELETE_ARTICLE_RESULT',
   CLEAR_DELETE_RESULT: 'CLEAR_DELETE_RESULT',
-  CHANGE_ARTICLE_SHOW_STYLE: 'CHANGE_ARTICLE_SHOW_STYLE',
   GET_ARTICLE_CONTENT: 'GET_ARTICLE_CONTENT',
   SET_ARTICLE_CONTENT: 'SET_ARTICLE_CONTENT',
   COMMENT_REVIEW: 'COMMENT_REVIEW',
   COMMENT_REVIEW_FAILED: 'COMMENT_REVIEW_FAILED',
   COMMENT_REVIEW_SUCCESS: 'COMMENT_REVIEW_SUCCESS',
-  CLEAR_REVIEW_FAILED_MESSAGE: 'CLEAR_REVIEW_FAILED_MESSAGE'
+  CLEAR_REVIEW_FAILED_MESSAGE: 'CLEAR_REVIEW_FAILED_MESSAGE',
+  CLEAR_ARTICLE_INFO: 'CLEAR_ARTICLE_INFO'
 }
 
 export const action = {
@@ -131,12 +132,6 @@ export const action = {
       type: actionTypes.CLEAR_DELETE_RESULT,
     }
   },
-  change_article_show_style: (style) => {
-    return {
-      type: actionTypes.CHANGE_ARTICLE_SHOW_STYLE,
-      style,
-    }
-  },
   get_article_content: (_id) => {
     return {
       type: actionTypes.GET_ARTICLE_CONTENT,
@@ -154,6 +149,19 @@ export const action = {
   clear_review_failed: () => {
     return {
       type: actionTypes.CLEAR_REVIEW_FAILED_MESSAGE
+    }
+  },
+  upload_article:(title, content, contentType, tags, writer, linkName) => {
+    return {
+      type: actionTypes.PUBLISH_ARTICLE,
+      articleData: {
+        title,content,contentType,tags,writer,linkName
+      }
+    }
+  },
+  clear_article_info: ()=> {
+    return {
+      type: actionTypes.CLEAR_ARTICLE_INFO,
     }
   }
 }
@@ -261,16 +269,11 @@ export function reducer(state=initialState, action) {
         }
       }
     }
-    case actionTypes.CHANGE_ARTICLE_SHOW_STYLE: {
-      return {
-        ...state,
-        article_show_style: action.style
-      }
-    }
     case actionTypes.SET_ARTICLE_CONTENT: {
       return {
         ...state,
-        article_content: action.content
+        article_content: action.content,
+        content_type: action.fileType
       }
     }
     case actionTypes.COMMENT_REVIEW_FAILED: {
@@ -304,6 +307,13 @@ export function reducer(state=initialState, action) {
           }
           return item;
         })
+      }
+    }
+    case actionTypes.CLEAR_ARTICLE_INFO: {
+      return {
+        ...state,
+        article_content: '',
+        content_type: '',
       }
     }
     default:

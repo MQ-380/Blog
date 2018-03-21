@@ -49,7 +49,6 @@ const mapStateToProps = (state) => {
     name: state.publish.file_name,
     linkNameEdit: state.publish.link_name,
     articleNameEdit: state.publish.article_name,
-    msg: state.publish.upload_message,
     writer: state.global.username
   }
 }
@@ -62,7 +61,6 @@ const mapDispatchToProps = (dispatch) => {
     set_article_name: bindActionCreators(action.set_article_name, dispatch),
     cancel_upload: bindActionCreators(action.cancel_upload,dispatch),
     upload: bindActionCreators(action.upload_info, dispatch),
-    clear_msg: bindActionCreators(action.clear_msg, dispatch)
   }
 }
 
@@ -70,22 +68,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(MarkdownUpload)
 
 
 class AfterUploads extends Component {
-
-  showResult = (self) => {
-    let msg = {
-      title: self.props.msg.title,
-      content: self.props.msg.content,
-      onOk: () => {
-        self.props.clear_msg(this.props.msg.type !== 'error');
-      }
-    }
-    if(this.props.msg.type === 'error'){
-      Modal.error(msg);
-    } else {
-      Modal.info(msg);
-    }
-  }
-
 
   render() {
     return (
@@ -119,9 +101,6 @@ class AfterUploads extends Component {
     )
   }
 
-  componentDidUpdate() {
-    if(this.props.msg.show) this.showResult(this)
-  }
 }
 
 const AfterUpload = connect(mapStateToProps, mapDispatchToProps)(AfterUploads)
@@ -139,9 +118,6 @@ const UploadForm = Form.create({
         ...props.articleNameEdit,
     })
     };
-  },
-  onValuesChange(_, value) {
-    console.log(value);
   }
 })((props) => {
   const {getFieldDecorator} = props.form;
@@ -150,7 +126,7 @@ const UploadForm = Form.create({
 
       <Form.Item label={'请输入文章标题'}>
         {getFieldDecorator('articleNameEdit',{
-          rules: [{required: true, message: '请输入文章的访问链接'},{max: 50, message: '最多输入50个字符'}],
+          rules: [{required: true, message: '请输入文章的标题'},{max: 50, message: '最多输入50个字符'}],
         })(
           <Input type={'text'}/>
         )}

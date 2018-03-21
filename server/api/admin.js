@@ -36,7 +36,6 @@ router.post('/addUser', function(req, res) {
   })
 })
 
-
 router.post('/editUser', function(req, res) {
   const {_id, newEmail} = req.body;
   Users.update({_id: _id}, {email: newEmail},(err) => {

@@ -10,7 +10,8 @@ let articleSchema = new mongoose.Schema({
   editTime: Date,
   comment: [],
   likeNumber: Number,
-  readNumber: Number
+  readNumber: Number,
+  fileType: String,
 })
 
 module.exports = mongoose.model('Article',articleSchema,'Article');

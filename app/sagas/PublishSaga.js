@@ -32,6 +32,32 @@ export function* uploadArticleInfoFlow() {
   }
 }
 
+export function* publishArticle(data) {
+  yield put({type: IndexTypes.FETCH_START})
+  try {
+    return yield post('/article/publishArticle', data)
+  } catch (err) {
+    console.error(err);
+  } finally {
+    yield put({type: IndexTypes.FETCH_END})
+  }
+}
+
+export function* publishArticleFlow() {
+  while(true) {
+    let req = yield take(actionTypes.PUBLISH_ARTICLE)
+    let res = yield call(publishArticle, req.articleData)
+    if (res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传成功！', title: '上传文章成功' ,alertType:'success'});
+      } else {
+        yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
+      }
+    }
+  }
+}
+
 export function* cancelUpload(data) {
   try {
     return yield post('/article/deleteFile', data);
@@ -110,7 +136,8 @@ export function* getArticleContentFlow() {
     if(res) {
       res = JSON.parse(res);
       if(res.status) {
-        yield put({type: actionTypes.SET_ARTICLE_CONTENT, content: res.content})
+        console.log(res.content)
+        yield put({type: actionTypes.SET_ARTICLE_CONTENT, content: res.content, fileType: res.fileType})
       } else {
         yield put({type: actionTypes.SET_ARTICLE_CONTENT, content: '请检查网络'})
       }
