@@ -8,7 +8,9 @@ import { Radio, Modal, Button, Table, Icon, Tooltip } from 'antd'
 
 class ArticleList extends Component {
 
-  state = {selectedRowKeys: [], visible: false, selectedRowNames: []}
+  state = {selectedRowKeys: [], visible: false, selectedRowNames: [],}
+
+  hasModal = false;
 
   onSelectedChange = (selectedRowKeys) => {
     selectedRowKeys = selectedRowKeys.filter((item) => this.props.article_list.filter((e) => e._id === item).length !== 0);
@@ -141,7 +143,6 @@ class ArticleList extends Component {
     )
   }
 
-
   componentDidMount() {
     this.props.get_article_list();
   }
@@ -150,9 +151,13 @@ class ArticleList extends Component {
     if(this.props.after_delete) {
       this.props.get_article_list();
     }
-    if(this.props.delete_message.show) {
+    if(this.props.delete_message.show && !this.hasModal) {
       this.showMessage(this)
     }
+  }
+
+  componentWillUpdate() {
+    this.hasModal = this.props.delete_message.show
   }
 }
 

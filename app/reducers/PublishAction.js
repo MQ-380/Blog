@@ -53,7 +53,10 @@ export const actionTypes = {
   COMMENT_REVIEW_FAILED: 'COMMENT_REVIEW_FAILED',
   COMMENT_REVIEW_SUCCESS: 'COMMENT_REVIEW_SUCCESS',
   CLEAR_REVIEW_FAILED_MESSAGE: 'CLEAR_REVIEW_FAILED_MESSAGE',
-  CLEAR_ARTICLE_INFO: 'CLEAR_ARTICLE_INFO'
+  CLEAR_ARTICLE_INFO: 'CLEAR_ARTICLE_INFO',
+  EDIT_ARTICLE: 'EDIT_ARTICLE',
+  EDIT_ARTICLE_RESULT: 'EDIT_ARTICLE_RESULT',
+  CLEAR_EDIT_RESULT_MESSAGE: 'CLEAR_EDIT_RESULT_MESSAGE'
 }
 
 export const action = {
@@ -163,9 +166,20 @@ export const action = {
     return {
       type: actionTypes.CLEAR_ARTICLE_INFO,
     }
+  },
+  edit_article: (id,articleName, linkName, content, tags) => {
+    return {
+      type: actionTypes.EDIT_ARTICLE,
+      data:
+        {id, articleName, linkName, content, tags}
+    }
+  },
+  clear_result_msg: () => {
+    return {
+      type: actionTypes.CLEAR_EDIT_RESULT_MESSAGE
+    }
   }
 }
-
 
 export function reducer(state=initialState, action) {
   switch(action.type) {
@@ -314,6 +328,28 @@ export function reducer(state=initialState, action) {
         ...state,
         article_content: '',
         content_type: '',
+      }
+    }
+    case actionTypes.EDIT_ARTICLE_RESULT: {
+      return {
+        ...state,
+        edit_article_result_message:{
+          show: true,
+          type: action.alertType,
+          content: action.content,
+          title: action.title
+        }
+      }
+    }
+    case actionTypes.CLEAR_EDIT_RESULT_MESSAGE: {
+      return {
+        ...state,
+        edit_article_result_message:{
+          show: false,
+          type: '',
+          content: '',
+          title: ''
+        }
       }
     }
     default:

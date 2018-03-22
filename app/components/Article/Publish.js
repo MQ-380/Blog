@@ -24,8 +24,6 @@ class Publish extends Component {
     }
   }
 
-
-
   changeType = (e) => {
     if(this.props.showTags || this.props.publish_type === 'richText'){
       Modal.confirm({

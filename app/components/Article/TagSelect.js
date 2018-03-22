@@ -37,7 +37,8 @@ export default  class TagSelect extends Component {
   saveInputRef = input => this.input = input
 
   render () {
-    const {tags, inputVisible, inputValue} = this.state;
+    let {tags, inputVisible, inputValue} = this.state;
+    if(this.props.nowTags) {tags = this.props.nowTags}
     return (
       <div>
         <h3>选择文章标签</h3>

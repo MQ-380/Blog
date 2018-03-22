@@ -2,39 +2,39 @@ import Express from 'express'
 import fs from 'fs'
 import Article from '../../db/Article'
 import Users from '../../db/Users'
-import {socket} from '../../server/api/apiServer'
+import { socket } from '../../server/api/apiServer'
 
 let multer = require('multer')
 let marked = require('marked')
 
 let storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'articles/');
+  destination: function (req, file, cb) {
+    cb(null, 'articles/')
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, file.originalname)
   }
 })
 
 let upload = multer({storage: storage}).single('md')
 
-const router = Express.Router();
+const router = Express.Router()
 
-router.post('/markdownUpload', function(req, res) {
-  upload(req, res, (err)=> {
-    if(err) {
+router.post('/markdownUpload', function (req, res) {
+  upload(req, res, (err) => {
+    if (err) {
       res.json({status: false})
-    }else {
-      res.json({status: true});
+    } else {
+      res.json({status: true})
     }
   })
 })
 
 router.post('/deleteFile', (req, res) => {
-  const {fileName} = req.body;
+  const {fileName} = req.body
   fs.unlink(`articles/${fileName}`, (err) => {
-    if(err) {
-      console.log(err);
+    if (err) {
+      console.log(err)
       res.json({status: false})
     }
     res.json({status: true})
@@ -42,7 +42,7 @@ router.post('/deleteFile', (req, res) => {
 })
 
 router.post('/uploadInfo', (req, res) => {
-  const {fileName, linkName, articleName, tags, writer} = req.body;
+  const {fileName, linkName, articleName, tags, writer} = req.body
   let newArticle = new Article({
     fileName, linkName, articleName, writer,
     tags: tags !== '' ? tags.split(',') : [],
@@ -51,8 +51,8 @@ router.post('/uploadInfo', (req, res) => {
   })
 
   newArticle.save((err) => {
-    if(err) {
-      console.log(err);
+    if (err) {
+      console.log(err)
       res.json({status: false})
     } else {
       res.json({status: true})
@@ -61,46 +61,78 @@ router.post('/uploadInfo', (req, res) => {
 })
 
 router.post('/publishArticle', (req, res) => {
-  const {title,content,contentType,tags,writer,linkName} = req.body;
-  let contentBuffer = new Buffer(content);
+  const {title, content, contentType, tags, writer, linkName} = req.body
+  let contentBuffer = new Buffer(content)
   let fileName = `articles/${title}.${contentType}`
-  for(let i =0;fs.existsSync(fileName);i++){
-    fileName = `articles/${title+i}.${contentType}`;
+  for (let i = 0; fs.existsSync(fileName); i++) {
+    fileName = `articles/${title + i}.${contentType}`
   }
   let newArticle = new Article({
-    linkName,writer,
+    linkName, writer,
     fileName: `${title}.${contentType}`,
     articleName: title,
-    tags: tags !== ''? tags.split(',') : [],
+    tags: tags !== '' ? tags.split(',') : [],
     createTime: new Date(), editTime: new Date(), comment: [],
     fileType: contentType
-  });
+  })
 
   newArticle.save((err) => {
-    if(err) {
-      console.log(err);
-      res.json({status: false});
+    if (err) {
+      console.log(err)
+      res.json({status: false})
     } else {
-      fs.writeFile(fileName, contentBuffer,(err)=>{
-        if(err) {
-          console.error(err);
-          res.json({status: false});
+      fs.writeFile(fileName, contentBuffer, (err) => {
+        if (err) {
+          console.error(err)
+          res.json({status: false})
         } else {
-          res.json({status: true});
+          res.json({status: true})
         }
-      });
+      })
+    }
+  })
+})
+
+router.post('/editArticle', (req, res) => {
+  const {id, articleName, linkName, content, tags} = req.body;
+  Article.findOne({_id: id}, (err, data) => {
+    if (err) {
+      console.error(err)
+      res.json({status: false})
+    } else {
+      const {fileName} = data
+      fs.writeFile(`articles/${fileName}`, new Buffer(content),
+        (err) => {
+          if (err) {
+            console.error(err)
+          } else {
+            let editedArticle = {
+              articleName, linkName,
+              editTime: new Date(),
+              tags: tags !== '' ? tags.split(',') : [],
+            }
+            Article.update({_id: id}, editedArticle, (err) => {
+              if (err) {
+                console.error(err)
+                res.json({status: false})
+              } else {
+                res.json({status: true})
+              }
+            })
+          }
+        })
     }
   })
 })
 
 router.get('/getArticleList', (req, res) => {
-  Article.find({}, (err, data) =>{
-    if(err) {
-      console.error(err);
-      res.status(500);
+  Article.find({}, (err, data) => {
+    if (err) {
+      console.error(err)
+      res.status(500)
     } else {
-      socket.emit('new_comment', 'new at data');
-      res.json(data);
+      socket.emit('new_comment', 'new at data')
+      res.json(data)
     }
   })
 })
@@ -109,64 +141,81 @@ router.post('/deleteArticle', (req, res) => {
   const {_ids} = req.body;
   let failedItem = [];
   _ids.split(',').forEach((item) => {
-    Article.remove({_id: item}, (err) => {
-      if(err) {
-        console.log(err);
-        failedItem.push(item);
+    Article.findOne({_id: item}, (err, data)=>{
+      if(err){
+        console.error(err);
+      } else {
+        const {fileName} = data;
+        Article.remove({_id: item}, (err) => {
+          if (err) {
+            console.error(err)
+            failedItem.push(item)
+          } else {
+            fs.unlink(`articles/${fileName}`,(err)=>{
+              if(err) {
+                console.error(err);
+                failedItem.push(item);
+              }
+            })
+          }
+        })
       }
     })
   })
-  if(failedItem.length !== 0) {
-    res.json({status: false});
+  if (failedItem.length !== 0) {
+    res.json({status: false})
   } else {
-    res.json({status: true});
+    res.json({status: true})
   }
 })
 
 router.post('/getArticleContent', (req, res) => {
-  let {_id} = req.body;
+  let {_id} = req.body
   Article.find({_id}, (err, data) => {
-    if(err) {
-      console.error(err);
-      res.json({status: false});
+    if (err) {
+      console.error(err)
+      res.json({status: false})
     } else {
-      const {fileName, fileType} = data[0];
-      fs.readFile(`articles/${fileName}`,'utf8', (err, data) => {
-        if(err) {console.error('err'); res.json({status: false})}
+      const {fileName, fileType} = data[0]
+      fs.readFile(`articles/${fileName}`, 'utf8', (err, data) => {
+        if (err) {
+          console.error('err')
+          res.json({status: false})
+        }
         else {
           res.json({status: true, content: data, fileType})
         }
-      });
+      })
     }
   })
 })
 
 router.post('/reviewComment', (req, res) => {
-  let {commentId, articleId, passed} = req.body;
+  let {commentId, articleId, passed} = req.body
   Article.findOne({_id: articleId}, (err, data) => {
-    if(err) {
-      console.error(err);
+    if (err) {
+      console.error(err)
       res.json({status: false})
     } else {
       let comment = data.comment.map((item) => {
-        if(item.id === commentId) {
-          passed = passed === 'true';
-          if(passed) {
-            item.reviewed = true;
-          } else if(!passed && item.reviewed) {
-            item.reviewed = false;
+        if (item.id === commentId) {
+          passed = passed === 'true'
+          if (passed) {
+            item.reviewed = true
+          } else if (!passed && item.reviewed) {
+            item.reviewed = false
           } else {
-            return undefined;
+            return undefined
           }
         }
-        return item;
-      }).filter((item) => !!item);
+        return item
+      }).filter((item) => !!item)
       Article.update({_id: articleId}, {comment}, (err) => {
-        if(err) {
-          console.error(err);
-          res.json({status: false});
+        if (err) {
+          console.error(err)
+          res.json({status: false})
         } else {
-          res.json({status: true, comment: comment, articleId: articleId});
+          res.json({status: true, comment: comment, articleId: articleId})
         }
       })
     }

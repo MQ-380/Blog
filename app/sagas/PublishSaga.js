@@ -45,8 +45,8 @@ export function* publishArticle(data) {
 
 export function* publishArticleFlow() {
   while(true) {
-    let req = yield take(actionTypes.PUBLISH_ARTICLE)
-    let res = yield call(publishArticle, req.articleData)
+    let req = yield take(actionTypes.PUBLISH_ARTICLE);
+    let res = yield call(publishArticle, req.articleData);
     if (res) {
       res = JSON.parse(res);
       if(res.status) {
@@ -54,6 +54,33 @@ export function* publishArticleFlow() {
       } else {
         yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
       }
+    } else {
+      yield put({type: actionTypes.PUBLISH_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
+    }
+  }
+}
+
+export function* editArticle(data) {
+  try {
+    return yield post('/article/editArticle', data)
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export function* editArticleFlow() {
+  while(true) {
+    let req = yield take(actionTypes.EDIT_ARTICLE);
+    let res = yield call(editArticle, req.data);
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章修改成功！', title: '文章修改成功' ,alertType:'success'})
+      } else {
+        yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章修改失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'})
+      }
+    } else {
+      yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
     }
   }
 }
