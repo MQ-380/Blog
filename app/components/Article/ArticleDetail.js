@@ -20,6 +20,7 @@ class ArticleDetail extends Component {
       content: this.props.msg.content,
       onOk: () => {
         this.props.clear_result_msg(this.props.msg.type !== 'error');
+        this.props.get_article_content(this.state.nowArticle._id)
       }
     }
     if(this.props.msg.type === 'error'){
