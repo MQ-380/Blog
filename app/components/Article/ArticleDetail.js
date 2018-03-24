@@ -151,24 +151,24 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleDetail)
 
-class ArticleContentPrototype extends Component {
-  render() {
-    return (
-      <div>
-         <ReactMarkdown source={this.props.article_content}/>
-      </div>
-    )
-  }
-
-  componentDidUpdate() {
-    Prism.highlightAll();
-  }
-
-  componentDidMount() {
-    Prism.highlightAll();
-  }
-}
-
-let ArticleContent = connect(mapStateToProps, mapDispatchToProps)(ArticleContentPrototype);
-
+// class ArticleContentPrototype extends Component {
+//   render() {
+//     return (
+//       <div>
+//          <ReactMarkdown source={this.props.article_content}/>
+//       </div>
+//     )
+//   }
+//
+//   componentDidUpdate() {
+//     Prism.highlightAll();
+//   }
+//
+//   componentDidMount() {
+//     Prism.highlightAll();
+//   }
+// }
+//
+// let ArticleContent = connect(mapStateToProps, mapDispatchToProps)(ArticleContentPrototype);
+//
 

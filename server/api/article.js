@@ -47,9 +47,8 @@ router.post('/uploadInfo', (req, res) => {
     fileName, linkName, articleName, writer,
     tags: tags !== '' ? tags.split(',') : [],
     createTime: new Date(),
-    editTime: new Date(), comment: [], fileType: 'md'
+    editTime: new Date(), comment: [], fileType: 'upload'
   })
-
   newArticle.save((err) => {
     if (err) {
       console.log(err)
