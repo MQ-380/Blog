@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { action as publishAction } from '../../reducers/PublishAction'
 import { action as pageAction } from '../../reducers/PageAction'
-import { Button, Icon, Modal, Upload } from 'antd'
+import { Button, Icon, Modal, Upload,message} from 'antd'
 import Editor from '../../../app/components/Normal/Editor'
 import Tags from '../../../app/components/Article/TagSelect'
 import EditorForm from '../../../app/components/Forms/EditorUploadForm'
 import Prism from 'prismjs'
-import { message } from 'antd/lib/index'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -32,14 +31,15 @@ class ArticleDetail extends Component {
   }
 
   isEdited = () => (
-    this.refs.editor.editorInstance.getContent() !== this.props.article_content ||
-    this.refs.editorForm.validateFields((err, values) => {
-      if (!err) {
-        return values.title !== this.state.nowArticle.articleName || values.linkName !== this.state.nowArticle.linkName
-      }
-    }) ||
-    this.refs.tags.state.tags !== this.state.nowArticle.tags
-  )
+    (this.props.content_type === 'upload' ? false :this.refs.editor.editorInstance.getContent() !== this.props.article_content) ||
+        this.refs.editorForm.validateFields((err, values) => {
+          if (!err) {
+            return values.title !== this.state.nowArticle.articleName || values.linkName !== this.state.nowArticle.linkName
+          }
+        }) ||
+        this.refs.tags.state.tags !== this.state.nowArticle.tags
+)
+
 
   backToList = () => {
     if (this.isEdited()) {
@@ -78,13 +78,23 @@ class ArticleDetail extends Component {
       if (err) {
         console.error(err)
       } else {
-        this.props.edit_article(this.state.nowArticle._id, values.title, values.linkName,
-          this.refs.editor.editorInstance.getHTMLContent(), this.refs.tags.state.tags)
+        if(this.props.content_type === 'upload') {
+          this.props.edit_upload_info(values.title, this.state.newFileName, this.state.nowArticle.fileName,
+            this.refs.tags.state.tags, values.linkName, this.state.nowArticle.writer, this.state.nowArticle._id);
+        } else {
+          this.props.edit_article(this.state.nowArticle._id, values.title, values.linkName,
+            this.refs.editor.editorInstance.getHTMLContent(), this.refs.tags.state.tags);
+        }
       }
     })
   }
 
   render () {
+    message.config({
+      top: 100,
+      duration: 2,
+    });
+
     let uploadProps = {
       accept: '.md',
       name: 'md',
@@ -93,28 +103,10 @@ class ArticleDetail extends Component {
       onChange: (info) => {
         if (info.file.status === 'done') {
           message.success('文章上传成功，但是需要保存修改才会正式替换！')
-          this.props.set_file_name(info.file.name)
+          this.setState({...this.state, newFileName: info.file.name})
         } else if (info.file.status === 'error') {
           message.error('上传失败！请检查网络后请重新上传')
         }
-      },
-      beforeUpload: (info) => {
-        let sure = false;
-        if(this.state.nowArticle.fileName === info.file.name) {
-          Modal.confirm({
-            title: '同名文件提醒',
-            content: '请注意，您将要上传的文件与原先文件的名称相同，会导致上传后直接覆盖原文章，请确认是否要上传？',
-            okText: '确定',
-            okType: 'danger',
-            cancelText: '取消',
-            onOk: ()=>{
-              this.state.newFileName = info.file.name;
-              sure = true;
-            }
-          });
-          return sure;
-        }
-        return true;
       }
     }
 
@@ -145,9 +137,9 @@ class ArticleDetail extends Component {
         </div>
         }
         {this.props.content_type === 'upload' && <div>
-          <Upload {...uploadProps}>
-            <Button>
-              <Icon type={'upload'}/>替换现有的文件
+          <Upload {...uploadProps} >
+            <Button style={{margin: '10px'}}>
+              <Icon type={'upload'}/>替换现有文件
             </Button>
           </Upload>
           <p>目前文章预览：</p>
@@ -159,12 +151,12 @@ class ArticleDetail extends Component {
 
   componentDidMount () {
     let nowArticle = this.props.article_list.filter((item) => item._id === this.props.article_id)[0]
-    this.setState({nowArticle})
+    this.setState({nowArticle, newFileName: nowArticle.fileName})
     this.props.get_article_content(nowArticle._id)
   }
 
   componentDidUpdate () {
-    if (this.props.content_type !== 'upload' && this.props.article_content !== '') {
+    if (/html|md/.test(this.props.content_type)&& this.props.article_content !== '') {
       this.refs.editor.editorInstance.setContent(this.props.article_content)
     }
     if (this.props.msg && this.props.msg.show) {
@@ -190,7 +182,8 @@ const mapDispatchToProps = (dispatch) => {
     delete_article: bindActionCreators(publishAction.delete_article, dispatch),
     clear_article_info: bindActionCreators(publishAction.clear_article_info, dispatch),
     edit_article: bindActionCreators(publishAction.edit_article, dispatch),
-    clear_result_msg: bindActionCreators(publishAction.clear_result_msg, dispatch)
+    clear_result_msg: bindActionCreators(publishAction.clear_result_msg, dispatch),
+    edit_upload_info: bindActionCreators(publishAction.edit_upload_info, dispatch)
   }
 }
 

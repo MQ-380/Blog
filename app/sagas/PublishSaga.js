@@ -85,6 +85,31 @@ export function* editArticleFlow() {
   }
 }
 
+export function* editFileInfo(data) {
+  try {
+    return yield post('/article/editInfo', data);
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export function* editFileInfoFlow() {
+  while(true) {
+    let req = yield take(actionTypes.EDIT_UPLOAD_INFO);
+    let res = yield call(editFileInfo, req.data);
+    if(res) {
+      res = JSON.parse(res);
+      if(res.status) {
+        yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章修改成功！', title: '文章修改成功' ,alertType:'success'})
+      } else {
+        yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章修改失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'})
+      }
+    } else {
+      yield put({type: actionTypes.EDIT_ARTICLE_RESULT, content: '文章上传失败！', title: '上传文章失败，请检查访问链接不能与已有文章重复！' ,alertType:'error'});
+    }
+  }
+}
+
 export function* cancelUpload(data) {
   try {
     return yield post('/article/deleteFile', data);

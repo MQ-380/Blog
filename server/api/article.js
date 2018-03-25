@@ -44,25 +44,92 @@ router.post('/deleteFile', (req, res) => {
 router.post('/uploadInfo', (req, res) => {
   const {fileName, linkName, articleName, tags, writer} = req.body
   let newArticle = new Article({
-    fileName, linkName, articleName, writer,
+    fileName,linkName, articleName, writer,
     tags: tags !== '' ? tags.split(',') : [],
     createTime: new Date(),
-    editTime: new Date(), comment: [], fileType: 'upload'
+    editTime: new Date(), comment: [], fileType: 'upload',
   })
-  newArticle.save((err) => {
-    if (err) {
-      console.log(err)
-      res.json({status: false})
+  if(!fs.existsSync(`articles/${writer}`)) {
+    fs.mkdirSync(`articles/${writer}`);
+  }
+  fs.rename(`articles/${fileName}`, `articles/${writer}/${fileName}`, (err) =>{
+    if(err) {
+      console.error(err);
     } else {
-      res.json({status: true})
+      newArticle.save((err) => {
+        if (err) {
+          console.log(err)
+          res.json({status: false})
+        } else {
+          res.json({status: true})
+        }
+      })
     }
   })
+})
+
+router.post('/editInfo', (req, res) => {
+  const {title, newFile, oldFile, tags, linkName, writer, id} = req.body;
+  Article.findOne({_id: id},(err,data) => {
+    let newArticle = {
+      tags: tags !== '' ? tags.split(',') : [],
+      editTime: new Date(),
+      articleName: title,
+      fileName: newFile,
+    };
+    if(err) {
+      console.log(err);
+    } else {
+      const linkNameOld = data.linkName;
+      if(linkNameOld !== linkName) {
+        newArticle = {
+          linkName,
+          tags: tags !== '' ? tags.split(',') : [],
+          editTime: new Date(),
+          articleName: title,
+          fileName: newFile,
+        }
+      }
+      if(fs.existsSync(`articles/${newFile}`)) {
+        fs.unlink(`articles/${writer}/${oldFile}`,(err)=>{
+          if(err) {
+            console.error(err);
+          }
+        })
+        fs.rename(`articles/${newFile}`, `articles/${writer}/${newFile}`, (err) => {
+          if (err) {
+            console.error(err);
+          } else {
+            Article.update({_id: id}, newArticle, (err) => {
+              if (err) {
+                console.log(err)
+                res.json({status: false})
+              } else {
+                res.json({status: true})
+              }
+            })
+          }
+        })
+      } else {
+        console.log(newArticle)
+        Article.update({_id: id}, newArticle, (err) => {
+          if (err) {
+            console.log(err)
+            res.json({status: false})
+          } else {
+            res.json({status: true})
+          }
+        })
+      }
+    }
+  })
+
 })
 
 router.post('/publishArticle', (req, res) => {
   const {title, content, contentType, tags, writer, linkName} = req.body
   let contentBuffer = new Buffer(content)
-  let fileName = `articles/${title}.${contentType}`
+  let fileName = `articles/${writer}/${title}.${contentType}`
   for (let i = 0; fs.existsSync(fileName); i++) {
     fileName = `articles/${title + i}.${contentType}`
   }
@@ -99,16 +166,27 @@ router.post('/editArticle', (req, res) => {
       console.error(err)
       res.json({status: false})
     } else {
-      const {fileName} = data
-      fs.writeFile(`articles/${fileName}`, new Buffer(content),
+      const {fileName, writer} = data;
+      const linkNameOld = data.linkName;
+      fs.writeFile(`articles/${writer}/${fileName}`, new Buffer(content),
         (err) => {
           if (err) {
             console.error(err)
           } else {
-            let editedArticle = {
-              articleName, linkName,
-              editTime: new Date(),
-              tags: tags !== '' ? tags.split(',') : [],
+            let editedArticle;
+            if(linkNameOld === linkName) {
+              editedArticle = {
+                articleName,
+                editTime: new Date(),
+                tags: tags !== '' ? tags.split(',') : [],
+              }
+            } else {
+              editedArticle = {
+                articleName,
+                linkName,
+                editTime: new Date(),
+                tags: tags !== '' ? tags.split(',') : [],
+              }
             }
             Article.update({_id: id}, editedArticle, (err) => {
               if (err) {
@@ -175,8 +253,8 @@ router.post('/getArticleContent', (req, res) => {
       console.error(err)
       res.json({status: false})
     } else {
-      const {fileName, fileType} = data[0]
-      fs.readFile(`articles/${fileName}`, 'utf8', (err, data) => {
+      const {fileName, fileType, writer} = data[0]
+      fs.readFile(`articles/${writer}/${fileName}`, 'utf8', (err, data) => {
         if (err) {
           console.error('err')
           res.json({status: false})

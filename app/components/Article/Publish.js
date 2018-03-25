@@ -77,7 +77,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     change_type: bindActionCreators(publishAction.change_type, dispatch),
-    clear_msg: bindActionCreators(publishAction.clear_msg, dispatch)
+    clear_msg: bindActionCreators(publishAction.clear_publish_msg, dispatch)
   }
 }
 

@@ -7,6 +7,11 @@ import Tags from './TagSelect'
 
 class MarkdownUpload extends Component {
   render () {
+    message.config({
+      top: 100,
+      duration: 2,
+    });
+
     let uploadProps = {
       accept: '.md',
       name: 'md',
@@ -60,7 +65,8 @@ const mapDispatchToProps = (dispatch) => {
     set_link_name: bindActionCreators(action.set_link_name, dispatch),
     set_article_name: bindActionCreators(action.set_article_name, dispatch),
     cancel_upload: bindActionCreators(action.cancel_upload,dispatch),
-    upload: bindActionCreators(action.upload_info, dispatch)
+    upload: bindActionCreators(action.upload_info, dispatch),
+    clear_msg: bindActionCreators(action.clear_publish_msg, dispatch)
   }
 }
 
@@ -90,6 +96,7 @@ class AfterUploads extends Component {
             okType: 'danger',
             cancelText: '取消',
             onOk: ()=>{
+              this.props.clear_msg(true)
               this.props.cancel_upload(this.props.name);
             }
           });

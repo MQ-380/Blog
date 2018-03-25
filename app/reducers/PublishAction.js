@@ -56,7 +56,8 @@ export const actionTypes = {
   CLEAR_ARTICLE_INFO: 'CLEAR_ARTICLE_INFO',
   EDIT_ARTICLE: 'EDIT_ARTICLE',
   EDIT_ARTICLE_RESULT: 'EDIT_ARTICLE_RESULT',
-  CLEAR_EDIT_RESULT_MESSAGE: 'CLEAR_EDIT_RESULT_MESSAGE'
+  CLEAR_EDIT_RESULT_MESSAGE: 'CLEAR_EDIT_RESULT_MESSAGE',
+  EDIT_UPLOAD_INFO: 'EDIT_UPLOAD_INFO'
 }
 
 export const action = {
@@ -101,7 +102,7 @@ export const action = {
       writer
     }
   },
-  clear_msg: (success) => {
+  clear_publish_msg: (success) => {
     return {
       type: success? actionTypes.CLEAR_PUBLISH_SUCCESS_RESULT : actionTypes.CLEAR_PUBLISH_FAIL_RESULT,
       success
@@ -177,6 +178,13 @@ export const action = {
   clear_result_msg: () => {
     return {
       type: actionTypes.CLEAR_EDIT_RESULT_MESSAGE
+    }
+  },
+  edit_upload_info: (title, newFile, oldFile, tags, linkName, writer, id) => {
+    return {
+      type: actionTypes.EDIT_UPLOAD_INFO,
+      data:
+        {title, newFile, oldFile, tags, linkName, writer, id}
     }
   }
 }
