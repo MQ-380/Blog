@@ -18,7 +18,7 @@ class MarkdownUpload extends Component {
           this.props.set_file_name(info.file.name)
           this.props.show_tags(true)
         } else if (info.file.status === 'error') {
-          message.error('上传失败！请重新上传')
+          message.error('上传失败！请检查网络后请重新上传')
         }
       },
       beforeUpload: () => {
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => {
     set_link_name: bindActionCreators(action.set_link_name, dispatch),
     set_article_name: bindActionCreators(action.set_article_name, dispatch),
     cancel_upload: bindActionCreators(action.cancel_upload,dispatch),
-    upload: bindActionCreators(action.upload_info, dispatch),
+    upload: bindActionCreators(action.upload_info, dispatch)
   }
 }
 
@@ -90,7 +90,6 @@ class AfterUploads extends Component {
             okType: 'danger',
             cancelText: '取消',
             onOk: ()=>{
-              this.props.clear_msg(true);
               this.props.cancel_upload(this.props.name);
             }
           });
@@ -100,7 +99,6 @@ class AfterUploads extends Component {
       </div>
     )
   }
-
 }
 
 const AfterUpload = connect(mapStateToProps, mapDispatchToProps)(AfterUploads)
