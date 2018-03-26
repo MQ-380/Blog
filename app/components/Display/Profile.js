@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {action as DisplayAction} from '../../reducers/DisplayAction'
+import {action as DisplayAction} from '../../reducers/ShowAction'
 import {action as IndexAction} from '../../reducers/AdminAction'
 import {Button, Form, Input, Icon} from 'antd'
 import { Modal } from 'antd/lib/index'
@@ -28,40 +28,52 @@ class Profile extends Component {
     return (
       <div className={'profile'}>
         {
-          this.props.isLogin && (
-            <div>
-              <h2>
-                {this.props.username}
-              </h2>
-              <strong>
-                {this.props.slogan === '' ? '未设置签名' : this.props.slogan}
-              </strong>
-                <div className={'link'}>
-                  <Button shape="circle" icon="github" disabled={!this.props.links.github}
+          this.props.publicInfo.visitUser && (
+            <div style={{
+              margin: '2em 2em 0'
+            }}>
+              <h1 style={{
+                color: 'white',
+                fontSize: '2.5em',
+                marginBottom: '0em'
+              }}>
+                {this.props.user}
+              </h1>
+              <p style={{
+                fontSize: '1.2em',
+                color: '#b0cadb',
+                fontWeight: '300'
+              }}>
+                {this.props.publicInfo.slogan === '' ? '作者未设置签名' : this.props.publicInfo.slogan}
+              </p>
+                <div className={'link'}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  flexWrap: 'wrap'
+                }}>
+                  <Button size="large" shape="circle" icon="github" disabled={!this.props.publicInfo.links.github}
                           onClick={()=>window.open(this.props.links.github)}/>
-                  <Button shape="circle" icon="weibo" disabled={!this.props.links.weibo}
+                  <Button size="large" shape="circle" icon="weibo" disabled={!this.props.publicInfo.links.weibo}
                           onClick={()=>window.open(this.props.links.weibo)}/>
-                  <Button shape="circle" icon="facebook" disabled={!this.props.links.facebook}
+                  <Button size="large" shape="circle" icon="facebook" disabled={!this.props.publicInfo.links.facebook}
                           onClick={()=>window.open(this.props.links.facebook)}/>
-                  <Button shape="circle" icon="twitter" disabled={!this.props.links.twitter}
+                  <Button size="large" shape="circle" icon="twitter" disabled={!this.props.publicInfo.links.twitter}
                           onClick={()=>window.open(this.props.links.twitter)}/>
                 </div>
             </div>
           )
         }
         {
-          !this.props.isLogin && (
+          !this.props.publicInfo.visitUser && (
             <div>
               <Login ref={'loginForm'}/>
-              <Button style={{marginLeft: '4.16666667%'}} onClick={() => {
+              <Button style={{marginLeft: '20.83333333%', width: '66.66666667%'}} onClick={() => {
                 this.refs.loginForm.validateFields((err, values) => {
                   this.props.login(values.username, md5(values.password));
                 })
               }}>
                 登录
-              </Button>
-              <Button>
-                注册新用户
               </Button>
             </div>
           )
@@ -84,10 +96,11 @@ class Profile extends Component {
 const mapStateToProps = (state) => {
   return {
     msg: state.global.msg,
+    publicInfo: state.show.userPublicInfo,
     username: state.global.username,
     slogan: state.global.slogan,
     links: state.global.links,
-    isLogin: state.global.isLogin,
+    isLogin: state.global.isLogin
   }
 }
 
@@ -106,7 +119,7 @@ class LoginProto extends Component {
     const {getFieldDecorator} = this.props.form
     const wrapperCol = {
       span: 16,
-      offset: 1
+      offset: 5
     }
     return (
       <Form>

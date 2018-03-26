@@ -12,6 +12,7 @@ export default class App extends Component {
       <Router>
           <Switch>
             <Route path='/admin' component={Admin}/>
+            <Route path='/user/:username' component={Home}/>
             <Route component={Home}/>
           </Switch>
       </Router>

@@ -1,7 +1,7 @@
 import {put, take, call} from 'redux-saga/effects'
 import {get, post} from './fetch'
 import {actionTypes as IndexTypes} from '../reducers/AdminAction'
-import {actionTypes as DisplayActionTypes} from '../reducers/DisplayAction'
+import {actionTypes as DisplayActionTypes} from '../reducers/ShowAction'
 import { actionTypes } from '../reducers/PublishAction'
 
 export function* adminLogin(data) {
