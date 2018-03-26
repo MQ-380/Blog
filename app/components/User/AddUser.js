@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { action } from '../../reducers/UserAction'
-import {action as indexAction} from '../../reducers/index'
+import {action as indexAction} from '../../reducers/AdminAction'
 import RegisterForm from '../Forms/RegisterForm'
 import { Form, Modal } from 'antd'
 

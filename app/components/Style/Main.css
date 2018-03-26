@@ -16,3 +16,24 @@
 .form {
     flex: auto;
 }
+
+.home {
+    display: flex;
+    height: 100%;
+}
+
+.main {
+    flex: 1;
+    height: 100%;
+}
+
+.sliderBar {
+    flex: 0 0 25%;
+    background-color: darkgray;
+    height: 100%;
+}
+
+.profile {
+    top: 10%;
+    left: 20%;
+}

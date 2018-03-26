@@ -1,7 +1,8 @@
 import {put, take, call} from 'redux-saga/effects'
 import {get, post} from './fetch'
-import {actionTypes as IndexTypes} from '../reducers/index'
-import {actionTypes as actionTypes} from '../reducers/UserAction'
+import {actionTypes as IndexTypes} from '../reducers/AdminAction'
+import {actionTypes as DisplayActionTypes} from '../reducers/DisplayAction'
+import { actionTypes } from '../reducers/PublishAction'
 
 export function* adminLogin(data) {
   yield put({type: IndexTypes.FETCH_START})
@@ -26,7 +27,8 @@ export function* adminLoginFlow () {
         let session = window.sessionStorage;
         session.token = res.token;
         yield put({type: 'REGISTER_USER', userId: res.id})
-        yield put({type: IndexTypes.LOGIN_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id, email: res.email});
+        yield put({type: IndexTypes.LOGIN_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id,
+          email: res.email, slogan: res.slogan, links: res.links});
       } else {
         yield put({type: IndexTypes.LOGIN_FAILED, msg: res.msg, alertType: 'error'});
       }
@@ -54,7 +56,8 @@ export function* checkLoginFlow() {
       res = JSON.parse(res);
       if(res.status) {
         yield put({type: 'REGISTER_USER', userId: res.id})
-        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username, id: res.id, email: res.email});
+        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username, id: res.id,
+          email: res.email,slogan: res.slogan, links: res.links});
       } else {
         window.sessionStorage.clear();
         yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg, alertType: 'error'});

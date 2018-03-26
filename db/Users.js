@@ -8,7 +8,9 @@ let userSchema = new mongoose.Schema({
   isAdmin: Boolean,
   auth: String,
   loginToken: String,
-  loginTime: Date
+  loginTime: Date,
+  slogan: String,
+  links: Object,
 })
 
 module.exports = mongoose.model('Users',userSchema,'Users');

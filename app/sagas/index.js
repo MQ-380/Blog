@@ -1,6 +1,6 @@
 import {fork} from 'redux-saga/effects'
 import {getUserFlow, addUsersFlow, editUsersFlow, deleteUsersFlow, editPasswordFlow} from './UserSaga'
-import {adminLoginFlow, checkLoginFlow, LogoutFlow } from './LoginSaga'
+import {adminLoginFlow, checkLoginFlow, LogoutFlow} from './LoginSaga'
 import {uploadArticleInfoFlow, cancelUploadFlow, getArticleListFlow, deleteArticleFlow,getArticleContentFlow,
   reviewCommentFlow, publishArticleFlow, editArticleFlow,editFileInfoFlow} from './PublishSaga'
 

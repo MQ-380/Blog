@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import AdminPanel from './AdminPanel'
 import AdminLogin from './AdminLogin'
 import { connect } from 'react-redux'
-import { action } from '../../reducers/index'
+import { action } from '../../reducers/AdminAction'
 import { bindActionCreators } from 'redux'
 import '../Style/Main.css'
 

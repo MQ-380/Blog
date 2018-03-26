@@ -5,6 +5,8 @@ import App from './components/App.js'
 import {AppContainer} from 'react-hot-loader'
 import configureStore from './configureStore'
 import 'antd/dist/antd.css';
+import Admin from './components/Admin/Admin'
+import Home from './components/Display/Home'
 
 let div = document.createElement('div');
 div.setAttribute('id', 'app');
@@ -26,3 +28,4 @@ ReactDOM.render(
   </AppContainer>,
   document.getElementById('app')
 );
+

@@ -10,24 +10,28 @@ const router = Express.Router();
 router.post('/login',(req, res) => {
   let {username, password} = req.body;
   Users.find({username: username},(err, data) => {
-    if(err){
+    if (err) {
       res.json({status: false, msg: '请检查数据库'})
     }
-    if(bcrypt.compareSync(password, data[0].password)) {
-      const loginToken = uuidv4();
-      Users.update({username: username}, {loginToken, loginTime: new Date()}, (err)=>{
-        if(err){
-          console.log(err);
-          res.json({status: false, msg: '请检查数据库'})
-        }
-        res.json({status: true, isAdmin: data[0].isAdmin, token: loginToken, id:data[0]._id, email: data[0].email});
-      })
+    if (data.length === 0) {
+      res.json({status: false, msg: '用户不存在，请检查用户名！'})
     } else {
-      res.json({status: false, msg: '密码错误'})
+      if (bcrypt.compareSync(password, data[0].password)) {
+        const loginToken = uuidv4();
+        Users.update({username: username}, {loginToken, loginTime: new Date()}, (err) => {
+          if (err) {
+            console.log(err);
+            res.json({status: false, msg: '请检查数据库'})
+          }
+          res.json({status: true, isAdmin: data[0].isAdmin, token: loginToken, id: data[0]._id,
+            email: data[0].email, slogan: data[0].slogan, links: data[0].links});
+        })
+      } else {
+        res.json({status: false, msg: '密码错误'})
+      }
     }
   })
 })
-
 
 router.post('/loginCheck', (req, res) => {
   let {token} = req.body;
@@ -47,7 +51,8 @@ router.post('/loginCheck', (req, res) => {
             res.json({status: false, msg: '当前登录已经过期，请重新登录'})
           });
         } else {
-          res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin, id:data[0]._id, email: data[0].email})
+          res.json({status: true, username: data[0].username, isAdmin: data[0].isAdmin, id:data[0]._id,
+            email: data[0].email,slogan: data[0].slogan, links: data[0].links})
         }
       }
     }

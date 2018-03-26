@@ -1,6 +1,6 @@
 import { put, take, call } from 'redux-saga/effects'
 import { get, post } from './fetch'
-import { actionTypes as IndexTypes } from '../reducers/index'
+import { actionTypes as IndexTypes } from '../reducers/AdminAction'
 import { actionTypes as actionTypes } from '../reducers/UserAction'
 
 export function* getUsers () {

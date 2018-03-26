@@ -1,4 +1,4 @@
-import {action as IndexAction} from '../app/reducers/index'
+import {action as IndexAction} from './reducers/AdminAction'
 
 function createSocketMiddleware(socket) {
   let eventFlag = false;

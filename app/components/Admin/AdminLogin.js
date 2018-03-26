@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import LoginForm from '../Forms/LoginForm'
-import { action } from '../../reducers/index'
+import { action } from '../../reducers/AdminAction'
 import { connect } from 'react-redux'
 import {Modal} from 'antd'
 
 class AdminLogin extends Component {
-  constructor () {
-    super()
-  }
-
   login (username, password, remember) {
     this.props.login(username, password)
   }
