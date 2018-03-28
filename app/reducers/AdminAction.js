@@ -29,8 +29,8 @@ export const actionTypes = {
   FETCH_END: "FETCH_END",
   CLEAR_MSG: 'CLEAR_MSG',
   CHANGE_PAGE: 'CHANGE_PAGE',
-  CHANGE_EMAIL: 'CHANGE_EMAIL',
-}
+  CHANGE_EMAIL: 'CHANGE_EMAIL'
+};
 
 export const action = {
   login: (username, password) => {
@@ -38,34 +38,34 @@ export const action = {
       type: actionTypes.LOGIN,
       username,
       password
-    }
+    };
   },
-  logout: (username) => {
+  logout: username => {
     return {
       type: actionTypes.LOGOUT,
       username
-    }
+    };
   },
-  check_login: (token) => {
+  check_login: token => {
     return {
       type: actionTypes.CHECK_LOGIN,
       token
-    }
+    };
   },
   clear_msg: () => {
     return {
       type: actionTypes.CLEAR_MSG
-    }
+    };
   },
-  achieve_new_comment: (data) => {
+  achieve_new_comment: data => {
     console.log(data);
     return {
       type: actionTypes.CLEAR_MSG
-    }
+    };
   }
-}
+};
 
-export function reducer(state=initialState, action){
+export function reducer (state = initialState, action) {
   switch (action.type) {
     case actionTypes.FETCH_START:
       return {
@@ -76,7 +76,7 @@ export function reducer(state=initialState, action){
       return {
         ...state,
         isFetching: false
-      }
+      };
     case actionTypes.SET_MESSAGE:
       return {
         ...state,
@@ -86,7 +86,7 @@ export function reducer(state=initialState, action){
           content: action.msgContent,
           type: action.alertType
         }
-      }
+      };
     case actionTypes.CLEAR_MSG:
       return {
         ...state,
@@ -95,7 +95,7 @@ export function reducer(state=initialState, action){
           content: '',
           title: ''
         }
-      }
+      };
     case actionTypes.LOGIN_SUCCESS:
       return {
         ...state,
@@ -106,7 +106,7 @@ export function reducer(state=initialState, action){
         isAdminLogin: action.isAdmin,
         slogan: action.slogan,
         links: action.links
-      }
+      };
     case actionTypes.CHECK_TRUE:
       return {
         ...state,
@@ -117,38 +117,38 @@ export function reducer(state=initialState, action){
         isAdminLogin: action.isAdmin,
         slogan: action.slogan,
         links: action.links
-      }
+      };
     case actionTypes.CHECK_FALSE:
       return {
         ...state,
         isLogin: false,
         msg: {
           title: '登录状态错误',
-          content:action.msg,
-          type: action.alertType,
+          content: action.msg,
+          type: action.alertType
         }
-      }
+      };
     case actionTypes.LOGOUT_SUCCESS:
       return {
         ...state,
         isLogin: false,
         username: '',
         isAdminLogin: false
-      }
+      };
     case actionTypes.LOGIN_FAILED:
       return {
         ...state,
         msg: {
           title: '登录错误',
-          content:action.msg,
+          content: action.msg,
           type: action.alertType
         }
-      }
+      };
     case actionTypes.CHANGE_EMAIL:
       return {
         ...state,
         email: action.email
-      }
+      };
     default:
       return state;
   }

@@ -1,55 +1,67 @@
 import React, { Component } from 'react'
 import { Tag, Input, Tooltip, Icon } from 'antd/lib/index'
 
-export default  class TagSelect extends Component {
+export default class TagSelect extends Component {
   state = {
     tags: [],
     inputVisible: false,
     inputValue: ''
-  }
+  };
 
-  handleClose = (removedTag) => {
-    const tags = this.state.tags.filter(tag=> tag!== removedTag);
-    this.setState({tags});
+  handleClose = removedTag => {
+    const tags = this.state.tags.filter(tag => tag !== removedTag)
+    this.setState({tags})
   }
 
   showInput = () => {
-    this.setState({inputVisible: true}, () => this.input.focus());
-  }
+    this.setState({inputVisible: true}, () => this.input.focus())
+  };
 
-  handleInputChange = (e) => {
-    this.setState({inputValue: e.target.value});
+  handleInputChange = e => {
+    this.setState({inputValue: e.target.value})
   }
 
   handleInputConfirm = () => {
     const state = this.state;
-    let {inputValue, tags} = state;
+    let {inputValue, tags} = state
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue]
     }
     this.setState({
       tags,
       inputVisible: false,
-      inputValue: '',
-    })
-  }
+      inputValue: ''
+    });
+  };
 
-  saveInputRef = input => this.input = input
+  saveInputRef = input => (this.input = input)
 
   render () {
-    let {tags, inputVisible, inputValue} = this.state;
-    if(this.props.nowTags) {tags = this.props.nowTags}
+    let {tags, inputVisible, inputValue} = this.state
+    if (this.props.nowTags) {
+      tags = this.props.nowTags
+    }
     return (
       <div>
         <h3>选择文章标签</h3>
         {tags.map((tag, index) => {
           const isLongTag = tag.length > 20;
           const tagElem = (
-            <Tag key={tag} closable={true} afterClose={() => this.handleClose(tag)}>
+            <Tag
+              key={tag}
+              closable={true}
+              afterClose={() => this.handleClose(tag)}
+            >
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );
-          return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
+          return isLongTag ? (
+            <Tooltip title={tag} key={tag}>
+              {tagElem}
+            </Tooltip>
+          ) : (
+            tagElem
+          )
         })}
         {inputVisible && (
           <Input
@@ -72,7 +84,6 @@ export default  class TagSelect extends Component {
           </Tag>
         )}
       </div>
-    )
+    );
   }
 }
-

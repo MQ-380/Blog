@@ -3,53 +3,41 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Button } from 'antd'
 import { action as ShowAction } from '../../reducers/ShowAction'
-import Profile from '../../components/Display/Profile'
-import '../../components/Style/Main.css'
+import UserPage from '../../components/Display/UserPage'
+import HomePage from '../../components/Display/HomePage'
 
 class Home extends Component {
+  state = {visitUser: false}
+
   render () {
     return (
       <div style={{height: '100%'}}>
-        {this.props.userExists&&
-          <div className={'home'}>
-            <div className={'main'}>
-              Main
-            </div>
-            <div className={'sliderBar'}>
-              <Profile user={!!this.props.match.params.username? this.props.match.params.username : undefined}/>
-            </div>
-          </div>
-        }
-        {
-          !this.props.userExists &&
-            404
-        }
+        {this.state.visitUser && this.props.userExists && <UserPage/>}
+        {this.state.visitUser && !this.props.userExists && <div>404</div>}
+        {!this.state.visitUser && <HomePage/>}
       </div>
-    )
+    );
   }
 
   componentWillMount () {
-    if(this.props.match.params.username) {
-      console.log(this.props.match.params.username);
+    if (this.props.match.params.username) {
+      this.setState({visitUser: true})
       this.props.check_user(this.props.match.params.username);
-    } else {
-      this.props.set_check(true);
     }
   }
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    userExists: state.show.userExists
-  }
-}
+    userExists: state.show.userExists,
+    publicInfo: state.show.userPublicInfo
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    check_user: bindActionCreators(ShowAction.check_user, dispatch),
-    set_check: bindActionCreators(ShowAction.set_check, dispatch)
-  }
-}
+    check_user: bindActionCreators(ShowAction.check_user, dispatch)
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

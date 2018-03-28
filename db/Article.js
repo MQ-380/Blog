@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 let articleSchema = new mongoose.Schema({
-  linkName:  { type:String, unique: true },
+  linkName: {type: String, unique: true},
   tags: [],
   fileName: String,
   articleName: String,
@@ -11,7 +11,7 @@ let articleSchema = new mongoose.Schema({
   comment: [],
   likeNumber: Number,
   readNumber: Number,
-  fileType: String,
-})
+  fileType: String
+});
 
-module.exports = mongoose.model('Article',articleSchema,'Article');
+module.exports = mongoose.model('Article', articleSchema, 'Article')

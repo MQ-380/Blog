@@ -1,24 +1,24 @@
-import {put, take, call} from 'redux-saga/effects'
-import {get, post} from './fetch'
-import {actionTypes as IndexTypes} from '../reducers/AdminAction'
-import {actionTypes as DisplayActionTypes} from '../reducers/ShowAction'
+import { put, take, call } from 'redux-saga/effects'
+import { get, post } from './fetch'
+import { actionTypes as IndexTypes } from '../reducers/AdminAction'
+import { actionTypes as DisplayActionTypes } from '../reducers/ShowAction'
 import { actionTypes } from '../reducers/PublishAction'
 
 export function* adminLogin(data) {
   yield put({type: IndexTypes.FETCH_START})
   try {
-    return yield post('/login', data);
-  }catch(err) {
+    return yield post('/login', data)
+  } catch (err) {
     console.error(err);
-  }finally {
+  } finally {
     yield put({type: IndexTypes.FETCH_END})
   }
 }
 
 export function* adminLoginFlow () {
-  while(true) {
+  while (true) {
     let req = yield take(IndexTypes.LOGIN);
-    yield put({type: IndexTypes.CLEAR_MSG});
+    yield put({type: IndexTypes.CLEAR_MSG})
     const data = {username: req.username, password: req.password}
     let res = yield call(adminLogin, data);
     if (res) {
@@ -27,40 +27,66 @@ export function* adminLoginFlow () {
         let session = window.sessionStorage;
         session.token = res.token;
         yield put({type: 'REGISTER_USER', userId: res.id})
-        yield put({type: IndexTypes.LOGIN_SUCCESS, username:data.username, isAdmin: res.isAdmin, id:res.id,
-          email: res.email, slogan: res.slogan, links: res.links});
+        yield put({
+          type: IndexTypes.LOGIN_SUCCESS,
+          username: data.username,
+          isAdmin: res.isAdmin,
+          id: res.id,
+          email: res.email,
+          slogan: res.slogan,
+          links: res.links
+        })
       } else {
-        yield put({type: IndexTypes.LOGIN_FAILED, msg: res.msg, alertType: 'error'});
+        yield put({
+          type: IndexTypes.LOGIN_FAILED,
+          msg: res.msg,
+          alertType: 'error'
+        })
       }
     } else {
-      yield put({type: IndexTypes.LOGIN_FAILED, msg: '请检查网络连接', alertType: 'error'});
+      yield put({
+        type: IndexTypes.LOGIN_FAILED,
+        msg: '请检查网络连接',
+        alertType: 'error'
+      })
     }
   }
 }
 
 export function* checkLogin(data) {
   try {
-    return yield post('/loginCheck', data);
-  } catch(err) {
+    return yield post('/loginCheck', data)
+  } catch (err) {
     console.error(error);
   }
 }
 
 export function* checkLoginFlow() {
-  while(true) {
+  while (true) {
     let req = yield take(IndexTypes.CHECK_LOGIN);
-    yield put({type: IndexTypes.CLEAR_MSG});
-    const data  = {token: req.token};
+    yield put({type: IndexTypes.CLEAR_MSG})
+    const data = {token: req.token}
     let res = yield call(checkLogin, data);
-    if(res) {
+    if (res) {
       res = JSON.parse(res);
-      if(res.status) {
+      if (res.status) {
         yield put({type: 'REGISTER_USER', userId: res.id})
-        yield put({type: IndexTypes.CHECK_TRUE, isAdmin: res.isAdmin, username: res.username, id: res.id,
-          email: res.email,slogan: res.slogan, links: res.links});
+        yield put({
+          type: IndexTypes.CHECK_TRUE,
+          isAdmin: res.isAdmin,
+          username: res.username,
+          id: res.id,
+          email: res.email,
+          slogan: res.slogan,
+          links: res.links
+        })
       } else {
         window.sessionStorage.clear();
-        yield put({type: IndexTypes.CHECK_FALSE, msg: res.msg, alertType: 'error'});
+        yield put({
+          type: IndexTypes.CHECK_FALSE,
+          msg: res.msg,
+          alertType: 'error'
+        })
       }
     }
   }
@@ -68,27 +94,35 @@ export function* checkLoginFlow() {
 
 export function* logout(data) {
   try {
-    return yield post('/logout', data);
-  } catch(err) {
+    return yield post('/logout', data)
+  } catch (err) {
     console.error(err);
   }
 }
 
 export function* LogoutFlow() {
-  while(true) {
+  while (true) {
     let req = yield take(IndexTypes.LOGOUT);
-    const data = {username: req.username};
+    const data = {username: req.username}
     let res = yield call(logout, data);
-    if(res) {
+    if (res) {
       res = JSON.parse(res);
-      if(res.status) {
+      if (res.status) {
         window.sessionStorage.clear();
         yield put({type: IndexTypes.LOGOUT_SUCCESS})
       } else {
-        yield put({type: IndexTypes.LOGIN_FAILED, msg: res.message, alertType: 'error'})
+        yield put({
+          type: IndexTypes.LOGIN_FAILED,
+          msg: res.message,
+          alertType: 'error'
+        })
       }
     } else {
-      yield put({type: IndexTypes.LOGIN_FAILED, msg: res.message, alertType: 'error'})
+      yield put({
+        type: IndexTypes.LOGIN_FAILED,
+        msg: res.message,
+        alertType: 'error'
+      })
     }
   }
 }

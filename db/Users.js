@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 let userSchema = new mongoose.Schema({
   username: String,
@@ -10,7 +10,7 @@ let userSchema = new mongoose.Schema({
   loginToken: String,
   loginTime: Date,
   slogan: String,
-  links: Object,
-})
+  links: Object
+});
 
-module.exports = mongoose.model('Users',userSchema,'Users');
+module.exports = mongoose.model('Users', userSchema, 'Users')

@@ -1,21 +1,18 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { Form, Input, Button } from 'antd'
-
+import { Form, Input } from 'antd'
 
 class RegisterForm extends Component {
   state = {
     confirmDirty: false
-  }
+  };
 
   checkSame = (rule, value, callback) => {
-    if (this.props.user.some((item) => (item.username === value))) {
+    if (this.props.user.some(item => item.username === value)) {
       callback('与现有用户重名,请更换名称')
     } else {
       callback()
     }
-  }
+  };
 
   checkPassword = (rule, value, callback) => {
     const form = this.props.form
@@ -23,7 +20,7 @@ class RegisterForm extends Component {
       form.validateFields(['checkPassword'], {force: true})
     }
     callback()
-  }
+  };
 
   checkConfirm = (rule, value, callback) => {
     const form = this.props.form
@@ -32,9 +29,9 @@ class RegisterForm extends Component {
     } else {
       callback()
     }
-  }
+  };
 
-  handleConfirmBlur = (e) => {
+  handleConfirmBlur = e => {
     const value = e.target.value
     this.setState({confirmDirty: this.state.confirmDirty || !!value})
   }
@@ -51,56 +48,65 @@ class RegisterForm extends Component {
         xs: {span: 24},
         sm: {span: 16}
       }
-    }
+    };
 
     return (
       <Form>
         <Form.Item {...formItemLayout} label={'用户名'}>
           {getFieldDecorator('username', {
-            rules: [{
-              required: true, message: '请输入用户名'
-            }, {
-              validator: this.checkSame
-            }]
-          })(
-            <Input/>
-          )}
+            rules: [
+              {
+                required: true,
+                message: '请输入用户名'
+              },
+              {
+                validator: this.checkSame
+              }
+            ]
+          })(<Input/>)}
         </Form.Item>
         <Form.Item {...formItemLayout} label={'密码'}>
           {getFieldDecorator('password', {
-            rules: [{
-              required: true, message: '请输入密码'
-            }, {
-              validator: this.checkPassword
-            }]
-          })(
-            <Input type={'password'}/>
-          )}
+            rules: [
+              {
+                required: true,
+                message: '请输入密码'
+              },
+              {
+                validator: this.checkPassword
+              }
+            ]
+          })(<Input type={'password'}/>)}
         </Form.Item>
         <Form.Item {...formItemLayout} label={'确认密码'}>
           {getFieldDecorator('checkPassword', {
-            rules: [{
-              required: true, message: '请确认密码'
-            }, {
-              validator: this.checkConfirm
-            }]
-          })(
-            <Input type={'password'} onBlur={this.handleConfirmBlur}/>
-          )}
+            rules: [
+              {
+                required: true,
+                message: '请确认密码'
+              },
+              {
+                validator: this.checkConfirm
+              }
+            ]
+          })(<Input type={'password'} onBlur={this.handleConfirmBlur}/>)}
         </Form.Item>
         <Form.Item {...formItemLayout} label={'Email'}>
           {getFieldDecorator('email', {
-            rules: [{
-              required: true, message: 'email'
-            }, {
-              type: 'email', message: '请输入合法的邮箱地址'
-            }]
-          })(
-            <Input/>
-          )}
+            rules: [
+              {
+                required: true,
+                message: 'email'
+              },
+              {
+                type: 'email',
+                message: '请输入合法的邮箱地址'
+              }
+            ]
+          })(<Input/>)}
         </Form.Item>
       </Form>
-    )
+    );
   }
 }
 

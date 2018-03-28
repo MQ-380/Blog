@@ -5,12 +5,11 @@ import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/braft.css'
 
 export default class Editor extends React.Component {
-
   state = {
     htmlContent: '',
     contentFormat: 'raw',
-    initialContent: '',
-  }
+    initialContent: ''
+  };
 
   render() {
     let editorProps = {
@@ -30,17 +29,19 @@ export default class Editor extends React.Component {
           }
         }
       ]
-    }
+    };
 
     return (
       <div className="demo">
-        <BraftEditor {...editorProps} ref={instance => this.editorInstance = instance}/>
+        <BraftEditor
+          {...editorProps}
+          ref={instance => (this.editorInstance = instance)}
+        />
       </div>
-    )
+    );
   }
 
-  handleHTMLChange = (htmlContent) => {
-    this.setState({ htmlContent })
+  handleHTMLChange = htmlContent => {
+    this.setState({htmlContent})
   }
 }
-

@@ -3,17 +3,16 @@ import axios from 'axios'
 let config = {
   baseURL: '/api',
   transformRequest: [
-    function (data){
-      let ret = '';
+    function (data) {
+      let ret = ''
       for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+        ret +=
+          encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
       }
       return ret;
     }
   ],
-  transformResponse:[
-    (data)=>(data)
-  ],
+  transformResponse: [data => data],
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
   },
@@ -21,7 +20,7 @@ let config = {
   response: 'json'
 };
 
-axios.interceptors.response.use((res) => (res.data));
+axios.interceptors.response.use(res => res.data)
 
 export function get(url) {
   return axios.get(url, config);
@@ -30,6 +29,3 @@ export function get(url) {
 export function post(url, data) {
   return axios.post(url, data, config)
 }
-
-
-
