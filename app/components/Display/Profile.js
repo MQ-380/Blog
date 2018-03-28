@@ -27,7 +27,7 @@ class Profile extends Component {
 
   render () {
     return (
-      <div className={'profile'}>
+      <div>
         <div
           style={{
             margin: '2em 2em 0'

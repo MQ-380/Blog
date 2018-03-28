@@ -22,9 +22,7 @@ export function* checkUserExistsFlow() {
       yield put({
         type: ShowActionType.CHECK_USER_RESULT,
         result: res.status,
-        slogan: res.slogan,
-        links: res.links,
-        username: req.username
+        userPublicInfo: res.userData
       })
     } else {
       yield put({type: ShowActionType.CHECK_USER_RESULT, result: false})

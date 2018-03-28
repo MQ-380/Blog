@@ -3,7 +3,9 @@ const initialState = {
   userPublicInfo: {
     username: '',
     slogan: '',
-    links: {}
+    links: {},
+    articleTags: [],
+    allArticles: []
   }
 };
 
@@ -27,11 +29,7 @@ export function reducer (state = initialState, action) {
       return {
         ...state,
         userExists: action.result,
-        userPublicInfo: {
-          username: action.username,
-          slogan: action.slogan,
-          links: action.links
-        }
+        userPublicInfo: action.userPublicInfo
       };
     default:
       return state;

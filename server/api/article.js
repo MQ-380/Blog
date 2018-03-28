@@ -1,7 +1,6 @@
 import Express from 'express'
 import fs from 'fs'
 import Article from '../../db/Article'
-import Users from '../../db/Users'
 import { socket } from '../../server/api/apiServer'
 
 let multer = require('multer')

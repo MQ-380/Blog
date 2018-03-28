@@ -34,12 +34,14 @@
     "babel-register": "^6.26.0",
     "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
+    "bizcharts": "^3.1.4-beta.4",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "braft-editor": "^1.8.0",
     "connect-history-api-fallback": "^1.5.0",
     "css-loader": "^0.28.9",
     "draft-js": "^0.10.5",
+    "draftjs-to-markdown": "^0.5.1",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "highlight.js": "^9.12.0",
@@ -53,6 +55,8 @@
     "multer": "^1.3.0",
     "prismjs": "^1.12.2",
     "rc-editor-mention": "^1.1.6",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-hot-loader": "^3.1.3",
     "react-markdown": "^3.3.0",
     "react-redux": "^5.0.6",
@@ -70,9 +74,6 @@
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
     "webpack-dev-server": "^2.10.0",
-    "webpack-hot-middleware": "^2.21.0",
-    "draftjs-to-markdown": "^0.5.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "webpack-hot-middleware": "^2.21.0"
   }
 }
