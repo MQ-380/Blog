@@ -21,9 +21,9 @@ router.post('/checkUser', (req, res) => {
                 articleTags: getTagsWithArticleId(articles),
                 allArticles: getAllArticles(articles)
               }
-            })
+            });
           }
-        })
+        });
       } else {
         return res.json({status: false})
       }
@@ -33,7 +33,7 @@ router.post('/checkUser', (req, res) => {
 
 module.exports = router
 
-const getTagsWithArticleId = (articles) => {
+const getTagsWithArticleId = articles => {
   let tags = articles
     .map(
       item =>
@@ -41,7 +41,7 @@ const getTagsWithArticleId = (articles) => {
           ? {articleId: item._id, tags: item.tags}
           : undefined
     )
-    .filter(i => i)
+    .filter(i => i);
   return []
     .concat(
       ...tags.map(item =>
@@ -49,7 +49,9 @@ const getTagsWithArticleId = (articles) => {
       )
     )
     .reduce((before, now) => {
-      if (!Array.isArray(before)) before = [].concat(before)
+      if (!Array.isArray(before)) {
+        before = [].concat(before)
+      }
       let isCombined = false
       before = before.map(item => {
         if (!isCombined && item.tags === now.tags) {
@@ -57,21 +59,25 @@ const getTagsWithArticleId = (articles) => {
           return {
             tags: item.tags,
             aId: [].concat(item.aId, now.aId)
-          }
+          };
         } else {
-          if (!Array.isArray(item.aId))
-            item = {tags: item.tags, aId: [item.aId]}
           return item
         }
-      })
+      });
       if (!isCombined) {
         return before.concat(now)
       }
       return before
     })
-}
+    .map(item => {
+      if (!Array.isArray(item.aId)) {
+        return {tags: item.tags, aId: [item.aId]}
+      }
+      return item
+    });
+};
 
-const getAllArticles = (articles) => (
+const getAllArticles = articles =>
   articles.map(item => {
     const {writer, fileName} = item
     let data = fs.readFileSync(`articles/${writer}/${fileName}`, 'utf8')
@@ -85,6 +91,5 @@ const getAllArticles = (articles) => (
       tags: item.tags,
       linkName: item.linkName,
       content: data.slice(0, Math.min(data.length, 500))
-    }
-  })
-)
+    };
+  });

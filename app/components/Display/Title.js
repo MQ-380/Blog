@@ -5,25 +5,29 @@ export default class Title extends Component {
     let tags = []
     this.props.articleInfo.tags.some((item, i) => {
       tags.push(
-        <span key={i}>
-            <a
-              style={{
-                background: (() => (
-                  '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6)
-                ))()
-              }}
-            >
-              {item}，
-            </a>
-          </span>
-      )
+        <a
+          key={i}
+          style={{
+            background: (() =>
+              '#' +
+              ('00000' + ((Math.random() * 0x1000000) << 0).toString(16)).slice(
+                -6
+              ))(),
+            padding: '0.3em 1em',
+            margin: '0 0.1em',
+            color: 'black'
+          }}
+        >
+          {item}
+        </a>
+      );
       if (tags.length === 3 && this.props.articleInfo.tags > 3) {
-        tags.push(<span>...</span>)
+        tags.push(<a key={4}>...</a>)
         return true
       } else {
         return false
       }
-    })
+    });
 
     return (
       <div>
@@ -41,9 +45,15 @@ export default class Title extends Component {
           作者：
           <span style={{color: '#111'}}>{this.props.articleInfo.writer}</span>
           标签：
-          {tags}
+          <span>{tags}</span>
+          <span>
+            发表日期：{(t =>
+            `${t.getMonth() + 1}/${t.getDate() + 1},${t.getFullYear()}`)(
+            new Date(this.props.articleInfo.createTime)
+          )}
+          </span>
         </p>
       </div>
-    )
+    );
   }
 }

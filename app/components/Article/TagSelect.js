@@ -5,7 +5,8 @@ export default class TagSelect extends Component {
   state = {
     tags: [],
     inputVisible: false,
-    inputValue: ''
+    inputValue: '',
+    isUpdated: false,
   };
 
   handleClose = removedTag => {
@@ -38,9 +39,6 @@ export default class TagSelect extends Component {
 
   render () {
     let {tags, inputVisible, inputValue} = this.state
-    if (this.props.nowTags) {
-      tags = this.props.nowTags
-    }
     return (
       <div>
         <h3>选择文章标签</h3>
@@ -85,5 +83,12 @@ export default class TagSelect extends Component {
         )}
       </div>
     );
+  }
+
+  componentDidUpdate () {
+    if (this.props.nowTags && !this.state.isUpdated) {
+      console.log('in will')
+      this.setState({tags: this.props.nowTags, isUpdated: true})
+    }
   }
 }

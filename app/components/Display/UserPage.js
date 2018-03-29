@@ -11,7 +11,7 @@ import '../../components/Style/Main.css'
 class UserPage extends Component {
   render () {
     let articles = []
-    this.props.publishInfo.allArticles.forEach((item, i) => {
+    this.props.publishInfo.allArticles.sort((a, b) => new Date(b.createTime) - new Date(a.createTime)).forEach((item, i) => {
       articles.push(
         <div key={i}>
           <ArticlePreview articleInfo={item}/>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import Title from '../../components/Display/Title'
+import Content from '../../components/Display/ContentPreview'
 
 class ArticlePreview extends Component {
 
@@ -10,7 +11,7 @@ class ArticlePreview extends Component {
     return (
       <div>
         <Title articleInfo={this.props.articleInfo}/>
-
+        <Content articleInfo={this.props.articleInfo}/>
       </div>
     )
   }
