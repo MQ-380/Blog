@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Admin from './Admin/Admin'
 import Home from './Display/Home'
+import Article from './Display/Article'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/themes/prism-okaidia.css'
 
@@ -12,6 +13,7 @@ export default class App extends Component {
         <Switch>
           <Route path="/admin" component={Admin}/>
           <Route path="/user/:username" component={Home}/>
+          <Route path="/article/:linkName" component={Article}/>
           <Route component={Home}/>
         </Switch>
       </Router>

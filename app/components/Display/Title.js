@@ -21,8 +21,8 @@ export default class Title extends Component {
           {item}
         </a>
       );
-      if (tags.length === 3 && this.props.articleInfo.tags > 3) {
-        tags.push(<a key={4}>...</a>)
+      if (tags.length === this.props.number && this.props.articleInfo.tags > this.props.number) {
+        tags.push(<a key={this.props.number + 1}>...</a>)
         return true
       } else {
         return false

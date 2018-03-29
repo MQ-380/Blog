@@ -26,6 +26,7 @@
     flex: 1;
     height: 100%;
     padding: 2em 3em 0;
+    overflow: scroll;
 }
 
 .sliderBar {
@@ -34,3 +35,30 @@
     height: 100%;
 }
 
+.article {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    height: 2em;
+    position: fixed;
+}
+
+.articleDisplay {
+    margin-top: 2em;
+    display: flex;
+    flex: 1;
+}
+
+.left, .right {
+    flex: 0 0 12em
+}
+
+.left {
+    order: -1
+}
+
+.content {
+    flex: 1
+}

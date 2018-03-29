@@ -31,6 +31,50 @@ router.post('/checkUser', (req, res) => {
   });
 });
 
+router.post('/getArticleInfo', (req, res) => {
+  let {linkName} = req.body
+  Article.find({linkName}, (err, item) => {
+    if (!err) {
+      if (item.length !== 0) {
+        const {
+          _id,
+          writer,
+          fileName,
+          articleName,
+          fileType,
+          createTime,
+          editTime,
+          tags,
+          linkName,
+          comment
+        } = item[0]
+        try {
+          let content = fs.readFileSync(`articles/${writer}/${fileName}`, 'utf8')
+          return res.json({
+            status: true,
+            fullInfo: {
+              _id,
+              articleName,
+              fileType,
+              writer,
+              createTime,
+              editTime,
+              tags,
+              content,
+              linkName,
+              comment
+            }
+          })
+        } catch (err) {
+          console.error(err)
+        }
+      }
+    } else {
+      return res.json({status: false})
+    }
+  });
+});
+
 module.exports = router
 
 const getTagsWithArticleId = articles => {

@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-class ContentPreview extends Component {
+const ReactMarkdown = require('react-markdown')
+
+class ArticleContent extends Component {
 
   render () {
     return (
@@ -13,9 +15,16 @@ class ContentPreview extends Component {
               lineHeight: '1.8em',
               fontFamily: 'Georgia, "Cambria", serif',
             }}/>
-            <a>(...更多)</a>
           </div>
         )}
+        {
+          this.props.articleInfo.fileType !== 'html' && (
+            <ReactMarkdown source={this.props.articleInfo.content}/>
+          )
+        }
+        {this.props.isNotFull &&
+        <a>(...更多)</a>
+        }
       </div>
     )
   }
@@ -29,4 +38,4 @@ const mapDispatchToProps = dispatch => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContentPreview)
+export default connect(mapStateToProps, mapDispatchToProps)(ArticleContent)

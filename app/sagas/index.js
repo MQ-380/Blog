@@ -3,7 +3,7 @@ import {getUserFlow, addUsersFlow, editUsersFlow, deleteUsersFlow, editPasswordF
 import {adminLoginFlow, checkLoginFlow, LogoutFlow } from './LoginSaga'
 import {uploadArticleInfoFlow, cancelUploadFlow, getArticleListFlow, deleteArticleFlow,getArticleContentFlow,
   reviewCommentFlow, publishArticleFlow, editArticleFlow,editFileInfoFlow} from './PublishSaga'
-import {checkUserExistsFlow} from './ShowSaga'
+import { checkUserExistsFlow, getArticleInfoFlow } from './ShowSaga'
 
 export default function* rootSaga() {
   yield fork(getUserFlow);
@@ -24,4 +24,5 @@ export default function* rootSaga() {
   yield fork(editArticleFlow);
   yield fork(editFileInfoFlow);
   yield fork(checkUserExistsFlow);
+  yield fork(getArticleInfoFlow)
 }
