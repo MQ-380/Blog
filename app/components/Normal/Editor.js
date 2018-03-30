@@ -18,7 +18,8 @@ export default class Editor extends React.Component {
       initialContent: this.props.initialContent,
       onHTMLChange: this.handleHTMLChange,
       viewWrapper: '.demo',
-      excludeControls: ['media'],
+      excludeControls: this.props.excludeControls,
+      height: this.props.height,
       extendControls: [
         {
           type: 'button',

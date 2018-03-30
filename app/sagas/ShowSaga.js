@@ -21,12 +21,13 @@ export function* checkUserExistsFlow() {
         type: showActionType.CHECK_USER_RESULT,
         result: res.status,
         userPublicInfo: res.userData
-      })
+      });
     } else {
       yield put({
-        type: showActionType.CHECK_USER_RESULT, result: false,
+        type: showActionType.CHECK_USER_RESULT,
+        result: false,
         userPublicInfo: {}
-      })
+      });
     }
   }
 }
@@ -49,11 +50,38 @@ export function* getArticleInfoFlow () {
         yield put({
           type: showActionType.ARTICLE_AND_COMMENT,
           result: true,
-          fullInfo: res.fullInfo,
-        })
+          fullInfo: res.fullInfo
+        });
       }
     } else {
-      yield put({type: showActionType.ARTICLE_AND_COMMENT, result: false, fullInfo: {}})
+      yield put({
+        type: showActionType.ARTICLE_AND_COMMENT,
+        result: false,
+        fullInfo: {}
+      })
+    }
+  }
+}
+
+export function* publishComment (data) {
+  try {
+    console.log(data)
+    return yield post('/show/publishComment', data)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export function* publishCommentFlow () {
+  while (true) {
+    let req = yield take(showActionType.PUBLISH_COMMENT)
+    let res = yield call(publishComment, req.commentData)
+    if (res) {
+      res = JSON.parse(res)
+      yield put({
+        type: showActionType.PUBLISH_COMMENT_RESULT,
+        result: res.status
+      })
     }
   }
 }

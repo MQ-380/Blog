@@ -153,6 +153,8 @@ class ArticleDetail extends Component {
               ref={'editor'}
               contentFormat={'html'}
               initialContent={this.props.article_content}
+              excludeControls={['media']}
+              height={500}
             />
           </div>
         )}
@@ -244,6 +246,7 @@ class ArticleContentPrototype extends Component {
   componentDidMount() {
     Prism.highlightAll();
   }
+
 }
 
 let ArticleContent = connect(mapStateToProps, mapDispatchToProps)(

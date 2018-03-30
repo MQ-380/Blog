@@ -75,6 +75,33 @@ router.post('/getArticleInfo', (req, res) => {
   });
 });
 
+router.post('/publishComment', (req, res) => {
+  let {id, content, author, refId, articleId} = req.body
+  Article.find({_id: articleId}, (err, data) => {
+    if (!err) {
+      let {comment} = data[0]
+      comment.push({
+        id: id,
+        content: content,
+        reviewed: false,
+        noticed: false,
+        author: author,
+        time: new Date(),
+        refId: refId
+      })
+      data[0].comment = comment
+      Article.update({_id: articleId}, data[0], (err) => {
+        if (!err) {
+          res.json({status: true})
+        } else {
+          res.json({status: false})
+        }
+
+      })
+    }
+  })
+})
+
 module.exports = router
 
 const getTagsWithArticleId = articles => {

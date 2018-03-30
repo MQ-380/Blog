@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { action as showAction } from '../../reducers/ShowAction'
+import { BackTop } from 'antd'
 
 import Title from './Title'
 import ArticleContent from './ArticleContent'
+import Comment from './Comment'
 
 import '../../components/Style/Main.css'
 
@@ -19,9 +21,12 @@ class Article extends Component {
               <div className={'content'}>
                 <Title articleInfo={this.props.articleInfo} number={1000}/>
                 <ArticleContent articleInfo={this.props.articleInfo} isNotFull={false}/>
+                <Comment commentInfo={this.props.articleInfo.comment} articleId={this.props.articleInfo._id}/>
               </div>
               <div className={'left'}>left</div>
-              <div className={'right'}>right</div>
+              <div className={'right'}>
+                <BackTop/>
+              </div>
             </div>
           </div>
         )}

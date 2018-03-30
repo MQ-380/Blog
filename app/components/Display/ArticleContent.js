@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Prism from 'prismjs'
 
 const ReactMarkdown = require('react-markdown')
 
@@ -27,6 +28,14 @@ class ArticleContent extends Component {
         }
       </div>
     )
+  }
+
+  componentDidUpdate () {
+    Prism.highlightAll()
+  }
+
+  componentDidMount () {
+    Prism.highlightAll()
   }
 }
 

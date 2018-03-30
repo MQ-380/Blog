@@ -19,6 +19,10 @@ const initialState = {
     content: '',
     linkName: '',
     comment: []
+  },
+  publish_comment_result: {
+    isPublished: false,
+    publishResult: false
   }
 };
 
@@ -26,7 +30,10 @@ export const actionTypes = {
   CHECK_USER: 'CHECK_USER',
   CHECK_USER_RESULT: 'CHECK_USER_RESULT',
   GET_ARTICLE_INFO: 'GET_ARTICLE_INFO',
-  ARTICLE_AND_COMMENT: 'ARTICLE_AND_COMMENT'
+  ARTICLE_AND_COMMENT: 'ARTICLE_AND_COMMENT',
+  PUBLISH_COMMENT: 'PUBLISH_COMMENT',
+  PUBLISH_COMMENT_RESULT: 'PUBLISH_COMMENT_RESULT',
+  CLEAR_COMMENT_RESULT: 'CLEAR_COMMENT_RESULT'
 };
 
 export const action = {
@@ -40,6 +47,17 @@ export const action = {
     return {
       type: actionTypes.GET_ARTICLE_INFO,
       linkName
+    }
+  },
+  upload_comment: commentData => {
+    return {
+      type: actionTypes.PUBLISH_COMMENT,
+      commentData
+    }
+  },
+  close_result_message: () => {
+    return {
+      type: actionTypes.CLEAR_COMMENT_RESULT
     }
   }
 };
@@ -57,6 +75,22 @@ export function reducer (state = initialState, action) {
         ...state,
         articleResult: action.result,
         articleDisplayInfo: action.fullInfo
+      }
+    case actionTypes.PUBLISH_COMMENT_RESULT:
+      return {
+        ...state,
+        publish_comment_result: {
+          isPublished: true,
+          publishResult: action.result
+        }
+      }
+    case actionTypes.CLEAR_COMMENT_RESULT:
+      return {
+        ...state,
+        publish_comment_result: {
+          isPublished: false,
+          publishResult: false
+        }
       }
     default:
       return state;

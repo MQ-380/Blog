@@ -54,7 +54,8 @@ class EditorUpload extends Component {
         </p>
         <EditorForm ref={'editor'}/>
         <Tags ref={'tags'}/>
-        <Editor ref={'richEditor'} contentFormat={'raw'} initialContent={''}/>
+        <Editor ref={'richEditor'} contentFormat={'raw'} initialContent={''} excludeControls={['media']}
+                height={500}/>
       </div>
     );
   }
