@@ -13,6 +13,7 @@ export default class App extends Component {
         <Switch>
           <Route path="/admin" component={Admin}/>
           <Route path="/user/:username" component={Home}/>
+          <Route path="/tag/:tag" component={Home}/>
           <Route path="/article/:linkName" component={Article}/>
           <Route component={Home}/>
         </Switch>

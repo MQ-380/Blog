@@ -10,8 +10,8 @@ class Admin extends Component {
   render () {
     return (
       <div className="full">
-        {this.props.isAdminLogin && <AdminPanel/>}
-        {!this.props.isAdminLogin && (
+        {this.props.isLogin && <AdminPanel/>}
+        {!this.props.isLogin && (
           <div className="container">
             <div className="form">
               <AdminLogin/>
@@ -31,7 +31,7 @@ class Admin extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAdminLogin: state.global.isLogin && state.global.isAdminLogin
+    isLogin: state.global.isLogin
   };
 };
 

@@ -44,14 +44,14 @@ class AdminPanel extends Component {
             >
               <Menu
                 mode="inline"
-                defaultSelectedKeys={['userList']}
-                defaultOpenKeys={['Users']}
+                defaultSelectedKeys={['message']}
+                defaultOpenKeys={['message']}
                 style={{height: '100%', borderRight: 0}}
                 onSelect={e => this.props.change_page(e.key)}
               >
-                <Menu.Item key="user">
+                <Menu.Item key="message">
                   <span>
-                    <Icon type="user"/>用户管理
+                    <Icon type="inbox"/>消息列表
                   </span>
                 </Menu.Item>
                 <SubMenu
@@ -69,16 +69,18 @@ class AdminPanel extends Component {
                     <Icon type="table"/>文章列表
                   </Menu.Item>
                 </SubMenu>
+                {!this.props.notAdmin &&
+                <Menu.Item key="user">
+                  <span>
+                    <Icon type="user"/>用户管理
+                  </span>
+                </Menu.Item>}
                 <Menu.Item key="data">
                   <span>
                     <Icon type="dashboard"/>浏览数据
                   </span>
                 </Menu.Item>
-                <Menu.Item key="message">
-                  <span>
-                    <Icon type="inbox"/>消息列表
-                  </span>
-                </Menu.Item>
+
               </Menu>
             </Sider>
             <Layout>
@@ -110,7 +112,7 @@ class AdminPanel extends Component {
 
 const mapStateToProps = state => {
   return {
-    notAdmin: !state.global.isAdmin,
+    notAdmin: !state.global.isAdminLogin,
     username: state.global.username,
     page: state.page.now_page
   };

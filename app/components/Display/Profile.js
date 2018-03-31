@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { action as DisplayAction } from '../../reducers/ShowAction'
-import { action as IndexAction } from '../../reducers/AdminAction'
-import { Button, Form, Input, Icon } from 'antd'
+import { Button } from 'antd'
 import { Modal } from 'antd/lib/index'
 
 class Profile extends Component {
@@ -11,12 +8,6 @@ class Profile extends Component {
     let msg = {
       title: this.props.msg.title,
       content: this.props.msg.content,
-      onCancel () {
-        console.log('aaa')
-      },
-      onOK () {
-        console.log('bbb')
-      }
     };
     if (this.props.msg.type === 'error') {
       Modal.error(msg);

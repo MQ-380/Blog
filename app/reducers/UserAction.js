@@ -5,6 +5,7 @@ const initialState = {
   show_delete: false,
   show_edit: false,
   show_edit_password: false,
+  register_result: false,
   edit_message: {
     show: false,
     type: '',
@@ -35,7 +36,8 @@ export const actionTypes = {
   EDIT_PASSWORD: 'EDIT_PASSWORD',
   EDIT_USER_INFO: 'EDIT_USER_INFO',
   CLEAR_MSG: 'CLEAR_MSG',
-  EDIT_RESULT: 'EDIT_RESULT'
+  EDIT_RESULT: 'EDIT_RESULT',
+  REGISTER_CLOSE: 'REGISTER_CLOSE'
 };
 
 export const action = {
@@ -44,21 +46,14 @@ export const action = {
       type: actionTypes.GET_ALL_USERS
     };
   },
-  add_new_users: userName => {
-    return {
-      type: actionTypes.ADD_NEW_USERS,
-      userName,
-      time: new Date()
-    };
-  },
-  add_new_admin: (username, password, email) => {
+  add_new_user: (username, password, email, isAdmin) => {
     return {
       type: actionTypes.ADD_NEW_USERS,
       username,
       password,
       email,
-      isAdmin: true,
-      auth: 'admin'
+      isAdmin: isAdmin,
+      auth: isAdmin ? 'admin' : 'user'
     };
   },
   delete_item: _ids => {
@@ -110,6 +105,11 @@ export const action = {
       userId,
       newEmail
     };
+  },
+  register_close: () => {
+    return {
+      type: actionTypes.REGISTER_CLOSE,
+    }
   }
 };
 
@@ -130,8 +130,14 @@ export function reducer (state = initialState, action) {
       return {
         ...state,
         show_register: false,
-        after_register: true
+        after_register: true,
+        register_result: true,
       };
+    case actionTypes.REGISTER_CLOSE:
+      return {
+        ...state,
+        register_result: false,
+      }
     case actionTypes.TO_SHOW_DELETE:
       return {
         ...state,

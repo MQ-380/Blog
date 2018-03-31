@@ -1,30 +1,76 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Form, Button, Input, Icon } from 'antd'
-import { action as IndexAction } from '../../reducers/AdminAction'
+import { action as showAction } from '../../reducers/ShowAction'
+import Header from '../../components/Display/Header'
+import ArticlePreview from '../../components/Display/ArticlePreview'
 
-const md5 = require('md5')
+import '../../components/Style/Main.css'
+import { action } from '../../reducers/UserAction'
 
 class HomePage extends Component {
   render () {
+    let writer = []
+    this.props.info.writers.forEach((item, i) => {
+      writer.push(<li key={i}><a href={`/user/${item}`}>{item}</a></li>)
+    })
+
+    let articles = []
+    this.props.info.articles.sort((a, b) => new Date(b.createTime) - new Date(a.createTime)).forEach((item, i) => {
+      articles.push(
+        <div key={i}>
+          <ArticlePreview articleInfo={item}/>
+        </div>
+      )
+    })
+
+    let catalogs = []
+    this.props.info.tags
+      .sort((a, b) => b.aId.length - a.aId.length)
+      .forEach((item, i) => {
+        catalogs.push(
+          <li key={i}>
+            <a href={`/tag/${item.tags}`}>
+              {item.tags}
+            </a>
+            （{item.aId.length}）
+          </li>
+        )
+      })
+
     return (
-      <div style={{height: '100%'}}>
-        <div className={'home'}>
-          <div className={'main'}>Main</div>
-          <div className={'sliderBar'}>
-            <div>
-              <Login ref={'loginForm'}/>
-              <Button
-                style={{marginLeft: '20.83333333%', width: '66.66666667%'}}
-                onClick={() => {
-                  this.refs.loginForm.validateFields((err, values) => {
-                    this.props.login(values.username, md5(values.password))
-                  })
+      <div style={{height: '100%', width: '100%'}}>
+        <div className={'article'}>
+          <header className={'header'}>
+            <Header/>
+          </header>
+          <div className={'articleDisplay'}>
+            <div className={'homeContent'}>
+              {articles}
+            </div>
+            <div className={'right'} style={{padding: '3em'}}>
+              <h3
+                style={{
+                  color: 'black',
+                  fontSize: '1.5em',
+                  marginBottom: '0em'
                 }}
               >
-                登录
-              </Button>
+                作者：
+              </h3>
+              {writer}
+              <div style={{marginTop: '3em'}}>
+                <h3
+                  style={{
+                    color: 'black',
+                    fontSize: '1.5em',
+                    marginBottom: '0em'
+                  }}
+                >
+                  标签：
+                </h3>
+                {catalogs}
+              </div>
             </div>
           </div>
         </div>
@@ -33,74 +79,22 @@ class HomePage extends Component {
   }
 
   componentWillMount () {
-    if (window.sessionStorage.token) {
-      this.props.check_login(window.sessionStorage.token)
-    }
+    this.props.get_info()
   }
 }
 
 const mapStateToProps = state => {
-  return {}
+  return {
+    info: state.show.info
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: bindActionCreators(IndexAction.login, dispatch),
-    check_login: bindActionCreators(IndexAction.check_login, dispatch)
+    get_info: bindActionCreators(showAction.get_info, dispatch),
+    show_register: bindActionCreators(action.register_control, dispatch),
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
 
-class LoginProto extends Component {
-  render () {
-    const {getFieldDecorator} = this.props.form
-    const wrapperCol = {
-      span: 16,
-      offset: 5
-    }
-    return (
-      <Form>
-        <Form.Item
-          wrapperCol={wrapperCol}
-          style={{marginBottom: '2%', marginTop: '15%'}}
-        >
-          {getFieldDecorator('username', {
-            rules: [
-              {
-                required: true,
-                message: '请输入用户名'
-              }
-            ]
-          })(
-            <Input
-              prefix={
-                <Icon type={'user'} style={{color: 'rgba(0,0,0,.25)'}}/>
-              }
-              placeholder={'用户名'}
-              type={'text'}
-            />
-          )}
-        </Form.Item>
-        <Form.Item wrapperCol={wrapperCol} style={{marginBottom: '2%'}}>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-                message: '请输入密码'
-              }
-            ]
-          })(
-            <Input
-              prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
-              type="password"
-              placeholder="密码"
-            />
-          )}
-        </Form.Item>
-      </Form>
-    )
-  }
-}
-
-const Login = Form.create()(LoginProto)

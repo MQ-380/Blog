@@ -3,10 +3,14 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Form, Icon, Input, Button } from 'antd'
 import { action as IndexAction } from '../../reducers/AdminAction'
+import { action as UserAction } from '../../reducers/UserAction'
+
+import Add from '../../components/User/AddUser'
+import { message } from 'antd'
 
 const md5 = require('md5')
 
-class ArticleHeader extends Component {
+class Header extends Component {
   render () {
     return (
       <div>
@@ -31,31 +35,55 @@ class ArticleHeader extends Component {
           </h2>
           <div>
             {!this.props.isLogin && (
-              <div style={{
-                fontSize: '24px',
-                lineHeight: 1,
-                fontWeight: '600',
-                float: 'right',
-                margin: '7px 0 -7px',
-                height: '52px'
-              }}>
-                <LoginForm login={(username, password) => this.props.login(username, password, false)}/>
+              <div
+                style={{
+                  fontSize: '24px',
+                  lineHeight: 1,
+                  fontWeight: '600',
+                  float: 'right',
+                  margin: '7px 0 -7px',
+                  height: '52px'
+                }}
+              >
+                <LoginForm
+                  login={(username, password) =>
+                    this.props.login(username, password, false)
+                  }
+                  register={() => this.props.show_register(true)}
+                />
               </div>
             )}
-            {this.props.isLogin && <div style={{
-              fontSize: '24px',
-              lineHeight: 1,
-              fontWeight: '600',
-              float: 'right',
-              margin: '15px 0 -15px',
-              height: '52px'
-            }}>欢迎登录，{this.props.username}
-              <Button style={{marginLeft: '1em', height: '24px'}}
-                      onClick={() => this.props.logout(this.props.username)}>注销</Button></div>}
+            {this.props.isLogin && (
+              <div
+                style={{
+                  fontSize: '24px',
+                  lineHeight: 1,
+                  fontWeight: '600',
+                  float: 'right',
+                  margin: '15px 0 -15px',
+                  height: '52px'
+                }}
+              >
+                欢迎登录，{this.props.username}
+                <Button
+                  style={{marginLeft: '1em', height: '24px'}}
+                  onClick={() => this.props.logout(this.props.username)}
+                >
+                  <Icon type="poweroff"/>注销
+                </Button>
+                <Button
+                  style={{marginLeft: '1em', height: '24px'}}
+                  onClick={() => (window.location = '/admin')}
+                >
+                  <Icon type="setting"/>后台管理
+                </Button>
+              </div>
+            )}
           </div>
         </div>
+        <Add type={'user'}/>
       </div>
-    )
+    );
   }
 
   componentWillMount () {
@@ -63,35 +91,46 @@ class ArticleHeader extends Component {
       this.props.check_login(window.sessionStorage.token)
     }
   }
+
+  componentDidUpdate () {
+    if (this.props.registerResult) {
+      message.config({
+        top: 52
+      })
+      message.success('注册成功', 5, () => {this.props.register_close()})
+    }
+  }
 }
 
 const mapStateToProps = state => {
   return {
     isLogin: state.global.isLogin,
-    username: state.global.username
-  }
-}
+    username: state.global.username,
+    registerResult: state.user.register_result,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     login: bindActionCreators(IndexAction.login, dispatch),
     check_login: bindActionCreators(IndexAction.check_login, dispatch),
-    logout: bindActionCreators(IndexAction.logout, dispatch)
-  }
-}
+    logout: bindActionCreators(IndexAction.logout, dispatch),
+    show_register: bindActionCreators(UserAction.register_control, dispatch),
+    register_close: bindActionCreators(UserAction.register_close, dispatch)
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleHeader)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
 
 class LoginFormProto extends Component {
-
   handleSubmit = e => {
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.login(values.username, md5(values.password))
       }
-    })
-  }
+    });
+  };
 
   render () {
     const {getFieldDecorator} = this.props.form
@@ -123,10 +162,15 @@ class LoginFormProto extends Component {
           )}
         </Form.Item>
         <Form.Item>
-          <Button type={'primary'} htmlType={'submit'}>登录</Button>
+          <Button type={'primary'} htmlType={'submit'}>
+            登录
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button onClick={() => this.props.register()}>注册</Button>
         </Form.Item>
       </Form>
-    )
+    );
   }
 }
 

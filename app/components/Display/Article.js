@@ -7,7 +7,7 @@ import { BackTop, Button, Icon } from 'antd'
 import Title from './Title'
 import ArticleContent from './ArticleContent'
 import Comment from './Comment'
-import Header from './ArticleHeader'
+import Header from './Header'
 
 import '../../components/Style/Main.css'
 

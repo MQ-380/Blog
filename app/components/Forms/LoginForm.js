@@ -20,7 +20,7 @@ class LoginForm extends Component {
     return (
       <Form className="login-form" onSubmit={this.login}>
         <FormItem wrapperCol={{span: 4, offset: 10}}>
-          <h2>管理员登录</h2>
+          <h2>后台登录</h2>
         </FormItem>
         <FormItem wrapperCol={{span: 4, offset: 10}}>
           {getFieldDecorator('username', {

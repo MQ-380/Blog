@@ -5,7 +5,8 @@ const initialState = {
     slogan: '',
     links: {},
     articleTags: [],
-    allArticles: []
+    allArticles: [],
+    tagName: ''
   },
   articleResult: false,
   articleDisplayInfo: {
@@ -24,7 +25,17 @@ const initialState = {
     isPublished: false,
     publishResult: false
   },
-  isFetching: true
+  isFetching: true,
+  tagExists: false,
+  tagPublicInfo: {
+    tagName: '',
+    allArticles: []
+  },
+  info: {
+    writers: [],
+    articles: [],
+    tags: []
+  }
 };
 
 export const actionTypes = {
@@ -34,7 +45,11 @@ export const actionTypes = {
   ARTICLE_AND_COMMENT: 'ARTICLE_AND_COMMENT',
   PUBLISH_COMMENT: 'PUBLISH_COMMENT',
   PUBLISH_COMMENT_RESULT: 'PUBLISH_COMMENT_RESULT',
-  CLEAR_COMMENT_RESULT: 'CLEAR_COMMENT_RESULT'
+  CLEAR_COMMENT_RESULT: 'CLEAR_COMMENT_RESULT',
+  CHECK_TAG: 'CHECK_TAG',
+  CHECK_TAG_RESULT: 'CHECK_TAG_RESULT',
+  GET_INFO: 'GET_INFO',
+  GET_INFO_RESULT: 'GET_INFO_RESULT'
 };
 
 export const action = {
@@ -59,6 +74,17 @@ export const action = {
   close_result_message: () => {
     return {
       type: actionTypes.CLEAR_COMMENT_RESULT
+    }
+  },
+  check_tags: tag => {
+    return {
+      type: actionTypes.CHECK_TAG,
+      tag
+    }
+  },
+  get_info: () => {
+    return {
+      type: actionTypes.GET_INFO
     }
   }
 };
@@ -93,6 +119,17 @@ export function reducer (state = initialState, action) {
           isPublished: false,
           publishResult: false
         }
+      }
+    case actionTypes.CHECK_TAG_RESULT:
+      return {
+        ...state,
+        tagExists: action.status,
+        userPublicInfo: action.info
+      }
+    case actionTypes.GET_INFO_RESULT:
+      return {
+        ...state,
+        info: action.info
       }
     default:
       return state;

@@ -31,10 +31,11 @@ class AddUser extends Component {
     this.refs.form.validateFields((err, values) => {
       if (!err) {
         values.password = md5(values.password)
-        this.props.add_new_admin(
+        this.props.add_new_user(
           values.username,
           values.password,
-          values.email
+          values.email,
+          this.props.type === 'admin'
         )
       }
     });
@@ -44,14 +45,14 @@ class AddUser extends Component {
     return (
       <div>
         <Modal
-          title={'增加管理员'}
+          title={this.props.type === 'admin' ? '增加管理员' : '注册'}
           visible={this.props.show_register}
           destroyOnClose={true}
           onOk={this.submit}
           onCancel={() => this.props.to_show_register(false)}
           confirmLoading={this.props.isFetching}
         >
-          <RegisterForm ref={'form'} user={this.props.userList}/>
+          <RegisterForm ref={'form'} user={this.props.type === 'admin' ? this.props.userList : this.props.userListB}/>
         </Modal>
       </div>
     );
@@ -67,13 +68,14 @@ function mapStateToProps (state) {
     isFetching: state.global.isFetching,
     msg: state.global.msg,
     userList: state.user.userList,
+    userListB: state.show.info.userList,
     show_register: state.user.show_register
   };
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    add_new_admin: bindActionCreators(action.add_new_admin, dispatch),
+    add_new_user: bindActionCreators(action.add_new_user, dispatch),
     clearMsg: bindActionCreators(indexAction.clear_msg, dispatch),
     to_show_register: bindActionCreators(action.register_control, dispatch)
   };

@@ -13,9 +13,9 @@ class ArticleList extends Component {
   onSelectedChange = selectedRowKeys => {
     selectedRowKeys = selectedRowKeys.filter(
       item => this.props.article_list.filter(e => e._id === item).length !== 0
-    )
+    );
     this.setState({selectedRowKeys})
-  }
+  };
 
   showMessage = self => {
     let msg = {
@@ -118,8 +118,8 @@ class ArticleList extends Component {
                 let selectedRowNames = this.state.selectedRowKeys.map(id => {
                   return this.props.article_list.filter(
                     item => item._id === id
-                  )[0].articleName
-                })
+                  )[0].articleName;
+                });
                 this.setState({selectedRowNames})
                 this.props.show_delete_confirm(true)
               }}
@@ -182,7 +182,11 @@ class ArticleList extends Component {
 
 const mapStateToProps = state => {
   return {
-    article_list: state.publish.article_list,
+    article_list: state.global.isAdminLogin
+      ? state.publish.article_list
+      : state.publish.article_list.filter(
+        i => i.writer === state.global.username
+      ),
     show_delete: state.publish.show_delete,
     after_delete: state.publish.after_delete,
     delete_message: state.publish.delete_message

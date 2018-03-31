@@ -97,6 +97,11 @@ class Avatars extends Component {
                 >
                   修改个人信息
                 </a>
+                <div>
+                  <a href={'/'}>
+                    前往前台页面
+                  </a>
+                </div>
               </div>
               <Popconfirm
                 placement="bottom"

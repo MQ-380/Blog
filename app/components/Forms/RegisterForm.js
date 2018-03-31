@@ -7,6 +7,7 @@ class RegisterForm extends Component {
   };
 
   checkSame = (rule, value, callback) => {
+    console.log(this.props.user)
     if (this.props.user.some(item => item.username === value)) {
       callback('与现有用户重名,请更换名称')
     } else {

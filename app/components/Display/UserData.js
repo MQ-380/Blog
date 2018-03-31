@@ -15,6 +15,7 @@ class UserData extends Component {
                 color: '#b0cadb',
                 fontSize: '20px'
               }}
+              href={`/tag/${item.tags}`}
             >
               {item.tags}
             </a>
@@ -46,16 +47,6 @@ class UserData extends Component {
           margin: '5em 2em 0'
         }}
       >
-        <h1
-          style={{
-            fontSize: '1.2em',
-            color: '#40a9ff',
-            fontWeight: '300'
-          }}
-        >
-          {`该作者的文章数:${this.props.publicInfo.allArticles.length}`}
-        </h1>
-
         <div
           style={{
             color: '#fff',

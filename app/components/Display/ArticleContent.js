@@ -26,7 +26,13 @@ class ArticleContent extends Component {
           )
         }
         {this.props.isNotFull &&
-        <a>(...更多)</a>
+        <div style={{
+          paddingBottom: '3em',
+          borderBottom: '1px solid #eee'
+        }}>
+          <a>(...更多)</a>
+        </div>
+
         }
       </div>
     )

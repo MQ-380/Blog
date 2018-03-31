@@ -102,6 +102,42 @@ router.post('/publishComment', (req, res) => {
   })
 })
 
+router.post('/tagCheck', (req, res) => {
+  let {tag} = req.body
+  Article.find({}, (err, allArticle) => {
+    if (!err) {
+      let tagArticle = getTagsWithArticleId(allArticle).filter(i => i.tags === tag)
+      if (tagArticle.length === 0) return res.json({status: false})
+      let tags = tagArticle.map(i => ({
+        tagName: i.tags,
+        allArticles: getAllArticles(i.aId.map(a => allArticle.filter(s => s._id === a)[0]))
+      }))[0]
+      return res.json({status: true, info: tags})
+    }
+    return res.json({status: false})
+  })
+})
+
+router.post('/getInfo', (req, res) => {
+  Users.find({}, (error, allUser) => {
+    if (!error) {
+      Article.find({}, (err, allArticle) => {
+        if (!err) {
+          let info = {
+            writers: Array.from(new Set(allArticle.map(i => i.writer))),
+            articles: getAllArticles(allArticle),
+            userList: allUser.map(i => ({username: i.username})),
+            tags: getTagsWithArticleId(allArticle)
+          }
+          return res.json({status: true, info})
+        } else {
+          return res.json({status: false})
+        }
+      })
+    }
+  })
+})
+
 module.exports = router
 
 const getTagsWithArticleId = articles => {

@@ -65,7 +65,6 @@ export function* getArticleInfoFlow () {
 
 export function* publishComment (data) {
   try {
-    console.log(data)
     return yield post('/show/publishComment', data)
   } catch (err) {
     console.error(err)
@@ -81,6 +80,58 @@ export function* publishCommentFlow () {
       yield put({
         type: showActionType.PUBLISH_COMMENT_RESULT,
         result: res.status
+      })
+    }
+  }
+}
+
+export function* tagCheck (tag) {
+  try {
+    return yield post('/show/tagCheck', {tag})
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export function* tagCheckFlow () {
+  while (true) {
+    let req = yield take(showActionType.CHECK_TAG)
+    let res = yield call(tagCheck, req.tag)
+    if (res) {
+      res = JSON.parse(res)
+      if (res.status) {
+        yield put({
+          type: showActionType.CHECK_TAG_RESULT,
+          status: true,
+          info: res.info,
+        })
+      } else {
+        yield put({
+          type: showActionType.CHECK_TAG_RESULT,
+          status: false
+        })
+      }
+    }
+  }
+}
+
+export function* getInfo () {
+  try {
+    return yield post('/show/getInfo')
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export function* getInfoFlow () {
+  while (true) {
+    yield take(showActionType.GET_INFO)
+    let res = yield call(getInfo)
+    if (res) {
+      res = JSON.parse(res)
+      yield put({
+        type: showActionType.GET_INFO_RESULT,
+        info: res.info
       })
     }
   }

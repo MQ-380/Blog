@@ -142,7 +142,7 @@ class List extends Component {
             showQuickJumper: true
           }}
         />
-        <Add/>
+        <Add type={'admin'}/>
         <Modal
           title={`确定删除如下${this.state.selectedRowNames.length}个用户?`}
           visible={this.props.show_delete}

@@ -1,5 +1,5 @@
 const initialState = {
-  now_page: 'user',
+  now_page: 'message',
   now_article: ''
 };
 
