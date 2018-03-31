@@ -9,7 +9,9 @@ class ArticleContent extends Component {
 
   render () {
     return (
-      <div>
+      <div style={{
+        marginBottom: this.props.isNotFull ? '3em' : 0
+      }}>
         {this.props.articleInfo.fileType === 'html' && (
           <div>
             <div dangerouslySetInnerHTML={{__html: this.props.articleInfo.content}} style={{

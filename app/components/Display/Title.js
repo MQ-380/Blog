@@ -22,7 +22,7 @@ export default class Title extends Component {
         </a>
       );
       if (tags.length === this.props.number && this.props.articleInfo.tags > this.props.number) {
-        tags.push(<a key={this.props.number + 1}>...</a>)
+        tags.push(<a key={this.props.number + 1} href={this.props.articleInfo.linkName}>...</a>)
         return true
       } else {
         return false
@@ -31,23 +31,44 @@ export default class Title extends Component {
 
     return (
       <div>
-        <h2
-          style={{
-            fontSize: '2em',
-            color: '#222',
-            marginBottom: '0.2em',
-            marginTop: '0.83em'
-          }}
-        >
-          {this.props.articleInfo.articleName}
-        </h2>
+        {
+          this.props.isLink && (
+            <a
+              style={{
+                fontSize: '2em',
+                color: '#222',
+                marginBottom: '0.2em',
+                marginTop: '0.83em'
+              }}
+              href={`/article/${this.props.articleInfo.linkName}`}
+            >
+              {this.props.articleInfo.articleName}
+            </a>
+          )
+        }
+        {
+          !this.props.isLink &&
+          <h2
+            style={{
+              fontSize: '2em',
+              color: '#222',
+              marginBottom: '0.2em',
+              marginTop: '0.83em'
+            }}
+          >
+            {this.props.articleInfo.articleName}
+          </h2>
+        }
         <p>
           作者：
           <span style={{color: '#111'}}>{this.props.articleInfo.writer}</span>
-          标签：
+          {this.props.articleInfo.tags.length !== 0 && (
+            <span>&nbsp;&nbsp;标签：</span>
+          )
+          }
           <span>{tags}</span>
           <span>
-            发表日期：{(t =>
+            &nbsp;&nbsp;发表日期：{(t =>
             `${t.getMonth() + 1}/${t.getDate() + 1},${t.getFullYear()}`)(
             new Date(this.props.articleInfo.createTime)
           )}

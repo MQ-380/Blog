@@ -23,7 +23,8 @@ const initialState = {
   publish_comment_result: {
     isPublished: false,
     publishResult: false
-  }
+  },
+  isFetching: true
 };
 
 export const actionTypes = {
@@ -73,6 +74,7 @@ export function reducer (state = initialState, action) {
     case actionTypes.ARTICLE_AND_COMMENT:
       return {
         ...state,
+        isFetching: false,
         articleResult: action.result,
         articleDisplayInfo: action.fullInfo
       }

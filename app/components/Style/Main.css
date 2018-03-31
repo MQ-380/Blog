@@ -41,12 +41,14 @@
 }
 
 .header {
-    height: 2em;
+    height: 52px;
     position: fixed;
+    width: 100%;
+    background-color: rgba(225, 225, 225, 0.9);
 }
 
 .articleDisplay {
-    margin-top: 2em;
+    margin-top: 60px;
     display: flex;
     flex: 1;
 }
@@ -62,4 +64,5 @@
 .content {
     flex: 1;
     width: 50%;
+    font-family: "SF Pro SC", "SF Pro Display", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }

@@ -10,7 +10,7 @@ class ArticlePreview extends Component {
   render () {
     return (
       <div>
-        <Title articleInfo={this.props.articleInfo} number={3}/>
+        <Title articleInfo={this.props.articleInfo} number={3} isLink={true}/>
         <Content articleInfo={this.props.articleInfo} isNotFull={true}/>
       </div>
     )
