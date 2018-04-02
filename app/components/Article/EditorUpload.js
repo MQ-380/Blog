@@ -52,7 +52,7 @@ class EditorUpload extends Component {
             注意：若要根据编辑器内格式请使用文章发布，使用markdown发布字体、字号、间距等设定将失效。
           </b>
         </p>
-        <EditorForm ref={'editor'}/>
+        <EditorForm ref={'editor'} username={this.props.writer}/>
         <Tags ref={'tags'}/>
         <Editor ref={'richEditor'} contentFormat={'raw'} initialContent={''} excludeControls={['media']}
                 height={500}/>

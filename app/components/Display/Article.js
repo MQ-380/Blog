@@ -50,7 +50,7 @@ class Article extends Component {
 
   componentWillMount () {
     if (this.props.match.params.linkName) {
-      this.props.get_article_info(this.props.match.params.linkName)
+      this.props.get_article_info(`${this.props.match.params.writer}/${this.props.match.params.linkName}`)
     }
   }
 }

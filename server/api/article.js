@@ -44,7 +44,7 @@ router.post('/uploadInfo', (req, res) => {
   const {fileName, linkName, articleName, tags, writer} = req.body
   let newArticle = new Article({
     fileName,
-    linkName,
+    linkName: `${writer}/${linkName}`,
     articleName,
     writer,
     tags: tags !== '' ? tags.split(',') : [],
@@ -87,7 +87,7 @@ router.post('/editInfo', (req, res) => {
       const linkNameOld = data.linkName;
       if (linkNameOld !== linkName) {
         newArticle = {
-          linkName,
+          linkName: `${writer}/${linkName}`,
           tags: tags !== '' ? tags.split(',') : [],
           editTime: new Date(),
           articleName: title,
@@ -141,7 +141,7 @@ router.post('/publishArticle', (req, res) => {
     fileName = `articles/${title + i}.${contentType}`
   }
   let newArticle = new Article({
-    linkName,
+    linkName: `${writer}/${linkName}`,
     writer,
     fileName: `${title}.${contentType}`,
     articleName: title,
@@ -195,7 +195,7 @@ router.post('/editArticle', (req, res) => {
             } else {
               editedArticle = {
                 articleName,
-                linkName,
+                linkName: `${writer}/${linkName}`,
                 editTime: new Date(),
                 tags: tags !== '' ? tags.split(',') : []
               };

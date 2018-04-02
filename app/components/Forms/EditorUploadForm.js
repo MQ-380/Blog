@@ -31,7 +31,7 @@ class EditorUploadForm extends Component {
             ]
           })(
             <Input
-              addonBefore={`${window.location.origin}/articles/`}
+              addonBefore={`${window.location.origin}/articles/${this.props.username}/`}
               type={'text'}
             />
           )}

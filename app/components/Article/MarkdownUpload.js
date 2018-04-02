@@ -92,6 +92,7 @@ class AfterUploads extends Component {
               this.props.set_link_name(changedFields.linkNameEdit)
             else this.props.set_article_name(changedFields.articleNameEdit)
           }}
+          username={this.props.writer}
         />
 
         <Tags ref={'tags'}/>
