@@ -21,18 +21,20 @@ class Header extends Component {
             zIndex: 2
           }}
         >
-          <h2
+          <a
             style={{
               fontSize: '24px',
               lineHeight: 1,
               fontWeight: '600',
               float: 'left',
               margin: '15px 0 -15px',
-              height: '52px'
+              height: '52px',
+              color: 'black'
             }}
+            href={'/'}
           >
             BLOG
-          </h2>
+          </a>
           <div>
             {!this.props.isLogin && (
               <div

@@ -17,17 +17,17 @@ class CommentDetail extends Component {
         if (text.length > 60) {
           return (
             <div>
-              {text.substring(0, 60)}
+              <div dangerouslySetInnerHTML={{__html: text.substring(0, 60)}}/>
               <Popover
                 title={'评论全文'}
-                content={<div style={{width: '600px'}}>{text}</div>}
+                content={<div style={{width: '600px'}} dangerouslySetInnerHTML={{__html: text}}/>}
               >
                 <a>...</a>
               </Popover>
             </div>
           );
         } else {
-          return text;
+          return (<div dangerouslySetInnerHTML={{__html: text}}/>)
         }
       }
     },
@@ -83,7 +83,7 @@ class CommentDetail extends Component {
               }
               }
             >
-              <a>未审核</a>
+              <a style={{color: 'red'}}>未审核</a>
             </Popconfirm>
           );
         }

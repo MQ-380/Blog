@@ -53,6 +53,13 @@ router.post('/getArticleInfo', (req, res) => {
           if (!err) {
             try {
               let content = fs.readFileSync(`articles/${writer}/${fileName}`, 'utf8')
+              let c = comment.filter(i => i.reviewed === true)
+              c = c.map(i => {
+                if (i.refId !== '' && c.findIndex(e => parseInt(e.id) === i.refId) === -1) {
+                  i.refId = -1
+                  return i
+                } else {return i}
+              })
               return res.json({
                 status: true,
                 fullInfo: {
@@ -66,7 +73,7 @@ router.post('/getArticleInfo', (req, res) => {
                   content,
                   linkName,
                   readNumber,
-                  comment
+                  comment: c
                 }
               })
             } catch (err) {

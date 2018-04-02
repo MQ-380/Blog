@@ -14,7 +14,7 @@ class Home extends Component {
       <div style={{height: '100%'}}>
         {this.state.visitUser && this.props.userExists && <UserTagPage type={'user'}/>}
         {this.state.visitTag && this.props.tagExists && <UserTagPage type={'tag'}/>}
-        {(this.state.visitUser && !this.props.userExists) || (this.state.visitTag && !this.props.tagExists) &&
+        {((this.state.visitUser && !this.props.userExists) || (this.state.visitTag && !this.props.tagExists)) &&
         <div>404</div>}
         {!this.state.visitUser && !this.state.visitTag && <HomePage/>}
       </div>

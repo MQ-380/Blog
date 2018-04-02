@@ -300,7 +300,18 @@ router.post('/reviewComment', (req, res) => {
           }
           return item
         })
-        .filter(item => !!item)
+        .filter(item => !!item).map(i => {
+          commentId = parseInt(commentId)
+          if (i.refId === commentId || i.lastRef === commentId) {
+            if (passed) {
+              i.refId = i.lastRef
+            } else {
+              i.lastRef = i.refId
+              i.refId = -1
+            }
+          }
+          return i
+        })
       Article.update({_id: articleId}, {comment}, err => {
         if (err) {
           console.error(err)

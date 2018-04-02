@@ -35,17 +35,30 @@ class Comment extends Component {
             </div>
             <div className={'commentRef'} style={{}}>
               {
-                item.refId !== '' && (
+                (item.refId !== '' && parseInt(item.refId) !== -1) && (
                   <div style={{
                     fontWeight: 'lighter',
                     color: '#aaa',
                     borderBottom: '0.1em dashed #aaa',
                     borderTop: '0.1em dashed #aaa'
                   }}>
-                    回复 ： {`# ${parseInt(item.refId) + 1}`}
+                    回复 ： {`# ${this.props.commentInfo.findIndex(i => i.id === item.refId) + 1}`}
                     <br/>
-                    {((t) => t.slice(0, Math.min(50, t.length)))(this.props.commentInfo[item.refId].content)}
+                    {<div
+                      dangerouslySetInnerHTML={{__html: ((t) => t.slice(0, Math.min(50, t.length)))(this.props.commentInfo.filter(i => {return parseInt(i.id) === item.refId})[0].content)}}/>}
                     ...
+                  </div>
+                )
+              }
+              {
+                parseInt(item.refId) === -1 && (
+                  <div style={{
+                    fontWeight: 'lighter',
+                    color: '#aaa',
+                    borderBottom: '0.1em dashed #aaa',
+                    borderTop: '0.1em dashed #aaa'
+                  }}>
+                    回复 ： （原评论已被删除或审核未通过）
                   </div>
                 )
               }
@@ -63,7 +76,7 @@ class Comment extends Component {
               {((t) => `${t.split('T')[0]} ${t.split('T')[1].split('.')[0]}`)(item.time)}
             </div>
 
-            <Button onClick={() => this.setState({nowReplying: i})}>回复</Button>
+            <Button onClick={() => this.setState({nowReplying: i + 1})}>回复</Button>
           </div>
         )
       }
@@ -112,11 +125,11 @@ class Comment extends Component {
             this.refs.comment.validateFields((err, values) => {
               if (!err) {
                 this.props.upload_comment({
-                  id: this.props.commentInfo.length + 1,
+                  id: this.props.commentInfo.length === 0 ? 0 : parseInt(this.props.commentInfo[this.props.commentInfo.length - 1].id) + 1,
                   articleId: this.props.articleId,
                   content: this.refs.editor.editorInstance.getHTMLContent(),
                   author: values.email,
-                  refId: this.state.nowReplying,
+                  refId: this.state.nowReplying === '' ? '' : this.props.commentInfo[parseInt(this.state.nowReplying) - 1].id,
                 })
               }
             })
@@ -136,8 +149,8 @@ class Comment extends Component {
         duration: 2,
       })
       this.props.publishCommentResult.publishResult ?
-        message.success('评论成功，等待作者审核中。', 5, onClose) :
-        message.error('评论失败，请检查网络。', 5, onClose)
+        message.success('评论成功，等待作者审核中。', 2, onClose) :
+        message.error('评论失败，请检查网络。', 2, onClose)
     }
   }
 }
