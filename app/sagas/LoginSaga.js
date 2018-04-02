@@ -34,7 +34,8 @@ export function* adminLoginFlow () {
           id: res.id,
           email: res.email,
           slogan: res.slogan,
-          links: res.links
+          links: res.links,
+          notice: res.notice,
         })
       } else {
         yield put({
@@ -78,7 +79,8 @@ export function* checkLoginFlow() {
           id: res.id,
           email: res.email,
           slogan: res.slogan,
-          links: res.links
+          links: res.links,
+          notice: res.notice,
         })
       } else {
         window.sessionStorage.clear();

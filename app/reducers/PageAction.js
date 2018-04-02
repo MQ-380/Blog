@@ -1,5 +1,5 @@
 const initialState = {
-  now_page: 'message',
+  now_page: 'ArticleList',
   now_article: ''
 };
 
@@ -14,7 +14,7 @@ export const action = {
       page,
       articleName
     };
-  }
+  },
 };
 
 export function reducer (state = initialState, action) {

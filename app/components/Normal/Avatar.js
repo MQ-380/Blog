@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Popover, Avatar, Badge, Popconfirm } from 'antd'
 import { action } from '../../reducers/AdminAction'
 import { action as userAction } from '../../reducers/UserAction'
+import { action as pageAction } from '../../reducers/PageAction'
 import EditPasswordForm from '../Forms/EditPasswordForm'
 import EditUserInfoForm from '../Forms/EditUserInfoForm'
 import { Modal } from 'antd'
@@ -80,6 +81,17 @@ class Avatars extends Component {
         <Popover
           content={
             <div>
+              {this.props.notice !== 0 &&
+              <div>
+                <a
+                  onClick={() => {
+                    this.props.change_page('commentList')
+                  }}
+                >
+                  {`您有${this.props.notice}条待审核评论。`}
+                </a>
+              </div>
+              }
               <div>
                 <a
                   onClick={() => {
@@ -118,7 +130,7 @@ class Avatars extends Component {
           placement="bottom"
           trigger="click"
         >
-          <Badge count={99}>
+          <Badge count={this.props.notice}>
             <Avatar
               style={{
                 backgroundColor: '#7265e6',
@@ -158,7 +170,8 @@ const mapStateToProps = state => {
     user_id: state.global.user_Id,
     msg: state.user.edit_message,
     email: state.global.email,
-    show_edit_info: state.user.show_edit
+    show_edit_info: state.user.show_edit,
+    notice: state.global.notice,
   };
 };
 
@@ -175,7 +188,8 @@ const mapDispatchToProps = dispatch => {
       userAction.show_edit_user_info,
       dispatch
     ),
-    edit_user_info: bindActionCreators(userAction.edit_user_info, dispatch)
+    edit_user_info: bindActionCreators(userAction.edit_user_info, dispatch),
+    change_page: bindActionCreators(pageAction.change_page, dispatch)
   };
 };
 

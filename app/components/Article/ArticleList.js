@@ -86,12 +86,12 @@ class ArticleList extends Component {
     {
       title: '点赞数',
       dataIndex: 'likeNumber',
-      sorter: (a, b) => a.likeNumber > b.likeNumber
+      sorter: (a, b) => a.likeNumber - b.likeNumber
     },
     {
       title: '浏览量',
       dataIndex: 'readNumber',
-      sorter: (a, b) => a.readNumber > b.readNumber
+      sorter: (a, b) => a.readNumber - b.readNumber
     },
     {
       title: '文章标签',

@@ -2,6 +2,7 @@ const initialState = {
   isAdminLogin: false,
   isLogin: false,
   isFetching: false,
+  notice: 0,
   username: '',
   user_Id: '',
   email: '',
@@ -29,7 +30,8 @@ export const actionTypes = {
   FETCH_END: "FETCH_END",
   CLEAR_MSG: 'CLEAR_MSG',
   CHANGE_PAGE: 'CHANGE_PAGE',
-  CHANGE_EMAIL: 'CHANGE_EMAIL'
+  CHANGE_EMAIL: 'CHANGE_EMAIL',
+  NOTICE_REDUCE: 'NOTICE_REDUCE'
 };
 
 export const action = {
@@ -58,10 +60,15 @@ export const action = {
     };
   },
   achieve_new_comment: data => {
-    console.log(data);
     return {
       type: actionTypes.CLEAR_MSG
     };
+  },
+  notice_reduce: number => {
+    return {
+      type: actionTypes.NOTICE_REDUCE,
+      number
+    }
   }
 };
 
@@ -105,7 +112,8 @@ export function reducer (state = initialState, action) {
         email: action.email,
         isAdminLogin: action.isAdmin,
         slogan: action.slogan,
-        links: action.links
+        links: action.links,
+        notice: action.notice,
       };
     case actionTypes.CHECK_TRUE:
       return {
@@ -116,7 +124,8 @@ export function reducer (state = initialState, action) {
         email: action.email,
         isAdminLogin: action.isAdmin,
         slogan: action.slogan,
-        links: action.links
+        links: action.links,
+        notice: action.notice,
       };
     case actionTypes.CHECK_FALSE:
       return {
@@ -149,6 +158,11 @@ export function reducer (state = initialState, action) {
         ...state,
         email: action.email
       };
+    case actionTypes.NOTICE_REDUCE:
+      return {
+        ...state,
+        notice: action.number
+      }
     default:
       return state;
   }

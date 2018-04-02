@@ -46,28 +46,34 @@ router.post('/getArticleInfo', (req, res) => {
           editTime,
           tags,
           linkName,
-          comment
+          comment,
+          readNumber,
         } = item[0]
-        try {
-          let content = fs.readFileSync(`articles/${writer}/${fileName}`, 'utf8')
-          return res.json({
-            status: true,
-            fullInfo: {
-              _id,
-              articleName,
-              fileType,
-              writer,
-              createTime,
-              editTime,
-              tags,
-              content,
-              linkName,
-              comment
+        Article.update({linkName}, {readNumber: readNumber + 1}, (err => {
+          if (!err) {
+            try {
+              let content = fs.readFileSync(`articles/${writer}/${fileName}`, 'utf8')
+              return res.json({
+                status: true,
+                fullInfo: {
+                  _id,
+                  articleName,
+                  fileType,
+                  writer,
+                  createTime,
+                  editTime,
+                  tags,
+                  content,
+                  linkName,
+                  readNumber,
+                  comment
+                }
+              })
+            } catch (err) {
+              console.error(err)
             }
-          })
-        } catch (err) {
-          console.error(err)
-        }
+          }
+        }))
       }
     } else {
       return res.json({status: false})
@@ -84,7 +90,6 @@ router.post('/publishComment', (req, res) => {
         id: id,
         content: content,
         reviewed: false,
-        noticed: false,
         author: author,
         time: new Date(),
         refId: refId

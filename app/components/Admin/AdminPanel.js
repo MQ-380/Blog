@@ -44,40 +44,27 @@ class AdminPanel extends Component {
             >
               <Menu
                 mode="inline"
-                defaultSelectedKeys={['message']}
-                defaultOpenKeys={['message']}
+                defaultSelectedKeys={['ArticleList']}
+                defaultOpenKeys={['ArticleList']}
                 style={{height: '100%', borderRight: 0}}
                 onSelect={e => this.props.change_page(e.key)}
               >
-                <Menu.Item key="message">
-                  <span>
-                    <Icon type="inbox"/>消息列表
-                  </span>
+
+                <Menu.Item key="ArticleList">
+                  <Icon type="table"/>文章列表
                 </Menu.Item>
-                <SubMenu
-                  key={'Article'}
-                  title={
-                    <span>
-                      <Icon type="book"/>文章管理
-                    </span>
-                  }
-                >
                   <Menu.Item key="createArticle">
                     <Icon type="cloud-upload-o"/>发表文章
                   </Menu.Item>
-                  <Menu.Item key="ArticleList">
-                    <Icon type="table"/>文章列表
-                  </Menu.Item>
-                </SubMenu>
                 {!this.props.notAdmin &&
                 <Menu.Item key="user">
                   <span>
                     <Icon type="user"/>用户管理
                   </span>
                 </Menu.Item>}
-                <Menu.Item key="data">
+                <Menu.Item key="commentList">
                   <span>
-                    <Icon type="dashboard"/>浏览数据
+                    <Icon type="dashboard"/>待审核评论
                   </span>
                 </Menu.Item>
 
@@ -100,6 +87,7 @@ class AdminPanel extends Component {
                 {this.props.page.includes('createArticle') && <AddArticle/>}
                 {this.props.page.includes('ArticleList') && <ArticleList/>}
                 {this.props.page.includes('articleDetail') && <ArticleDetail/>}
+                {this.props.page.includes('commentList') && <CommentDetail/>}
                 {this.props.page.includes('commentDetail') && <CommentDetail/>}
               </Content>
             </Layout>

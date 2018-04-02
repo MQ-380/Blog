@@ -1,5 +1,6 @@
 import Express from 'express'
 import Users from '../../db/Users'
+import Article from '../../db/Article'
 import { io } from '../../server/api/apiServer'
 
 const bcrypt = require('bcryptjs')
@@ -26,14 +27,25 @@ router.post('/login', (req, res) => {
               console.log(err)
               res.json({status: false, msg: '请检查数据库'})
             }
-            res.json({
-              status: true,
-              isAdmin: data[0].isAdmin,
-              token: loginToken,
-              id: data[0]._id,
-              email: data[0].email,
-              slogan: data[0].slogan,
-              links: data[0].links
+            Article.find({}, (err, e) => {
+              let noticedNumber = 0
+              if (!err) {
+                e.forEach(i => {
+                  i.comment.forEach(c => {
+                    if (!c.reviewed) noticedNumber += 1
+                  })
+                })
+                res.json({
+                  status: true,
+                  isAdmin: data[0].isAdmin,
+                  token: loginToken,
+                  id: data[0]._id,
+                  email: data[0].email,
+                  slogan: data[0].slogan,
+                  links: data[0].links,
+                  notice: noticedNumber,
+                })
+              }
             })
           }
         )
@@ -66,14 +78,25 @@ router.post('/loginCheck', (req, res) => {
             }
           )
         } else {
-          res.json({
-            status: true,
-            username: data[0].username,
-            isAdmin: data[0].isAdmin,
-            id: data[0]._id,
-            email: data[0].email,
-            slogan: data[0].slogan,
-            links: data[0].links
+          Article.find({}, (err, e) => {
+            let noticedNumber = 0
+            if (!err) {
+              e.forEach(i => {
+                i.comment.forEach(c => {
+                  if (!c.reviewed) noticedNumber += 1
+                })
+              })
+              res.json({
+                status: true,
+                isAdmin: data[0].isAdmin,
+                username: data[0].username,
+                id: data[0]._id,
+                email: data[0].email,
+                slogan: data[0].slogan,
+                links: data[0].links,
+                notice: noticedNumber,
+              })
+            }
           })
         }
       }
