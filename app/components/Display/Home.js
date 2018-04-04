@@ -44,7 +44,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     check_user: bindActionCreators(ShowAction.check_user, dispatch),
-    check_tags: bindActionCreators(ShowAction.check_tags, dispatch),
+    check_tags: bindActionCreators(ShowAction.check_tags, dispatch)
   };
 };
 
